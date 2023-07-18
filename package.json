@@ -23,7 +23,13 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0",
     "eslint-config-prettier": "^8.8.0",
     "prettier": "3.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
