@@ -1,11 +1,10 @@
 import { storage } from '@/firebase/config';
 import { ref, uploadBytes } from 'firebase/storage';
+import { UploadImageError } from '@/exceptions';
 
-export function uploadFile(storagePath: string, file: File) {
-  try {
-    const fileRef = ref(storage, storagePath);
-    return uploadBytes(fileRef, file);
-  } catch (error) {
-    console.log(error);
-  }
+export async function uploadFile(storagePath: string, file: File) {
+  const fileRef = ref(storage, storagePath);
+  return uploadBytes(fileRef, file).catch(() => {
+    throw new UploadImageError();
+  });
 }

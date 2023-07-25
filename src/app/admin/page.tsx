@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { axiosInstance } from '@/lib/axios/instance';
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { createGame } from '@/services/game';
+import { AddDocFirebaseError, UploadImageError } from '@/exceptions';
 
 export default function AdminPage() {
   const [id, setId] = useState('');
@@ -76,8 +78,17 @@ export default function AdminPage() {
     });
   };
 
-  const onSubmit = (data: createGameTypeSchema) => {
-    createGame(data);
+  const onSubmit = async (data: createGameTypeSchema) => {
+    try {
+      await createGame(data);
+      toast.success('Jogo criado com sucesso');
+    } catch (error: any) {
+      if (error instanceof AddDocFirebaseError || error instanceof UploadImageError) {
+        toast.error(error.message);
+        return;
+      }
+      toast.error('Um erro inesperado ocorreu ao criar o jogo');
+    }
   };
 
   return (
