@@ -11,7 +11,7 @@ const baseGameSchema = z.object({
   developer: z.string().min(3, { message: minLengthMessage('desenvolvedora', 3) }),
   publisher: z.string().min(3, { message: minLengthMessage('editora', 3) }),
   game_url: z.string().min(3, { message: minLengthMessage('url do jogo', 3) }),
-  thumbnail: z.string().optional(),
+  thumbnail: z.any().refine((val) => val.length > 0, { message: 'thumbnail é obrigatória' }),
 });
 
 export const createGameSchema = baseGameSchema.extend({

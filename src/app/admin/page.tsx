@@ -9,6 +9,7 @@ import ResourceData from '@/components/ResourceData';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { createGame } from '@/services/game';
 
 export default function AdminPage() {
   const [id, setId] = useState('');
@@ -38,6 +39,7 @@ export default function AdminPage() {
       developer: '',
       publisher: '',
       game_url: '',
+      thumbnail: {} as FileList,
       min_system_requirements: {
         os: '',
         processor: '',
@@ -75,7 +77,7 @@ export default function AdminPage() {
   };
 
   const onSubmit = (data: createGameTypeSchema) => {
-    console.log(data);
+    createGame(data);
   };
 
   return (
@@ -108,7 +110,6 @@ export default function AdminPage() {
           </Button>
         </div>
       </div>
-
       <div className="grid grid-cols-2 gap-4">
         <form
           className="bg-[#0F172A] flex flex-col h-[500px] overflow-y-scroll gap-4 px-4 py-2"
@@ -194,6 +195,16 @@ export default function AdminPage() {
               <Input className="h-7" id="game_url" {...register('game_url')} />
               {errors.game_url && <p className="text-sm text-red-700">{errors.game_url.message}</p>}
             </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="thumbnail" className="text-white">
+                upload thumbnail
+              </Label>
+              <Input id="thumbnail" type="file" multiple={false} {...register('thumbnail')} />
+              {errors.thumbnail && (
+                <p className="text-sm text-red-700">{errors.thumbnail.message as string}</p>
+              )}
+            </div>
           </fieldset>
 
           <fieldset className="flex flex-col gap-4">
@@ -273,7 +284,6 @@ export default function AdminPage() {
               </div>
             </div>
           </fieldset>
-
           <div className="w-full flex items-center justify-around mt-4">
             <Button type="submit" variant={'secondary'} className="w-1/3">
               Criar jogo
