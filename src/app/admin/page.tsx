@@ -18,9 +18,13 @@ export default function AdminPage() {
   const [resource, setResource] = useState<RootObject | null>(null);
 
   async function getResource() {
-    const res = await axiosInstance.get(`/game?id=${id}`);
-    const data = res.data;
-    setResource(data);
+    try {
+      const res = await axiosInstance.get(`/game?id=${id}`);
+      const data = res.data;
+      setResource(data);
+    } catch (error) {
+      toast.error("Erro ao buscar dados")
+    }
   }
 
   const {
