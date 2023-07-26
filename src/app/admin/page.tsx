@@ -15,6 +15,7 @@ import { AddDocFirebaseError, UploadImageError } from '@/exceptions';
 
 export default function AdminPage() {
   const [id, setId] = useState('');
+  const [disableButton, setDisableButton] = useState(false);
   const [resource, setResource] = useState<RootObject | null>(null);
 
   async function getResource() {
@@ -23,7 +24,7 @@ export default function AdminPage() {
       const data = res.data;
       setResource(data);
     } catch (error) {
-      toast.error("Erro ao buscar dados")
+      toast.error('Erro ao buscar dados');
     }
   }
 
@@ -84,6 +85,7 @@ export default function AdminPage() {
 
   const onSubmit = async (data: createGameTypeSchema) => {
     try {
+      setDisableButton(true);
       await createGame(data);
       toast.success('Jogo criado com sucesso');
     } catch (error: any) {
@@ -92,6 +94,8 @@ export default function AdminPage() {
         return;
       }
       toast.error('Um erro inesperado ocorreu ao criar o jogo');
+    } finally {
+      setDisableButton(false);
     }
   };
 
@@ -300,7 +304,7 @@ export default function AdminPage() {
             </div>
           </fieldset>
           <div className="w-full flex items-center justify-around mt-4">
-            <Button type="submit" variant={'secondary'} className="w-1/3">
+            <Button type="submit" variant={'secondary'} className="w-1/3" disabled={disableButton}>
               Criar jogo
             </Button>
 
