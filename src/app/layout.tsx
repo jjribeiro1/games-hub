@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-br">
-      <body className={`${inter.className}, h-full w-full bg-emperor-950`}>
+      <body className={`${inter.className}, h-full w-full bg-mine-shaft-950`}>
         {children}
         <ToastContainer limit={1} position="top-right" autoClose={2000} />
       </body>
