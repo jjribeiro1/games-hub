@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { minLengthMessage } from './utils';
+import { minLengthMessage } from '@/utils/min-length-message';
 
 const baseGameSchema = z.object({
   title: z.string().min(3, { message: minLengthMessage('título', 3) }),
