@@ -5,7 +5,7 @@ import { NavBar } from './index';
 
 export default function Header() {
   return (
-    <header className="bg-mine-shaft-900 flex items-center px-4 py-2 pl-4 cursor-pointer">
+    <header className="bg-mine-shaft-900 flex items-center px-4 py-2 pl-4">
       <Logo />
       <NavBar />
     </header>
