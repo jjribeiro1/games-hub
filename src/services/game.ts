@@ -1,4 +1,4 @@
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { StorageReference, getDownloadURL } from 'firebase/storage';
 import { db } from '@/firebase/config';
 import { uploadFile } from './storage';
@@ -23,4 +23,8 @@ export async function createGame(game: createGameTypeSchema) {
   }).catch(() => {
     throw new AddDocFirebaseError();
   });
+}
+
+export async function getAllGames() {
+  return getDocs(collection(db, 'games'));
 }
