@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { axiosInstance } from '@/lib/axios/instance';
 import { createGameSchema, createGameTypeSchema } from '@/lib/schemas/create-game';
 import { RootObject } from '@/types/resource-response';
-import ResourceData from '@/components/ResourceData';
+import { ResourceData } from '@/components/ResourceData';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
