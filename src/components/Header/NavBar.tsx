@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
+import Link from 'next/link';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { FiChevronDown } from 'react-icons/fi';
 import useFetchGames from '@/hooks/useFetchGames';
+import { formatGenrePath } from '@/utils/format-genre-path';
 
 export default function NavBar() {
   const { genres } = useFetchGames();
@@ -31,9 +33,11 @@ export default function NavBar() {
                   key={i}
                   className="
               bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100
-               pl-4 py-2 cursor-pointer"
+               p-2 cursor-pointer"
                 >
-                  {genre}
+                  <Link href={`games/${formatGenrePath(genre)}`} prefetch className="w-full inline-block">
+                    {genre}
+                  </Link>
                 </li>
               ))}
             </ul>
