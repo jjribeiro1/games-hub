@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { FiChevronDown } from 'react-icons/fi';
