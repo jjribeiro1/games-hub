@@ -7,6 +7,7 @@ export interface Game {
   freetogame_profile_url: string;
   game_url: string;
   genre: string;
+  isFree: boolean;
   minimum_system_requirements: MinimumSystemRequirements;
   platform: string;
   publisher: string;

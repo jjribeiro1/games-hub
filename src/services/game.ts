@@ -19,6 +19,7 @@ export async function createGame(game: createGameTypeSchema) {
     developer: game.developer,
     publisher: game.publisher,
     game_url: game.game_url,
+    isFree: game.isFree,
     thumbnail: thumbnailRef,
   }).catch(() => {
     throw new AddDocFirebaseError();

@@ -46,6 +46,7 @@ export default function AdminPage() {
       developer: '',
       publisher: '',
       game_url: '',
+      isFree: true,
       thumbnail: {} as FileList,
       min_system_requirements: {
         os: '',
@@ -214,6 +215,37 @@ export default function AdminPage() {
               <Input className="h-7" id="game_url" {...register('game_url')} />
               {errors.game_url && <p className="text-sm text-red-700">{errors.game_url.message}</p>}
             </div>
+
+            <fieldset className="flex flex-col gap-4">
+              <legend className="text-white">É grátis para jogar?</legend>
+
+              <div className="flex items-center gap-3 mt-4">
+                <Label htmlFor="isFree" className="text-white">
+                  Sim
+                </Label>
+                <Input
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 cursor-pointer"
+                  id="isFree"
+                  type="radio"
+                  {...register('isFree')}
+                  value={1}
+                />
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <Label htmlFor="isNotFree" className="text-white">
+                  Não
+                </Label>
+                <Input
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 cursor-pointer"
+                  id="isNotFree"
+                  type="radio"
+                  {...register('isFree')}
+                  value={0}
+                />
+              </div>
+              {errors.isFree && <p className="text-sm text-red-700">{errors.isFree.message}</p>}
+            </fieldset>
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="thumbnail" className="text-white">

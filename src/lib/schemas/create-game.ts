@@ -10,6 +10,12 @@ const baseGameSchema = z.object({
   platform: z.string().min(3, { message: minLengthMessage('plataforma', 3) }),
   developer: z.string().min(3, { message: minLengthMessage('desenvolvedora', 3) }),
   publisher: z.string().min(3, { message: minLengthMessage('editora', 3) }),
+  isFree: z
+    .enum(['0', '1'])
+    .refine((val) => val === '0' || val === '1', { message: 'valor inválido' })
+    .transform((val) => {
+      return Boolean(parseInt(val));
+    }),
   game_url: z.string().min(3, { message: minLengthMessage('url do jogo', 3) }),
   thumbnail: z.any().refine((val) => val.length > 0, { message: 'thumbnail é obrigatória' }),
 });
