@@ -26,6 +26,8 @@ export default function GamesGenrePage() {
   const { data } = useQuery({
     queryKey: ['fetch-games', filters],
     queryFn: () => fetcher(filters),
+    staleTime: 1000 * 60 * 10,
+    cacheTime: 1000 * 60 * 10,
   });
 
   return (
