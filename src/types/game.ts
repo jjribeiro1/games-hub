@@ -4,7 +4,6 @@ export interface Game {
   title: string;
   description: string;
   developer: string;
-  freetogame_profile_url: string;
   game_url: string;
   genre: string;
   isFree: boolean;
