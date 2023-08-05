@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import Logo from '../ui/logo';
 import { NavBar } from './index';
