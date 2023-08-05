@@ -35,7 +35,7 @@ export default function NavBar() {
               bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100
                p-2 cursor-pointer"
                 >
-                  <Link href={`games/${formatGenrePath(genre)}`} prefetch className="w-full inline-block">
+                  <Link href={`/games/${formatGenrePath(genre)}`} prefetch className="w-full inline-block">
                     {genre}
                   </Link>
                 </li>
