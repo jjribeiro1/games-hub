@@ -1,9 +1,10 @@
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { StorageReference, getDownloadURL } from 'firebase/storage';
 import { db } from '@/firebase/config';
 import { uploadFile } from './storage';
 import { createGameTypeSchema } from '@/lib/schemas/create-game';
 import { AddDocFirebaseError } from '@/exceptions';
+import { GamesFilters } from '@/types/games-filters';
 
 export async function createGame(game: createGameTypeSchema) {
   const thumbnailFile = await uploadFile(`/thumbnail/${game.thumbnail[0].name}`, game.thumbnail[0]);
@@ -28,4 +29,9 @@ export async function createGame(game: createGameTypeSchema) {
 
 export async function getAllGames() {
   return getDocs(collection(db, 'games'));
+}
+
+export async function getGamesByFilters(filters: GamesFilters) {
+  const q = query(collection(db, 'games'), where(filters.fieldPath, filters.operator, filters.value));
+  return getDocs(q);
 }
