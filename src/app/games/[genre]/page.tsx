@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { GameCard } from '@/components/GameCard';
 import { getGamesByFilters } from '@/services/game';
@@ -9,9 +9,9 @@ import { GamesFilters } from '@/types/games-filters';
 import { Game } from '@/types/game';
 
 export default function GamesGenrePage() {
-  const pathname = usePathname();
-  const originalGenre = getOriginalGenreName(pathname.split('games/')[1]) as string;
-
+  const params = useParams();
+  const originalGenre = getOriginalGenreName(params.genre as string) as string;
+  
   const filters: GamesFilters = {
     fieldPath: 'genre',
     operator: '==',
