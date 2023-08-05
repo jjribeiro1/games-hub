@@ -11,7 +11,7 @@ interface GameCardProps {
 export default function GameCard({ game }: GameCardProps) {
   return (
     <div className="bg-mine-shaft-900 w-60 h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-md cursor-pointer">
-      <Link href={`/games/${game.id}`} prefetch>
+      <Link href={`/game/${game.id}`} prefetch>
       <Image
         className="aspect-video rounded-t-md"
         src={game.thumbnail}
