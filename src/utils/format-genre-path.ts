@@ -1,4 +1,4 @@
-export const formatGenrePath = (str: string) => str.replaceAll(' ', '-').toLowerCase();
+export const formatGenrePath = (str: string) => str?.replaceAll(' ', '-').toLowerCase();
 
 export const genresMap = new Map<string, string>();
 genresMap.set('shooter', 'Shooter');
