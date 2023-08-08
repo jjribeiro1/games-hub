@@ -3,11 +3,11 @@ import React from 'react';
 import Link from 'next/link';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { FiChevronDown } from 'react-icons/fi';
-import useFetchGames from '@/hooks/useFetchGames';
 import { formatGenrePath } from '@/utils/format-genre-path';
+import useFetchGenres from '@/hooks/useFetchGenres';
 
 export default function NavBar() {
-  const { genres } = useFetchGames();
+  const { genres } = useFetchGenres()
 
   return (
     <NavigationMenu.Root>
@@ -28,7 +28,7 @@ export default function NavBar() {
             onPointerLeave={(e) => e.preventDefault()}
           >
             <ul className=" text-sm sm:text-base flex flex-col divide-y divide-mine-shaft-500">
-              {Array.from(genres).map((genre, i) => (
+              {genres?.map((genre, i) => (
                 <li
                   key={i}
                   className="
