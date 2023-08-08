@@ -12,12 +12,8 @@ export interface Game {
   platform: string;
   publisher: string;
   release_date: string;
-  screenshots: Screenshot[];
+  screenshots: string[];
   short_description: string;
   status: string;
   thumbnail: string;
-}
-
-export interface Screenshot {
-  image: string;
 }
