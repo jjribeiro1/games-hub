@@ -31,7 +31,7 @@ export default function GameCard({ game }: GameCardProps) {
         <div className="text-mine-shaft-200 flex items-center gap-2 self-end lg:mt-3">
           <span className="text-xs lg:text-sm bg-mine-shaft-600 px-1 rounded">{game.genre}</span>
           <span>
-            {game.platform === 'Windows' ? <BsWindows className="text-mine-shaft-400 w-5 h-5" /> : 'Windows'}
+            {game.platform === 'PC' ? <BsWindows className="text-mine-shaft-400 w-5 h-5" /> : 'PC'}
           </span>
         </div>
       </div>
