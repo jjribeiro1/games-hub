@@ -61,3 +61,22 @@ export async function getGamesByGenre(genreName: string) {
 
   return games;
 }
+
+export async function getGamesByPlatform(platformName: string) {
+  const platformQuery = query(collection(db, 'platforms'), where('name', '==', platformName));
+  const platformSnapshot = await getDocs(platformQuery);
+
+  if (platformSnapshot.empty) {
+    return [];
+  }
+
+  const gamesId = platformSnapshot.docs[0].data().gamesId as string[];
+  const gamesPromises = gamesId.map((gameId) => getDoc(doc(db, 'games', gameId)));
+
+  const gamesSnapshots = await Promise.all(gamesPromises);
+  const games = gamesSnapshots.map(
+    (gameSnapshot) => ({ id: gameSnapshot.id, ...gameSnapshot.data() }) as Game,
+  );
+
+  return games;
+}
