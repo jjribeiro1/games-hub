@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 html {
-  width: 100vw;
-  height: 100vh;
+  scrollbar-gutter: stable;
+  overflow: auto;
 }

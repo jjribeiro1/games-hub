@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-br">
-      <body className={`${inter.className} h-full w-full bg-mine-shaft-950`}>
+      <body className={`${inter.className} min-h-screen w-full bg-mine-shaft-950`}>
         <PageProviders>
           <Header />
           {children}
