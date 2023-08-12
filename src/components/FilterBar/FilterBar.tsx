@@ -39,9 +39,14 @@ export default function FilterBar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuPortal>
-            <DropdownMenuContent className="w-48">
+            <DropdownMenuContent className="w-48 bg-mine-shaft-100">
               {platforms?.map((platform) => (
-                <DropdownMenuItem key={platform.id}>{platform.name}</DropdownMenuItem>
+                <DropdownMenuItem
+                  key={platform.id}
+                  className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+                >
+                  {platform.name}
+                </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenuPortal>
@@ -63,10 +68,11 @@ export default function FilterBar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuPortal>
-            <DropdownMenuContent className="w-48">
+            <DropdownMenuContent className="w-48 bg-mine-shaft-100">
               {genres?.map((genre) => (
                 <DropdownMenuItem
                   key={genre.id}
+                  className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
                   onClick={() => router.push(`/games/${formatGenrePath(genre.name)}`)}
                 >
                   {genre.name}
