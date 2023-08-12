@@ -7,7 +7,7 @@ import { formatGenrePath } from '@/utils/format-genre-path';
 import useFetchGenres from '@/hooks/useFetchGenres';
 
 export default function NavBar() {
-  const { genres } = useFetchGenres()
+  const { genres } = useFetchGenres();
 
   return (
     <NavigationMenu.Root>
@@ -35,7 +35,11 @@ export default function NavBar() {
               bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100
                p-2 cursor-pointer"
                 >
-                  <Link href={`/games/${formatGenrePath(genre.name)}`} prefetch className="w-full inline-block">
+                  <Link
+                    href={`/games/${formatGenrePath(genre.name)}`}
+                    prefetch
+                    className="w-full inline-block"
+                  >
                     {genre.name}
                   </Link>
                 </li>
