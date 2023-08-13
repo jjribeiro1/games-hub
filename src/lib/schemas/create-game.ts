@@ -7,7 +7,10 @@ const baseGameSchema = z.object({
   release_date: z.string().nonempty({ message: 'A data de lançamento é obrigatória' }),
   short_description: z.string().min(10, { message: minLengthMessage('descrição', 10) }),
   description: z.string().min(30, { message: minLengthMessage('descrição', 30) }),
-  platform: z.string().min(3, { message: minLengthMessage('plataforma', 3) }),
+  platform: z
+    .string()
+    .min(3, { message: minLengthMessage('plataforma', 3) })
+    .transform((value) => (value === 'Windows' ? 'PC' : value)),
   developer: z.string().min(3, { message: minLengthMessage('desenvolvedora', 3) }),
   publisher: z.string().min(3, { message: minLengthMessage('editora', 3) }),
   isFree: z
