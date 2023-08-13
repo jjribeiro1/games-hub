@@ -69,19 +69,21 @@ export default function AdminPage() {
     setValue('developer', data.developer, { shouldValidate: true });
     setValue('publisher', data.publisher, { shouldValidate: true });
     setValue('game_url', data.game_url, { shouldValidate: true });
-    setValue('min_system_requirements.os', data.minimum_system_requirements.os, { shouldValidate: true });
-    setValue('min_system_requirements.processor', data.minimum_system_requirements.processor, {
-      shouldValidate: true,
-    });
-    setValue('min_system_requirements.graphics', data.minimum_system_requirements.graphics, {
-      shouldValidate: true,
-    });
-    setValue('min_system_requirements.memory', data.minimum_system_requirements.memory, {
-      shouldValidate: true,
-    });
-    setValue('min_system_requirements.storage', data.minimum_system_requirements.storage, {
-      shouldValidate: true,
-    });
+    if (data.minimum_system_requirements) {
+      setValue('min_system_requirements.os', data.minimum_system_requirements?.os, { shouldValidate: true });
+      setValue('min_system_requirements.processor', data.minimum_system_requirements?.processor, {
+        shouldValidate: true,
+      });
+      setValue('min_system_requirements.graphics', data.minimum_system_requirements?.graphics, {
+        shouldValidate: true,
+      });
+      setValue('min_system_requirements.memory', data.minimum_system_requirements?.memory, {
+        shouldValidate: true,
+      });
+      setValue('min_system_requirements.storage', data.minimum_system_requirements?.storage, {
+        shouldValidate: true,
+      });
+    }
   };
 
   const onSubmit = async (data: createGameTypeSchema) => {
