@@ -3,7 +3,9 @@ import { db } from '@/firebase/config';
 import { Genre } from '@/types/genre';
 
 export async function getAllGenres() {
-  return getDocs(collection(db, 'genres'));
+  const querySnapshot = await getDocs(collection(db, 'genres'));
+  const genres = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Genre[];
+  return genres;
 }
 
 export async function getGenreByName(name: string) {
