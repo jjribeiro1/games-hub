@@ -3,7 +3,6 @@ import React from 'react';
 import Link from 'next/link';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { FiChevronDown } from 'react-icons/fi';
-import { formatGenrePath } from '@/utils/format-genre-path';
 import useFetchGenres from '@/hooks/useFetchGenres';
 
 export default function NavBar() {
@@ -28,16 +27,15 @@ export default function NavBar() {
             onPointerLeave={(e) => e.preventDefault()}
           >
             <ul className=" text-sm sm:text-base flex flex-col divide-y divide-mine-shaft-500">
-              {genres?.map((genre, i) => (
+              {genres?.map((genre) => (
                 <li
-                  key={i}
+                  key={genre.slug}
                   className="
               bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100
                p-2 cursor-pointer"
                 >
                   <Link
-                    href={`/games/${formatGenrePath(genre.name)}`}
-                    prefetch
+                    href={`/games/${genre.slug}`}
                     className="w-full inline-block"
                   >
                     {genre.name}
