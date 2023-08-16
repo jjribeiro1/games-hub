@@ -3,7 +3,9 @@ import { db } from '@/firebase/config';
 import { Platform } from '@/types/platform';
 
 export async function getAllPlatforms() {
-  return getDocs(collection(db, 'platforms'));
+  const querySnapshot = await getDocs(collection(db, 'platforms'));
+  const platforms = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Platform[];
+  return platforms;
 }
 
 export async function getPlatformByName(name: string) {
