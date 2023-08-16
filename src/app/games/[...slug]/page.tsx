@@ -2,19 +2,22 @@
 import React from 'react';
 import { useParams } from 'next/navigation';
 import { GameCard } from '@/components/GameCard';
-import useFetchGamesByGenre from '@/hooks/useFetchGamesByGenre';
-import { getOriginalGenreName } from '@/utils/format-genre-path';
 import { FilterBar } from '@/components/FilterBar';
+import useFetchGenres from '@/hooks/useFetchGenres';
+import useFetchGamesByGenre from '@/hooks/useFetchGamesByGenre';
 
 export default function GamesGenrePage() {
-  const params = useParams();
-  const originalGenre = getOriginalGenreName(params.genre as string) as string;
+  const { mappedGenres } = useFetchGenres();
+  const { slug } = useParams();
+  const genreSlug = slug.length > 1 ? slug[1] : slug[0];
+  const originalGenre = mappedGenres.get(genreSlug) as string;
+
   const { games } = useFetchGamesByGenre(originalGenre);
 
   const headingText = () => {
     return `Top Free ${originalGenre} ${
-      originalGenre.includes(' Game') ? '' : 'games'
-    } for Pc and Browser in ${new Date().getFullYear()}`;
+      originalGenre?.includes(' Game') ? '' : 'games'
+    }  in ${new Date().getFullYear()}`;
   };
 
   return (
@@ -22,7 +25,7 @@ export default function GamesGenrePage() {
       <h1 className="text-mine-shaft-200 text-xl">{headingText()}</h1>
 
       <section className="">
-        <FilterBar />
+        <FilterBar genreFromUrl={genreSlug} />
       </section>
 
       <section className="w-full px-4">
