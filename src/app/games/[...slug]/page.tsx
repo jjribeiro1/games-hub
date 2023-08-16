@@ -5,9 +5,10 @@ import { GameCard } from '@/components/GameCard';
 import { FilterBar } from '@/components/FilterBar';
 import useFetchGenres from '@/hooks/useFetchGenres';
 import useFetchGamesByGenre from '@/hooks/useFetchGamesByGenre';
+import { Genre } from '@/types/genre';
 
 export default function GamesGenrePage() {
-  const { mappedGenres } = useFetchGenres();
+  const { genres, mappedGenres } = useFetchGenres();
   const { slug } = useParams();
   const genreSlug = slug.length > 1 ? slug[1] : slug[0];
   const originalGenre = mappedGenres.get(genreSlug) as string;
@@ -25,7 +26,7 @@ export default function GamesGenrePage() {
       <h1 className="text-mine-shaft-200 text-xl">{headingText()}</h1>
 
       <section className="">
-        <FilterBar genreFromUrl={genreSlug} />
+        <FilterBar genres={genres as Genre[]} genreSlug={genreSlug} mappedGenres={mappedGenres} />
       </section>
 
       <section className="w-full px-4">
