@@ -9,7 +9,13 @@ export default function useFetchGenres() {
     cacheTime: 1000 * 60 * 10,
   });
 
+  const genresMap = new Map<string, string>();
+  data?.forEach((genre) => {
+    genresMap.set(genre.slug, genre.name);
+  });
+
   return {
     genres: data,
+    mappedGenres: genresMap
   };
 }
