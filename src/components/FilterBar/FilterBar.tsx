@@ -11,18 +11,27 @@ import {
 import { Button } from '../ui/button';
 import { BiCheckboxChecked } from 'react-icons/bi';
 import { FiChevronDown } from 'react-icons/fi';
-import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import { Genre } from '@/types/genre';
+import { Platform } from '@/types/platform';
 
 interface FilterBarProps {
   genres: Genre[];
   genreSlug: string;
   mappedGenres: Map<string, string>;
+  platforms: Platform[];
+  platformSlug: string | null;
+  mappedPlatforms: Map<string, string>;
 }
 
-export default function FilterBar({ genres, genreSlug, mappedGenres }: FilterBarProps) {
+export default function FilterBar({
+  genres,
+  genreSlug,
+  mappedGenres,
+  platforms,
+  platformSlug,
+  mappedPlatforms,
+}: FilterBarProps) {
   const [activeSortOption, setActiveSortOption] = useState('Relevance');
-  const { platforms } = useFetchPlatforms();
   const sortOptions = ['Relevance', 'Release Date', 'Alphabetical'];
 
   return (
@@ -36,7 +45,7 @@ export default function FilterBar({ genres, genreSlug, mappedGenres }: FilterBar
               </span>
 
               <span className="text-mine-shaft-200 flex items-center ml-1">
-                All Platforms
+                {platformSlug ? mappedPlatforms.get(platformSlug) : 'All Platforms'}
                 <FiChevronDown className="text-cyan-700 w-6 h-6" />
               </span>
             </Button>
@@ -48,7 +57,7 @@ export default function FilterBar({ genres, genreSlug, mappedGenres }: FilterBar
                   key={platform.id}
                   className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
                 >
-                  <Link href={`/games/${platform.name}/${genreSlug}`} className="w-full">
+                  <Link href={`/games/${platform.slug}/${genreSlug}`} className="w-full">
                     {platform.name}
                   </Link>
                 </DropdownMenuItem>
@@ -79,7 +88,10 @@ export default function FilterBar({ genres, genreSlug, mappedGenres }: FilterBar
                   key={genre.id}
                   className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
                 >
-                  <Link href={`/games/${genre.slug}`} className="w-full">
+                  <Link
+                    href={platformSlug ? `/games/${platformSlug}/${genre.slug}` : `/games/${genre.slug}`}
+                    className="w-full"
+                  >
                     {genre.name}
                   </Link>
                 </DropdownMenuItem>

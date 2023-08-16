@@ -6,11 +6,15 @@ import { FilterBar } from '@/components/FilterBar';
 import useFetchGenres from '@/hooks/useFetchGenres';
 import useFetchGamesByGenre from '@/hooks/useFetchGamesByGenre';
 import { Genre } from '@/types/genre';
+import useFetchPlatforms from '@/hooks/useFetchPlatforms';
+import { Platform } from '@/types/platform';
 
-export default function GamesGenrePage() {
+export default function GamesSlugPage() {
   const { genres, mappedGenres } = useFetchGenres();
+  const { platforms, mappedPlatforms } = useFetchPlatforms();
   const { slug } = useParams();
   const genreSlug = slug.length > 1 ? slug[1] : slug[0];
+  const platformSlug = slug.length > 1 ? slug[0] : null;
   const originalGenre = mappedGenres.get(genreSlug) as string;
 
   const { games } = useFetchGamesByGenre(originalGenre);
@@ -26,7 +30,14 @@ export default function GamesGenrePage() {
       <h1 className="text-mine-shaft-200 text-xl">{headingText()}</h1>
 
       <section className="">
-        <FilterBar genres={genres as Genre[]} genreSlug={genreSlug} mappedGenres={mappedGenres} />
+        <FilterBar
+          genres={genres as Genre[]}
+          genreSlug={genreSlug}
+          mappedGenres={mappedGenres}
+          platforms={platforms as Platform[]}
+          platformSlug={platformSlug}
+          mappedPlatforms={mappedPlatforms}
+        />
       </section>
 
       <section className="w-full px-4">
