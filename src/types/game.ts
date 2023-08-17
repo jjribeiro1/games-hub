@@ -6,14 +6,14 @@ export interface Game {
   description: string;
   developer: string;
   game_url: string;
-  genre: string;
+  genre: string[];
   isFree: boolean;
   minimum_system_requirements: MinimumSystemRequirements;
-  platform: string;
+  platform: string[];
   publisher: string;
   release_date: string;
   screenshots: string[];
   short_description: string;
-  status: string;
   thumbnail: string;
 }
+
