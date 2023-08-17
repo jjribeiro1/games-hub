@@ -1,17 +1,20 @@
 import React from 'react';
 import Image from 'next/image';
-import { BsWindows } from 'react-icons/bs';
-import { Game } from '@/types/game';
 import Link from 'next/link';
+import { Game } from '@/types/game';
+import useGameIcons from './useGameIcons';
 
 interface GameCardProps {
   game: Game;
+  mappedGenres: Map<string, string>;
 }
 
-export default function GameCard({ game }: GameCardProps) {
+export default function GameCard({ game, mappedGenres }: GameCardProps) {
+  const { gameIcons } = useGameIcons(game);
+
   return (
-    <div className="bg-mine-shaft-900 w-60 h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-md cursor-pointer">
-      <Link href={`/game/${game.id}`} prefetch>
+    <div className="bg-mine-shaft-900 w-60 h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-md">
+      <Link href={`/game/${game.id}`}>
         <Image
           className="aspect-video rounded-t-md"
           src={game.thumbnail}
@@ -29,8 +32,10 @@ export default function GameCard({ game }: GameCardProps) {
         </p>
 
         <div className="text-mine-shaft-200 flex items-center gap-2 self-end lg:mt-3">
-          <span className="text-xs lg:text-sm bg-mine-shaft-600 px-1 rounded">{game.genre}</span>
-          <span>{game.platform === 'PC' ? <BsWindows className="text-mine-shaft-400 w-5 h-5" /> : 'PC'}</span>
+          <span className="text-xs lg:text-sm bg-mine-shaft-600 px-1 rounded">
+            {game.genre.map((genre) => mappedGenres.get(genre))}
+          </span>
+          <span className="flex items-center gap-2">{gameIcons()}</span>
         </div>
       </div>
     </div>
