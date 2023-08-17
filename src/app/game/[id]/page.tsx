@@ -4,11 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
 import { FiPlayCircle } from 'react-icons/fi';
 import { BiChevronRight } from 'react-icons/bi';
-import { Button } from '@/components/ui/button';
 import { getGameById } from '@/services/game';
-import { formatGenrePath } from '@/utils/format-genre-path';
 
 export default function GameDetailsPage() {
   const params = useParams();
@@ -59,12 +58,12 @@ export default function GameDetailsPage() {
 
       <div className="text-mine-shaft-100 text-sm mt-4 px-4 w-[75%]">
         <div className="flex items-center gap-2">
-          <Link href={'/'} prefetch>
+          <Link href={'/'}>
             Home
           </Link>
           <BiChevronRight />
-          <Link href={`/games/${formatGenrePath(data?.genre as string)}`} prefetch>
-            {data?.genre}
+          <Link href={'/games'}>
+            Games
           </Link>
           <BiChevronRight />
           <span>{data?.title}</span>
