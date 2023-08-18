@@ -32,7 +32,7 @@ export default function GameCard({ game, mappedGenres }: GameCardProps) {
         <p className="text-mine-shaft-400 whitespace-nowrap overflow-hidden overflow-ellipsis">
           {game.short_description}
         </p>
-        <span className="flex items-center self-end gap-2 lg:mt-3 ">{gameIcons()}</span>
+        <span className="flex items-center self-end gap-2 pr-1 lg:mt-3 ">{gameIcons()}</span>
       </div>
     </div>
   );
