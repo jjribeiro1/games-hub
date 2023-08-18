@@ -3,14 +3,19 @@ import { minLengthMessage } from '@/utils/min-length-message';
 
 const baseGameSchema = z.object({
   title: z.string().min(3, { message: minLengthMessage('título', 3) }),
-  genre: z.string().min(3, { message: minLengthMessage('gênero', 3) }),
+  genre: z.array(
+    z.object({
+      name: z.string().min(3, { message: minLengthMessage('gênero', 3) }),
+    }),
+  ),
   release_date: z.string().nonempty({ message: 'A data de lançamento é obrigatória' }),
   short_description: z.string().min(10, { message: minLengthMessage('descrição', 10) }),
   description: z.string().min(30, { message: minLengthMessage('descrição', 30) }),
-  platform: z
-    .string()
-    .min(3, { message: minLengthMessage('plataforma', 3) })
-    .transform((value) => (value === 'Windows' ? 'PC' : value)),
+  platform: z.array(
+    z.object({
+      name: z.string().min(2, { message: minLengthMessage('plataforma', 2) }),
+    }),
+  ),
   developer: z.string().min(3, { message: minLengthMessage('desenvolvedora', 3) }),
   publisher: z.string().min(3, { message: minLengthMessage('editora', 3) }),
   isFree: z
@@ -20,11 +25,12 @@ const baseGameSchema = z.object({
       return Boolean(parseInt(val));
     }),
   game_url: z.string().min(3, { message: minLengthMessage('url do jogo', 3) }),
-  thumbnail: z.any().refine((val) => val.length > 0, { message: 'thumbnail é obrigatória' }),
+  thumbnail: z.string(),
+  screenshots: z.array(z.string()),
 });
 
 export const createGameSchema = baseGameSchema.extend({
-  min_system_requirements: z.object({
+  minimum_system_requirements: z.object({
     os: z
       .string()
       .nullable()
