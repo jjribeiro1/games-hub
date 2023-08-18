@@ -1,64 +1,58 @@
 import { collection, addDoc, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
-import { StorageReference, getDownloadURL } from 'firebase/storage';
 import { db } from '@/firebase/config';
-import { uploadFile } from './storage';
-import { createGenre, getAllGenres, getGenreByName, updateGenre } from './genre';
-import { createPlatform, getAllPlatforms, getPlatformByName, updatePlatform } from './platform';
-import { createGameTypeSchema } from '@/lib/schemas/create-game';
+import { checkForNewPlatforms, createPlatform, updatePlatformGamesId } from './platform';
+import { checkForNewGenres, createGenre, updateGenreGamesId } from './genre';
 import { AddDocFirebaseError } from '@/exceptions';
 import { GamesFilters } from '@/types/games-filters';
-import { Game } from '@/types/game';
+import { CreateGameInput, Game } from '@/types/game';
 
-export async function createGame(game: createGameTypeSchema) {
-  const thumbnailFile = await uploadFile(`/thumbnail/${game.thumbnail[0].name}`, game.thumbnail[0]);
-  const thumbnailRef = await getDownloadURL(thumbnailFile?.ref as StorageReference);
-  const createdGame = await addDoc(collection(db, 'games'), {
-    title: game.title,
-    genre: game.genre,
-    release_date: new Date(game.release_date),
-    short_description: game.short_description,
-    description: game.description,
-    platform: game.platform,
-    developer: game.developer,
-    publisher: game.publisher,
-    game_url: game.game_url,
-    min_system_requirements: {
-      os: game.min_system_requirements.os,
-      processor: game.min_system_requirements.processor,
-      graphics: game.min_system_requirements.graphics,
-      memory: game.min_system_requirements.memory,
-      storage: game.min_system_requirements.storage,
-    },
-    isFree: game.isFree,
-    thumbnail: thumbnailRef,
-  }).catch(() => {
+export async function createGame(game: CreateGameInput) {
+  const createdGame = await addDoc(collection(db, 'games'), game).catch(() => {
     throw new AddDocFirebaseError();
   });
 
-  await makeGameRelation(createdGame.id).catch(() => {
-    throw new Error('Erro ao criar as relações do jogo');
+  await makeGameRelation(createdGame.id).catch((error) => {
+    throw new Error(`Erro ao criar as relações do jogo: ${error.message}`);
   });
 }
 
 async function makeGameRelation(gameId: string) {
   const gameData = await getGameById(gameId);
-  const genresSnapshot = await getAllGenres();
-  const platformsSnapshot = await getAllPlatforms();
-  const isNewPlatform = platformsSnapshot.docs.some((doc) => doc.data().name === gameData.platform) === false;
-  const isNewGenre = genresSnapshot.docs.some((doc) => doc.data().name === gameData.genre) === false;
+  const { newPlatformsId, oldPlatformsId } = await checkForNewPlatforms(gameData.platform);
+  const { newGenresId, oldGenresId } = await checkForNewGenres(gameData.genre);
 
-  if (isNewGenre) {
-    await createGenre(gameData.genre, gameData.id);
-  } else {
-    const genre = await getGenreByName(gameData.genre);
-    await updateGenre(genre.id, gameData.id);
+  if (newPlatformsId.length > 0) {
+    newPlatformsId.forEach(async (platformId) => {
+      await createPlatform({
+        id: platformId,
+        slug: platformId,
+        name: platformId,
+        gamesId: [gameData.id],
+      });
+    });
   }
 
-  if (isNewPlatform) {
-    await createPlatform(gameData.platform, gameData.id);
-  } else {
-    const platform = await getPlatformByName(gameData.platform);
-    await updatePlatform(platform.id, gameData.id);
+  if (oldPlatformsId.length > 0) {
+    oldPlatformsId.forEach(async (id) => {
+      await updatePlatformGamesId(id, gameData.id);
+    });
+  }
+
+  if (newGenresId.length > 0) {
+    newGenresId.forEach(async (genreId) => {
+      await createGenre({
+        id: genreId,
+        slug: genreId,
+        name: genreId,
+        gamesId: [gameData.id],
+      });
+    });
+  }
+
+  if (oldGenresId.length > 0) {
+    oldGenresId.forEach(async (id) => {
+      await updateGenreGamesId(id, gameData.id);
+    });
   }
 }
 
