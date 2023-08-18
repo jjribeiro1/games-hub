@@ -17,11 +17,11 @@ export interface RootObject {
 }
 
 export interface MinimumSystemRequirements {
-  graphics: string;
-  memory: string;
-  os: string;
-  processor: string;
-  storage: string;
+  graphics: string | null;
+  memory: string | null;
+  os: string | null;
+  processor: string | null;
+  storage: string | null;
 }
 
 export interface Screenshot {
