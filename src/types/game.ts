@@ -17,3 +17,4 @@ export interface Game {
   thumbnail: string;
 }
 
+export interface CreateGameInput extends Omit<Game, 'id'> {}
