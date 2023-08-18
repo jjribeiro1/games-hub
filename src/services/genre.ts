@@ -1,4 +1,13 @@
-import { addDoc, arrayUnion, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import { Genre } from '@/types/genre';
 
@@ -14,13 +23,32 @@ export async function getGenreByName(name: string) {
   return { id: docSnap.docs[0].id, ...docSnap.docs[0].data() } as Genre;
 }
 
-export async function createGenre(name: string, gameId: string) {
-  await addDoc(collection(db, 'genres'), { name, gamesId: [gameId] });
+export async function createGenre(data: Genre) {
+  await setDoc(doc(db, 'genres', data.id), { name: data.name, slug: data.slug, gamesId: data.gamesId });
 }
 
-export async function updateGenre(genreId: string, gameId: string) {
+export async function updateGenreGamesId(genreId: string, gameId: string) {
   const genreRef = doc(db, 'genres', genreId);
   await updateDoc(genreRef, {
     gamesId: arrayUnion(gameId),
   });
+}
+
+export async function checkForNewGenres(genresId: string[]) {
+  const currentGenres = await getAllGenres();
+  const newGenresId: string[] = [];
+  const oldGenresId: string[] = [];
+
+  for (const genreId of genresId) {
+    if (currentGenres.some((genre) => genre.id === genreId)) {
+      oldGenresId.push(genreId);
+    } else {
+      newGenresId.push(genreId);
+    }
+  }
+
+  return {
+    newGenresId,
+    oldGenresId,
+  };
 }
