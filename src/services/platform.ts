@@ -1,4 +1,14 @@
-import { addDoc, arrayUnion, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import { Platform } from '@/types/platform';
 
@@ -14,13 +24,32 @@ export async function getPlatformByName(name: string) {
   return { id: docSnap.docs[0].id, ...docSnap.docs[0].data() } as Platform;
 }
 
-export async function createPlatform(name: string, gameId: string) {
-  await addDoc(collection(db, 'platforms'), { name, gamesId: [gameId] });
+export async function createPlatform(data: Platform) {
+  await setDoc(doc(db, 'platforms', data.id), { name: data.name, slug: data.slug, gamesId: data.gamesId });
 }
 
-export async function updatePlatform(genreId: string, gameId: string) {
-  const genreRef = doc(db, 'platforms', genreId);
-  await updateDoc(genreRef, {
+export async function updatePlatformGamesId(platformId: string, gameId: string) {
+  const platformRef = doc(db, 'platforms', platformId);
+  await updateDoc(platformRef, {
     gamesId: arrayUnion(gameId),
   });
+}
+
+export async function checkForNewPlatforms(platformsId: string[]) {
+  const currentPlatforms = await getAllPlatforms();
+  const newPlatformsId: string[] = [];
+  const oldPlatformsId: string[] = [];
+
+  for (const platformId of platformsId) {
+    if (currentPlatforms.some((platform) => platform.id === platformId)) {
+      oldPlatformsId.push(platformId);
+    } else {
+      newPlatformsId.push(platformId);
+    }
+  }
+
+  return {
+    newPlatformsId,
+    oldPlatformsId,
+  };
 }
