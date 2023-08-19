@@ -60,51 +60,14 @@ export async function getAllGames() {
   return getDocs(collection(db, 'games'));
 }
 
-export async function getGamesByFilters(filters: GamesFilters) {
-  const q = query(collection(db, 'games'), where(filters.fieldPath, filters.operator, filters.value));
-  return getDocs(q);
+export async function getGamesByFilters({ fieldPath, operator, value }: GamesFilters) {
+  const q = query(collection(db, 'games'), where(fieldPath, operator, value));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Game[];
 }
 
 export async function getGameById(id: string) {
   const docRef = doc(db, 'games', id);
   const docSnap = await getDoc(docRef);
   return { id: docSnap.id, ...docSnap.data() } as Game;
-}
-
-export async function getGamesByGenre(genreName: string) {
-  const genreQuery = query(collection(db, 'genres'), where('name', '==', genreName));
-  const genreSnapshot = await getDocs(genreQuery);
-
-  if (genreSnapshot.empty) {
-    return [];
-  }
-
-  const gamesId = genreSnapshot.docs[0].data().gamesId as string[];
-  const gamesPromises = gamesId.map((gameId) => getDoc(doc(db, 'games', gameId)));
-
-  const gamesSnapshots = await Promise.all(gamesPromises);
-  const games = gamesSnapshots.map(
-    (gameSnapshot) => ({ id: gameSnapshot.id, ...gameSnapshot.data() }) as Game,
-  );
-
-  return games;
-}
-
-export async function getGamesByPlatform(platformName: string) {
-  const platformQuery = query(collection(db, 'platforms'), where('name', '==', platformName));
-  const platformSnapshot = await getDocs(platformQuery);
-
-  if (platformSnapshot.empty) {
-    return [];
-  }
-
-  const gamesId = platformSnapshot.docs[0].data().gamesId as string[];
-  const gamesPromises = gamesId.map((gameId) => getDoc(doc(db, 'games', gameId)));
-
-  const gamesSnapshots = await Promise.all(gamesPromises);
-  const games = gamesSnapshots.map(
-    (gameSnapshot) => ({ id: gameSnapshot.id, ...gameSnapshot.data() }) as Game,
-  );
-
-  return games;
 }
