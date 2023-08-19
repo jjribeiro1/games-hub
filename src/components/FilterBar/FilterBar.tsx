@@ -16,7 +16,7 @@ import { Platform } from '@/types/platform';
 
 interface FilterBarProps {
   genres: Genre[];
-  genreSlug: string;
+  genreSlug: string | null;
   mappedGenres: Map<string, string>;
   platforms: Platform[];
   platformSlug: string | null;
@@ -76,7 +76,7 @@ export default function FilterBar({
               </span>
 
               <span className="text-mine-shaft-200 flex items-center ml-1">
-                {mappedGenres.get(genreSlug)}
+                {genreSlug ? mappedGenres.get(genreSlug) : 'All genres'}
                 <FiChevronDown className="text-cyan-700 w-6 h-6" />
               </span>
             </Button>
