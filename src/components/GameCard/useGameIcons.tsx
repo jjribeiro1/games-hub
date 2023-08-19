@@ -14,7 +14,7 @@ export default function useGameIcons(game: Game) {
     const platforms = game.platform;
     const platformKeys = new Set<string>();
     const iconsMap = new Map<string | string[], React.JSX.Element>();
-    const doublePlatforms = ['playstation4', 'playstation5', 'xbox-one', 'xbox-series-x'];
+    const doublePlatforms = ['playstation-4', 'playstation-5', 'xbox-one', 'xbox-series-x'];
     iconsMap.set('pc', <BsWindows key={'pc'} className="text-mine-shaft-400 w-4 h-4" />);
     iconsMap.set('playstation', <BsPlaystation key={'playstation'} className="text-mine-shaft-400 w-5 h-5" />);
     iconsMap.set('xbox', <BsXbox key={'xbox'} className="text-mine-shaft-400 w-4 h-4" />);
@@ -28,7 +28,7 @@ export default function useGameIcons(game: Game) {
         if (platform === 'xbox-one' || platform === 'xbox-series-x') {
           platformKeys.add('xbox');
         }
-        if (platform === 'playstation4' || platform === 'playstation5') {
+        if (platform === 'playstation-4' || platform === 'playstation-5') {
           platformKeys.add('playstation');
         }
       } else {
