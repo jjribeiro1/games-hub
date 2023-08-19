@@ -58,13 +58,9 @@ export default function GameDetailsPage() {
 
       <div className="text-mine-shaft-100 text-sm mt-4 px-4 w-[75%]">
         <div className="flex items-center gap-2">
-          <Link href={'/'}>
-            Home
-          </Link>
+          <Link href={'/'}>Home</Link>
           <BiChevronRight />
-          <Link href={'/games'}>
-            Games
-          </Link>
+          <Link href={'/games'}>Games</Link>
           <BiChevronRight />
           <span>{data?.title}</span>
         </div>

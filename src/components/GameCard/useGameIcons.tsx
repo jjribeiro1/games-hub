@@ -16,13 +16,22 @@ export default function useGameIcons(game: Game) {
     const iconsMap = new Map<string | string[], React.JSX.Element>();
     const doublePlatforms = ['playstation-4', 'playstation-5', 'xbox-one', 'xbox-series-x'];
     iconsMap.set('pc', <BsWindows key={'pc'} className="text-mine-shaft-400 w-4 h-4" />);
-    iconsMap.set('playstation', <BsPlaystation key={'playstation'} className="text-mine-shaft-400 w-5 h-5" />);
+    iconsMap.set(
+      'playstation',
+      <BsPlaystation key={'playstation'} className="text-mine-shaft-400 w-5 h-5" />,
+    );
     iconsMap.set('xbox', <BsXbox key={'xbox'} className="text-mine-shaft-400 w-4 h-4" />);
-    iconsMap.set('nintendo-switch',<BsNintendoSwitch key={'nintendo-switch'} className="text-mine-shaft-400 w-4 h-4" />);
+    iconsMap.set(
+      'nintendo-switch',
+      <BsNintendoSwitch key={'nintendo-switch'} className="text-mine-shaft-400 w-4 h-4" />,
+    );
     iconsMap.set('android', <BsAndroid2 key={'android'} className="text-mine-shaft-400 w-4 h-4" />);
     iconsMap.set('ios', <MdPhoneIphone key={'ios'} className="text-mine-shaft-400 w-4 h-4" />);
-    iconsMap.set('web-browser', <BsBrowserChrome key={'web-browser'} className="text-mine-shaft-400 w-4 h-4" />);
-    
+    iconsMap.set(
+      'web-browser',
+      <BsBrowserChrome key={'web-browser'} className="text-mine-shaft-400 w-4 h-4" />,
+    );
+
     platforms.forEach((platform) => {
       if (doublePlatforms.includes(platform)) {
         if (platform === 'xbox-one' || platform === 'xbox-series-x') {
@@ -36,11 +45,9 @@ export default function useGameIcons(game: Game) {
       }
     });
     return Array.from(platformKeys.values()).map((key) => iconsMap.get(key));
-  }
+  };
 
   return {
-    gameIcons
-  }
+    gameIcons,
+  };
 }
-
-

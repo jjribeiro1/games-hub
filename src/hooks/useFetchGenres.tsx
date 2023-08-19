@@ -16,6 +16,6 @@ export default function useFetchGenres() {
 
   return {
     genres: data,
-    mappedGenres: genresMap
+    mappedGenres: genresMap,
   };
 }

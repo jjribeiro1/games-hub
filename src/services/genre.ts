@@ -1,13 +1,4 @@
-import {
-  arrayUnion,
-  collection,
-  doc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
+import { arrayUnion, collection, doc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import { Genre } from '@/types/genre';
 
