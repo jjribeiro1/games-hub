@@ -4,31 +4,30 @@ import { useParams } from 'next/navigation';
 import { GameCard } from '@/components/GameCard';
 import { FilterBar } from '@/components/FilterBar';
 import useFetchGenres from '@/hooks/useFetchGenres';
-import useFetchGamesByGenre from '@/hooks/useFetchGamesByGenre';
-import { Genre } from '@/types/genre';
 import useFetchPlatforms from '@/hooks/useFetchPlatforms';
+import useFetchGamesBySlug from '@/hooks/useFetchGamesBySlug';
+import { Genre } from '@/types/genre';
 import { Platform } from '@/types/platform';
 
 export default function GamesSlugPage() {
   const { genres, mappedGenres } = useFetchGenres();
   const { platforms, mappedPlatforms } = useFetchPlatforms();
   const { slug } = useParams();
-  const genreSlug = slug.length > 1 ? slug[1] : slug[0];
-  const platformSlug = slug.length > 1 ? slug[0] : null;
-  const originalGenre = mappedGenres.get(genreSlug) as string;
+  let platformSlug = null;
+  let genreSlug = null;
 
-  const { games } = useFetchGamesByGenre(originalGenre);
+  if (slug.length === 1) {
+    mappedPlatforms.has(slug[0]) ? (platformSlug = slug[0]) : (genreSlug = slug[0]);
+  }
+  if (slug.length > 1) {
+    genreSlug = slug[1];
+    platformSlug = slug[0];
+  }
 
-  const headingText = () => {
-    return `Top Free ${originalGenre} ${
-      originalGenre?.includes(' Game') ? '' : 'games'
-    }  in ${new Date().getFullYear()}`;
-  };
+  const { games } = useFetchGamesBySlug({ platformSlug, genreSlug });
 
   return (
     <main className="flex flex-col items-center gap-8 mt-6 px-4 w-full">
-      <h1 className="text-mine-shaft-200 text-xl">{headingText()}</h1>
-
       <section className="">
         <FilterBar
           genres={genres as Genre[]}
