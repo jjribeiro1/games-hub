@@ -1,15 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Game } from '@/types/game';
 import useGameIcons from './useGameIcons';
+import { Game } from '@/types/game';
 
 interface GameCardProps {
   game: Game;
-  mappedGenres: Map<string, string>;
 }
 
-export default function GameCard({ game, mappedGenres }: GameCardProps) {
+export default function GameCard({ game }: GameCardProps) {
   const { gameIcons } = useGameIcons(game);
 
   return (
