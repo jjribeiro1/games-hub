@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,8 +32,28 @@ export default function FilterBar({
   platformSlug,
   mappedPlatforms,
 }: FilterBarProps) {
-  const [activeSortOption, setActiveSortOption] = useState('Relevance');
-  const sortOptions = ['Relevance', 'Release Date', 'Alphabetical'];
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const sortOptions = new Map<string, { name: string; slug: string }>();
+  sortOptions.set('relevance', { name: 'Relevance', slug: 'relevance' });
+  sortOptions.set('release_date', { name: 'Release Date', slug: 'release_date' });
+  sortOptions.set('alphabetical', { name: 'Alphabetical', slug: 'alphabetical' });
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  const handleSortClick = (option: string) => {
+    router.push(pathname + '?' + createQueryString('sort_by', option));
+  };
+  
 
   return (
     <div className="w-full flex items-center gap-4">
@@ -110,20 +131,22 @@ export default function FilterBar({
               </span>
 
               <span className="text-mine-shaft-200 flex items-center ml-1">
-                {activeSortOption}
+                {searchParams.has('sort_by')
+                  ? sortOptions.get(searchParams.get('sort_by') as string)?.name
+                  : 'Relevance'}
                 <FiChevronDown className="text-cyan-700 w-6 h-6" />
               </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuPortal>
             <DropdownMenuContent className="w-48 bg-mine-shaft-100">
-              {sortOptions?.map((option) => (
+              {Array.from(sortOptions.values()).map((option) => (
                 <DropdownMenuItem
-                  key={option}
+                  key={option.name}
                   className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
-                  onClick={() => setActiveSortOption(option)}
+                  onClick={() => handleSortClick(option.slug)}
                 >
-                  {option}
+                  {option.name}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>

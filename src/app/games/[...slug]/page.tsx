@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { GameCard } from '@/components/GameCard';
 import { FilterBar } from '@/components/FilterBar';
 import useFetchGenres from '@/hooks/useFetchGenres';
@@ -13,6 +13,12 @@ export default function GamesSlugPage() {
   const { genres, mappedGenres } = useFetchGenres();
   const { platforms, mappedPlatforms } = useFetchPlatforms();
   const { slug } = useParams();
+  const searchParams = useSearchParams();
+  const selectedSortBy = searchParams.get('sort_by') as string;
+  const selectedSortByMap = new Map<string, { fieldPath: string; value: 'asc' | 'desc' }>();
+  selectedSortByMap.set('release_date', { fieldPath: 'release_date', value: 'desc' });
+  selectedSortByMap.set('alphabetical', { fieldPath: 'title', value: 'asc' });
+
   let platformSlug = null;
   let genreSlug = null;
 
@@ -24,7 +30,11 @@ export default function GamesSlugPage() {
     platformSlug = slug[0];
   }
 
-  const { games } = useFetchGamesBySlug({ platformSlug, genreSlug });
+  const { games } = useFetchGamesBySlug({
+    platformSlug,
+    genreSlug,
+    sortBy: selectedSortByMap.get(selectedSortBy),
+  });
 
   return (
     <main className="flex flex-col items-center gap-8 mt-6 px-4 w-full">

@@ -5,18 +5,28 @@ import { Game } from '@/types/game';
 interface Props {
   platformSlug: string | null;
   genreSlug: string | null;
+  sortBy?: {
+    fieldPath: string;
+    value: 'asc' | 'desc';
+  };
 }
 
-export default function useFetchGamesBySlug({ platformSlug, genreSlug }: Props) {
+export default function useFetchGamesBySlug({ platformSlug, genreSlug, sortBy }: Props) {
   const fetchGamesByPlatform = async () =>
     await getGamesByFilters({
       fieldPath: 'platform',
       operator: 'array-contains',
       value: platformSlug as string,
+      sortBy,
     });
 
   const fetchGamesByGenre = async () =>
-    await getGamesByFilters({ fieldPath: 'genre', operator: 'array-contains', value: genreSlug as string });
+    await getGamesByFilters({
+      fieldPath: 'genre',
+      operator: 'array-contains',
+      value: genreSlug as string,
+      sortBy,
+    });
 
   const fetchGamesByPlatformAndGenre = async () => {
     const gamesByPlatform = await fetchGamesByPlatform();
@@ -38,7 +48,7 @@ export default function useFetchGamesBySlug({ platformSlug, genreSlug }: Props) 
   };
 
   const { data } = useQuery({
-    queryKey: ['fetch-games-by-slug', platformSlug, genreSlug],
+    queryKey: ['fetch-games-by-slug', platformSlug, genreSlug, sortBy],
     queryFn: fetcher,
     staleTime: 1000 * 60 * 10,
     cacheTime: 1000 * 60 * 10,
