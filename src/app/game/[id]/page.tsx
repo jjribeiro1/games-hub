@@ -21,8 +21,8 @@ export default function GameDetailsPage() {
   });
 
   return (
-    <section className="relative flex w-full h-full">
-      <div className="absolute w-full h-full opacity-5 -z-50">
+    <section className="relative flex w-full min-h-screen">
+      <div className="absolute w-full h-full opacity-25 -z-50">
         <div className="relative w-full h-[60%]">
           <Image
             className="object-cover"
