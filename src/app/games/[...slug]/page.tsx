@@ -14,10 +14,12 @@ export default function GamesSlugPage() {
   const { platforms, mappedPlatforms } = useFetchPlatforms();
   const { slug } = useParams();
   const searchParams = useSearchParams();
-  const selectedSortBy = searchParams.get('sort_by') as string;
-  const selectedSortByMap = new Map<string, { fieldPath: string; value: 'asc' | 'desc' }>();
-  selectedSortByMap.set('release_date', { fieldPath: 'release_date', value: 'desc' });
-  selectedSortByMap.set('alphabetical', { fieldPath: 'title', value: 'asc' });
+  const activeSortBy = searchParams.get('sort_by') as string;
+  const sortByQueryStringMap = new Map<string, { name: string; slug: string; fieldPath: string; value: 'asc' | 'desc' }>([
+    ['relevance', { name: 'Relevance', slug: 'relevance', fieldPath: '', value: 'asc'}],
+    ['release_date', {name: 'Release Date', slug: 'release_date', fieldPath: 'release_date', value: 'desc'}],
+    ['alphabetical', { name: 'Alphabetical', slug: 'alphabetical', fieldPath: 'title', value: 'asc'}]
+  ]);
 
   let platformSlug = null;
   let genreSlug = null;
@@ -33,7 +35,7 @@ export default function GamesSlugPage() {
   const { games } = useFetchGamesBySlug({
     platformSlug,
     genreSlug,
-    sortBy: selectedSortByMap.get(selectedSortBy),
+    sortBy: activeSortBy !== 'relevance' ? sortByQueryStringMap.get(activeSortBy) : undefined
   });
 
   return (
@@ -46,6 +48,8 @@ export default function GamesSlugPage() {
           platforms={platforms as Platform[]}
           platformSlug={platformSlug}
           mappedPlatforms={mappedPlatforms}
+          activeSortBy={activeSortBy}
+          sortByQueryStringMap={sortByQueryStringMap}
         />
       </section>
 

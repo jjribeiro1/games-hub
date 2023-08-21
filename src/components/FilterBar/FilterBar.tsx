@@ -22,6 +22,16 @@ interface FilterBarProps {
   platforms: Platform[];
   platformSlug: string | null;
   mappedPlatforms: Map<string, string>;
+  activeSortBy: string;
+  sortByQueryStringMap: Map<
+    string,
+    {
+      name: string;
+      slug: string;
+      fieldPath: string;
+      value: string;
+    }
+  >;
 }
 
 export default function FilterBar({
@@ -31,14 +41,12 @@ export default function FilterBar({
   platforms,
   platformSlug,
   mappedPlatforms,
+  activeSortBy,
+  sortByQueryStringMap,
 }: FilterBarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const sortOptions = new Map<string, { name: string; slug: string }>();
-  sortOptions.set('relevance', { name: 'Relevance', slug: 'relevance' });
-  sortOptions.set('release_date', { name: 'Release Date', slug: 'release_date' });
-  sortOptions.set('alphabetical', { name: 'Alphabetical', slug: 'alphabetical' });
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -54,7 +62,6 @@ export default function FilterBar({
     router.push(pathname + '?' + createQueryString('sort_by', option));
   };
   
-
   return (
     <div className="w-full flex items-center gap-4">
       <div>
@@ -131,16 +138,14 @@ export default function FilterBar({
               </span>
 
               <span className="text-mine-shaft-200 flex items-center ml-1">
-                {searchParams.has('sort_by')
-                  ? sortOptions.get(searchParams.get('sort_by') as string)?.name
-                  : 'Relevance'}
+                {activeSortBy ? sortByQueryStringMap.get(activeSortBy)?.name : 'Relevance'}
                 <FiChevronDown className="text-cyan-700 w-6 h-6" />
               </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuPortal>
             <DropdownMenuContent className="w-48 bg-mine-shaft-100">
-              {Array.from(sortOptions.values()).map((option) => (
+              {Array.from(sortByQueryStringMap.values()).map((option) => (
                 <DropdownMenuItem
                   key={option.name}
                   className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
