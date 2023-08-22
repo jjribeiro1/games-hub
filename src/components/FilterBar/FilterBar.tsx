@@ -26,7 +26,9 @@ interface FilterBarProps {
 export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatforms }: FilterBarProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { platformSlug, genreSlug, activeSortBy, searchParams } = useVerifyGamesPageUrlfrom({ mappedPlatforms });
+  const { platformSlug, genreSlug, activeSortBy, searchParams } = useVerifyGamesPageUrlfrom({
+    mappedPlatforms,
+  });
 
   const sortByQueryStringMap = new Map<string, { name: string; slug: string }>([
     ['relevance', { name: 'Relevance', slug: 'relevance' }],
@@ -76,6 +78,9 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
                   </Link>
                 </DropdownMenuItem>
               ))}
+              <DropdownMenuItem className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded">
+                <Link href={`/games/${genreSlug ?? ''}`}>All platforms</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenuPortal>
         </DropdownMenu>
