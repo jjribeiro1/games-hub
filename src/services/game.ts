@@ -57,7 +57,9 @@ async function makeGameRelation(gameId: string) {
 }
 
 export async function getAllGames() {
-  return getDocs(collection(db, 'games'));
+  const snapshot = await getDocs(collection(db, 'games'));
+  const games = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Game[];
+  return games;
 }
 
 export async function getGamesByFilters({ fieldPath, operator, value, sortBy }: GamesFilters) {
