@@ -3,7 +3,7 @@ import { getAllGames } from '@/services/game';
 import { useQuery } from '@tanstack/react-query';
 
 export default function useFetchAllGames() {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['fetch-all-games'],
     queryFn: getAllGames,
     staleTime: 1000 * 60 * 10,
@@ -12,5 +12,6 @@ export default function useFetchAllGames() {
 
   return {
     games: data,
+    isLoading
   };
 }

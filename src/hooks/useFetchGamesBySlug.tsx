@@ -47,7 +47,7 @@ export default function useFetchGamesBySlug({ platformSlug, genreSlug, sortBy }:
     }
   };
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['fetch-games-by-slug', platformSlug, genreSlug, sortBy],
     queryFn: fetcher,
     staleTime: 1000 * 60 * 10,
@@ -56,5 +56,6 @@ export default function useFetchGamesBySlug({ platformSlug, genreSlug, sortBy }:
 
   return {
     games: data as Game[],
+    isLoading
   };
 }
