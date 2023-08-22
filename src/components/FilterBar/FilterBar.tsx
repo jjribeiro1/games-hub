@@ -1,7 +1,7 @@
 'use client';
 import React, { useCallback } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,39 +14,25 @@ import { BiCheckboxChecked } from 'react-icons/bi';
 import { FiChevronDown } from 'react-icons/fi';
 import { Genre } from '@/types/genre';
 import { Platform } from '@/types/platform';
+import useVerifyGamesPageUrlfrom from '@/hooks/useVerifyGamesPageUrl';
 
 interface FilterBarProps {
   genres: Genre[];
-  genreSlug: string | null;
   mappedGenres: Map<string, string>;
   platforms: Platform[];
-  platformSlug: string | null;
   mappedPlatforms: Map<string, string>;
-  activeSortBy: string;
-  sortByQueryStringMap: Map<
-    string,
-    {
-      name: string;
-      slug: string;
-      fieldPath: string;
-      value: string;
-    }
-  >;
 }
 
-export default function FilterBar({
-  genres,
-  genreSlug,
-  mappedGenres,
-  platforms,
-  platformSlug,
-  mappedPlatforms,
-  activeSortBy,
-  sortByQueryStringMap,
-}: FilterBarProps) {
+export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatforms }: FilterBarProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const { platformSlug, genreSlug, activeSortBy, searchParams } = useVerifyGamesPageUrlfrom({ mappedPlatforms });
+
+  const sortByQueryStringMap = new Map<string, { name: string; slug: string }>([
+    ['relevance', { name: 'Relevance', slug: 'relevance' }],
+    ['release_date', { name: 'Release Date', slug: 'release_date' }],
+    ['alphabetical', { name: 'Alphabetical', slug: 'alphabetical' }],
+  ]);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -58,10 +44,10 @@ export default function FilterBar({
     [searchParams],
   );
 
-  const handleSortClick = (option: string) => {
+  const handleSortByClick = (option: string) => {
     router.push(pathname + '?' + createQueryString('sort_by', option));
   };
-  
+
   return (
     <div className="w-full flex items-center gap-4">
       <div>
@@ -149,7 +135,7 @@ export default function FilterBar({
                 <DropdownMenuItem
                   key={option.name}
                   className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
-                  onClick={() => handleSortClick(option.slug)}
+                  onClick={() => handleSortByClick(option.slug)}
                 >
                   {option.name}
                 </DropdownMenuItem>
