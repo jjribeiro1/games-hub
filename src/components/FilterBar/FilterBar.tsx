@@ -51,104 +51,98 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
   };
 
   return (
-    <div className="w-full flex items-center gap-4">
-      <div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
-              <span className="text-mine-shaft-400 font-semibold flex items-center">
-                Platform: <BiCheckboxChecked className="text-cyan-700 w-6 h-6" />
-              </span>
+    <div className="flex flex-wrap items-center gap-2 md:gap-4">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
+            <span className="text-mine-shaft-400 text-xs sm:text-sm md:text-base font-semibold flex items-center">
+              Platform: <BiCheckboxChecked className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+            </span>
 
-              <span className="text-mine-shaft-200 flex items-center ml-1">
-                {platformSlug ? mappedPlatforms.get(platformSlug) : 'All Platforms'}
-                <FiChevronDown className="text-cyan-700 w-6 h-6" />
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuContent className="w-48 bg-mine-shaft-100">
-              {platforms?.map((platform) => (
-                <DropdownMenuItem
-                  key={platform.id}
-                  className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
-                >
-                  <Link href={`/games/${platform.slug}/${genreSlug}`} className="w-full">
-                    {platform.name}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuItem className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded">
-                <Link href={`/games/${genreSlug ?? ''}`}>All platforms</Link>
+            <span className="text-mine-shaft-200 text-xs md:text-base flex items-center ml-1">
+              {platformSlug ? mappedPlatforms.get(platformSlug) : 'All Platforms'}
+              <FiChevronDown className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuContent className="w-48 bg-mine-shaft-100">
+            {platforms?.map((platform) => (
+              <DropdownMenuItem
+                key={platform.id}
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+              >
+                <Link href={`/games/${platform.slug}/${genreSlug}`} className="w-full">
+                  {platform.name}
+                </Link>
               </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenuPortal>
-        </DropdownMenu>
-      </div>
+            ))}
+            <DropdownMenuItem className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded">
+              <Link href={`/games/${genreSlug ?? ''}`}>All platforms</Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenu>
 
-      <div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
-              <span className="text-mine-shaft-400 font-semibold flex items-center">
-                Genre: <BiCheckboxChecked className="text-cyan-700 w-6 h-6" />
-              </span>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
+            <span className="text-mine-shaft-400 text-xs sm:text-sm md:text-base font-semibold flex items-center">
+              Genre: <BiCheckboxChecked className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+            </span>
 
-              <span className="text-mine-shaft-200 flex items-center ml-1">
-                {genreSlug ? mappedGenres.get(genreSlug) : 'All genres'}
-                <FiChevronDown className="text-cyan-700 w-6 h-6" />
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuContent className="w-48 bg-mine-shaft-100">
-              {genres?.map((genre) => (
-                <DropdownMenuItem
-                  key={genre.id}
-                  className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+            <span className="text-mine-shaft-200 text-xs md:text-base flex items-center ml-1">
+              {genreSlug ? mappedGenres.get(genreSlug) : 'All genres'}
+              <FiChevronDown className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuContent className="w-48 bg-mine-shaft-100">
+            {genres?.map((genre) => (
+              <DropdownMenuItem
+                key={genre.id}
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+              >
+                <Link
+                  href={platformSlug ? `/games/${platformSlug}/${genre.slug}` : `/games/${genre.slug}`}
+                  className="w-full"
                 >
-                  <Link
-                    href={platformSlug ? `/games/${platformSlug}/${genre.slug}` : `/games/${genre.slug}`}
-                    className="w-full"
-                  >
-                    {genre.name}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenuPortal>
-        </DropdownMenu>
-      </div>
+                  {genre.name}
+                </Link>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenu>
 
-      <div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
-              <span className="text-mine-shaft-400 font-semibold flex items-center">
-                Sort By: <BiCheckboxChecked className="text-cyan-700 w-6 h-6" />
-              </span>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
+            <span className="text-mine-shaft-400 text-xs sm:text-sm md:text-base font-semibold flex items-center">
+              Sort By: <BiCheckboxChecked className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+            </span>
 
-              <span className="text-mine-shaft-200 flex items-center ml-1">
-                {activeSortBy ? sortByQueryStringMap.get(activeSortBy)?.name : 'Relevance'}
-                <FiChevronDown className="text-cyan-700 w-6 h-6" />
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuContent className="w-48 bg-mine-shaft-100">
-              {Array.from(sortByQueryStringMap.values()).map((option) => (
-                <DropdownMenuItem
-                  key={option.name}
-                  className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
-                  onClick={() => handleSortByClick(option.slug)}
-                >
-                  {option.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenuPortal>
-        </DropdownMenu>
-      </div>
+            <span className="text-mine-shaft-200 text-xs md:text-base flex items-center ml-1">
+              {activeSortBy ? sortByQueryStringMap.get(activeSortBy)?.name : 'Relevance'}
+              <FiChevronDown className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuContent className="w-48 bg-mine-shaft-100">
+            {Array.from(sortByQueryStringMap.values()).map((option) => (
+              <DropdownMenuItem
+                key={option.name}
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+                onClick={() => handleSortByClick(option.slug)}
+              >
+                {option.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenu>
     </div>
   );
 }

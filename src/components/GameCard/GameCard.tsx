@@ -12,7 +12,7 @@ export default function GameCard({ game }: GameCardProps) {
   const { gameIcons } = useGameIcons(game);
 
   return (
-    <div className="bg-mine-shaft-900 w-60 h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-md hover:scale-105 transition-transform">
+    <div className="bg-mine-shaft-900 w-72 h-72 sm:w-64 sm:h-64 md:w-60 lg:w-72 lg:h-72 min-[1440px]:w-80 min-[1440px]:h-80 rounded-md hover:scale-105 transition-transform">
       <Link href={`/game/${game.id}`}>
         <div className="flex flex-col gap-2">
           <Image

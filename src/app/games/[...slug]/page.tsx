@@ -22,7 +22,7 @@ export default function GamesSlugPage() {
   });
 
   return (
-    <section className="w-full px-4">
+    <section>
       {isLoading ? (
         <Spinner />
       ) : (
