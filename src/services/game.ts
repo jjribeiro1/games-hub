@@ -1,4 +1,15 @@
-import { collection, addDoc, getDocs, query, where, doc, getDoc, orderBy } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc,
+  orderBy,
+  limit,
+  startAfter,
+} from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import { checkForNewPlatforms, createPlatform, updatePlatformGamesId } from './platform';
 import { checkForNewGenres, createGenre, updateGenreGamesId } from './genre';
@@ -56,10 +67,17 @@ async function makeGameRelation(gameId: string) {
   }
 }
 
-export async function getAllGames() {
-  const snapshot = await getDocs(collection(db, 'games'));
+export async function getAllGames({ pageParam }: any) {
+  let q = query(collection(db, 'games'), limit(8));
+  if (pageParam) {
+    q = query(collection(db, 'games'), limit(8), startAfter(pageParam));
+  }
+  const snapshot = await getDocs(q);
   const games = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Game[];
-  return games;
+  return {
+    games,
+    lastDocRef: snapshot.docs[snapshot.docs.length - 1],
+  };
 }
 
 export async function getGamesByFilters({ fieldPath, operator, value, sortBy }: GamesFilters) {
