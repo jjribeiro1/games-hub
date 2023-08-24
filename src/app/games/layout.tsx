@@ -11,7 +11,7 @@ export default function GamesLayout({ children }: { children: React.ReactNode })
   const { platforms, mappedPlatforms } = useFetchPlatforms();
 
   return (
-    <main className="flex flex-col items-center gap-8 mt-6 px-2 lg:px-4 w-full">
+    <main className="flex flex-col items-center gap-8 mt-6 px-2 lg:px-4 py-4 w-full">
       <section>
         <FilterBar
           genres={genres as Genre[]}
