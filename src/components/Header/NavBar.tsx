@@ -5,13 +5,14 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { FiChevronDown } from 'react-icons/fi';
 import useFetchGenres from '@/hooks/useFetchGenres';
 import useFetchPlatforms from '@/hooks/useFetchPlatforms';
+import { Button } from '../ui/button';
 
 export default function NavBar() {
   const { genres } = useFetchGenres();
   const { platforms } = useFetchPlatforms();
 
   return (
-    <NavigationMenu.Root>
+    <NavigationMenu.Root className="w-full flex items-center justify-between pb-1">
       <NavigationMenu.List className="flex items-center gap-10">
         <NavigationMenu.Item className="relative">
           <NavigationMenu.Trigger
@@ -94,6 +95,21 @@ export default function NavBar() {
           </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu.List>
+
+      <div>
+        <ul className="flex gap-2">
+          <li>
+            <Button type="button" variant={'link'} asChild className='text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg'>
+              <Link href={'/login'}>Login</Link>
+            </Button>
+          </li>
+          <li>
+            <Button type="button" variant={'link'} asChild className='text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg'>
+              <Link href={'/register'}>Register</Link>
+            </Button>
+          </li>
+        </ul>
+      </div>
     </NavigationMenu.Root>
   );
 }
