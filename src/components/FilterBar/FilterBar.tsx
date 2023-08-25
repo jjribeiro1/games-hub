@@ -72,7 +72,10 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
                 key={platform.id}
                 className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
               >
-                <Link href={`/games/${platform.slug}/${genreSlug}`} className="w-full">
+                <Link
+                  href={genreSlug ? `/games/${platform.slug}/${genreSlug}` : `/games/${platform.slug}`}
+                  className="w-full"
+                >
                   {platform.name}
                 </Link>
               </DropdownMenuItem>
