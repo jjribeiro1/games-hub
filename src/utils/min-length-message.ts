@@ -1,2 +1,2 @@
 export const minLengthMessage = (propName: string, minLength: number) =>
-  `${propName} deve ter pelo menos ${minLength} caracteres`;
+  `${propName} must be at least ${minLength} characters long`;
