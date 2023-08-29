@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '@/firebase/config';
 import { checkUserUniqueFields, saveUserTofirestore } from './user';
 import {
@@ -38,6 +38,14 @@ export async function login({ email, password }: LoginInput) {
       throw new InvalidLoginCredentialsError();
     }
 
+    throw new Error('unexpected error, try again later');
+  }
+}
+
+export async function logout() {
+  try {
+    await signOut(auth);
+  } catch (error) {
     throw new Error('unexpected error, try again later');
   }
 }
