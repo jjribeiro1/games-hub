@@ -18,10 +18,7 @@ export const registerUserSchema = z
       .string()
       .nonempty({ message: nonEmptyMessage('password') })
       .min(6, { message: minLengthMessage('password', 6) }),
-    passwordConfirmation: z
-      .string()
-      .nonempty({ message: nonEmptyMessage('password confirmation') })
-      .min(6, { message: minLengthMessage('password confirmation', 6) }),
+    passwordConfirmation: z.string(),
   })
   .superRefine(({ password, passwordConfirmation }, ctx) => {
     if (password !== passwordConfirmation) {
