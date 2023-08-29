@@ -10,8 +10,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { registerUserSchema } from '@/lib/schemas/register-user';
 import { newUserAuthentication } from '@/services/authentication';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof registerUserSchema>>({
     resolver: zodResolver(registerUserSchema),
     defaultValues: {
@@ -30,6 +33,7 @@ export default function RegisterPage() {
     try {
       const { email, password, username } = values;
       await newUserAuthentication({ email, password, username });
+      router.push('/');
       toast.success('Your account has been successfully created');
     } catch (error: any) {
       toast.error(error.message, { autoClose: 5000 });
