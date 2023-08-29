@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { loginSchema } from '@/lib/schemas/login-input';
+import { login } from '@/services/authentication';
 import { toast } from 'react-toastify';
 
 export default function LoginPage() {
@@ -25,7 +26,12 @@ export default function LoginPage() {
   ) {
     e?.preventDefault();
     try {
-    } catch (error) {}
+      const { email, password } = values;
+      await login({ email, password });
+      toast.success('Login successful! Welcome back!');
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   }
 
   return (

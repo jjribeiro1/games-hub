@@ -1,12 +1,17 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase/config';
-import { NewUserAuthenticationInput } from '@/types/new-user-auth-input';
 import { checkUserUniqueFields, saveUserTofirestore } from './user';
-import { NewUserAuthenticationError, UniqueFieldValidationError } from '@/exceptions';
+import {
+  InvalidLoginCredentialsError,
+  NewUserAuthenticationError,
+  UniqueFieldValidationError,
+} from '@/exceptions';
+import { NewUserAuthenticationInput } from '@/types/new-user-auth-input';
+import { LoginInput } from '@/types/login-input';
 
 export async function newUserAuthentication({ email, password, username }: NewUserAuthenticationInput) {
   try {
-    await checkUserUniqueFields(email, username)
+    await checkUserUniqueFields(email, username);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     await saveUserTofirestore({ email: user.email as string, uid: user.uid, username });
@@ -17,5 +22,22 @@ export async function newUserAuthentication({ email, password, username }: NewUs
       throw new Error(error.message);
     }
     throw new NewUserAuthenticationError();
+  }
+}
+
+export async function login({ email, password }: LoginInput) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    return user;
+  } catch (error: any) {
+    if (
+      error.message === 'Firebase: Error (auth/wrong-password).' ||
+      error.message === 'Firebase: Error (auth/user-not-found).'
+    ) {
+      throw new InvalidLoginCredentialsError();
+    }
+
+    throw new Error('unexpected error, try again later');
   }
 }

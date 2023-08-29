@@ -25,3 +25,10 @@ export class UniqueFieldValidationError extends Error {
     this.name = 'UniqueFieldValidationError';
   }
 }
+
+export class InvalidLoginCredentialsError extends Error {
+  constructor(message = 'Invalid login credentials. Review your information and try again.') {
+    super(message);
+    this.name = 'InvalidLoginCredentialsError';
+  }
+}
