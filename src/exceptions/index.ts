@@ -11,3 +11,17 @@ export class AddDocFirebaseError extends Error {
     this.name = 'AddDocFirebaseError';
   }
 }
+
+export class NewUserAuthenticationError extends Error {
+  constructor(message = 'unexpected error, could not create a new account') {
+    super(message);
+    this.name = 'NewUserAuthenticationError';
+  }
+}
+
+export class UniqueFieldValidationError extends Error {
+  constructor(readonly message: string) {
+    super(message);
+    this.name = 'UniqueFieldValidationError';
+  }
+}

@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { registerUserSchema } from '@/lib/schemas/register-user';
+import { newUserAuthentication } from '@/services/authentication';
+import { toast } from 'react-toastify';
 
 export default function RegisterPage() {
   const form = useForm<z.infer<typeof registerUserSchema>>({
@@ -20,12 +22,18 @@ export default function RegisterPage() {
     },
   });
 
-  function onSubmit(
+  async function onSubmit(
     values: z.infer<typeof registerUserSchema>,
     e: React.BaseSyntheticEvent<object, any, any> | undefined,
   ) {
     e?.preventDefault();
-    console.log(values);
+    try {
+      const { email, password, username } = values;
+      await newUserAuthentication({ email, password, username });
+      toast.success('Your account has been successfully created');
+    } catch (error: any) {
+      toast.error(error.message, { autoClose: 5000 });
+    }
   }
 
   return (
