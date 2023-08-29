@@ -135,7 +135,7 @@ export default function RegisterPage() {
           <div className="flex items-center self-center">
             <p className="text-mine-shaft-300 text-sm">Already a member?</p>
             <Button type="button" size={'sm'} variant={'link'} asChild>
-              <Link href={'/login'} className="text-cyan-500 hover:text-cyan-600 font-semibold text-sm">
+              <Link href={'/login'} className="text-cyan-600 hover:text-cyan-700 font-semibold text-sm">
                 Log in
               </Link>
             </Button>
