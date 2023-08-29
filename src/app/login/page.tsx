@@ -30,7 +30,7 @@ export default function LoginPage() {
       await login({ email, password });
       toast.success('Login successful! Welcome back!');
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.message, { autoClose: 5000 });
     }
   }
 
@@ -91,10 +91,14 @@ export default function LoginPage() {
 
           <div className="flex items-center self-center">
             <p className="text-mine-shaft-300 text-sm">{"Don't have an account?"}</p>
-            <Button type="button" size={'sm'} variant={'link'} asChild>
-              <Link href={'/register'} className="text-cyan-600 hover:text-cyan-700 font-semibold text-sm">
-                Register
-              </Link>
+            <Button
+              type="button"
+              size={'sm'}
+              variant={'link'}
+              asChild
+              className="text-cyan-600 hover:text-cyan-700 font-semibold text-sm"
+            >
+              <Link href={'/register'}>Register</Link>
             </Button>
           </div>
         </form>
