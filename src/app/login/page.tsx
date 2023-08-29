@@ -10,8 +10,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { loginSchema } from '@/lib/schemas/login-input';
 import { login } from '@/services/authentication';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -28,6 +31,7 @@ export default function LoginPage() {
     try {
       const { email, password } = values;
       await login({ email, password });
+      router.push('/');
       toast.success('Login successful! Welcome back!');
     } catch (error: any) {
       toast.error(error.message, { autoClose: 5000 });
