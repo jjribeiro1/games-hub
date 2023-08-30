@@ -1,4 +1,9 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from 'firebase/auth';
 import { auth } from '@/firebase/config';
 import { checkUserUniqueFields, saveUserTofirestore } from './user';
 import {
@@ -14,6 +19,7 @@ export async function newUserAuthentication({ email, password, username }: NewUs
     await checkUserUniqueFields(email, username);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+    await updateProfile(user, { displayName: username });
     await saveUserTofirestore({ email: user.email as string, uid: user.uid, username });
 
     return user;
