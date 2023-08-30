@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -9,11 +10,12 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { registerUserSchema } from '@/lib/schemas/register-user';
 import { newUserAuthentication } from '@/services/authentication';
+import { useAuthContext } from '@/context/auth-context';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { setDisplayName } = useAuthContext();
 
   const form = useForm<z.infer<typeof registerUserSchema>>({
     resolver: zodResolver(registerUserSchema),
@@ -32,7 +34,8 @@ export default function RegisterPage() {
     e?.preventDefault();
     try {
       const { email, password, username } = values;
-      await newUserAuthentication({ email, password, username });
+      const newUser = await newUserAuthentication({ email, password, username });
+      setDisplayName(newUser?.displayName);
       router.push('/');
       toast.success('Your account has been successfully created');
     } catch (error: any) {
