@@ -59,7 +59,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
         </p>
 
         <div className="flex items-center justify-between px-1 lg:mt-3 w-full">
-          {!gameInUserLibrary ? (
+          {!gameInUserLibrary || !loggedUserInfo ? (
             <Button
               type="button"
               className="bg-mine-shaft-600 hover:bg-mine-shaft-700 h-min w-min py-0.5 px-2"
