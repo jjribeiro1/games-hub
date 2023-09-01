@@ -27,6 +27,10 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
   const { gameIcons } = useGameIcons(game);
 
   const handleAddGameToLibrary = async () => {
+    if (!loggedUserInfo) {
+      toast.error('You have to be logged in to add a game to your library');
+      return;
+    }
     try {
       await addGameToUserLibrary(loggedUserInfo?.id as string, game, 'Uncategorized');
       queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
