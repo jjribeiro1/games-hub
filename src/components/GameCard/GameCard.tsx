@@ -1,15 +1,41 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { HiPlus } from 'react-icons/hi';
+import { BsCheck2 } from 'react-icons/bs';
+import { FiChevronDown } from 'react-icons/fi';
+import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import useGameIcons from './useGameIcons';
+import { addGameToUserLibrary } from '@/services/user';
 import { Game } from '@/types/game';
+import { UserInfo } from '@/types/user-info';
+import { toast } from 'react-toastify';
+import { queryClient } from '@/providers';
 
 interface GameCardProps {
   game: Game;
+  loggedUserInfo: UserInfo | null | undefined;
 }
 
-export default function GameCard({ game }: GameCardProps) {
+export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
+  const [gameInUserLibrary, setGameInUserLibrary] = useState(
+    loggedUserInfo?.library?.some((value) => value.game.id === game.id),
+  );
   const { gameIcons } = useGameIcons(game);
+
+  const handleAddGameToLibrary = async () => {
+    try {
+      await addGameToUserLibrary(loggedUserInfo?.id as string, game, 'Uncategorized');
+      queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
+      setGameInUserLibrary(true);
+      toast.success('Game added to your library');
+    } catch (error) {
+      toast.error('An unexpected error happened');
+    }
+  };
 
   return (
     <div className="bg-mine-shaft-900 w-72 h-72 sm:w-64 sm:h-64 md:w-60 lg:w-72 lg:h-72 min-[1440px]:w-80 min-[1440px]:h-80 rounded-md hover:scale-105 transition-transform">
@@ -31,7 +57,55 @@ export default function GameCard({ game }: GameCardProps) {
         <p className="text-mine-shaft-400 whitespace-nowrap overflow-hidden overflow-ellipsis">
           {game.short_description}
         </p>
-        <span className="flex items-center self-end gap-2 pr-1 lg:mt-3 ">{gameIcons()}</span>
+
+        <div className="flex items-center justify-between px-1 lg:mt-3 w-full">
+          {!gameInUserLibrary ? (
+            <Button
+              type="button"
+              className="bg-mine-shaft-600 hover:bg-mine-shaft-700 h-min w-min py-0.5 px-2"
+              onClick={handleAddGameToLibrary}
+            >
+              <HiPlus className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
+            </Button>
+          ) : (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  className="bg-green-700 hover:bg-green-800 justify-between h-5 w-16 py-1 px-0 rounded"
+                >
+                  <BsCheck2 className="w-5 h-4 ml-1 text-mine-shaft-100" strokeWidth="1" />
+
+                  <span className="flex">
+                    <Separator orientation="vertical" className="h-4 text-mine-shaft-100 opacity-70" />
+                    <FiChevronDown className="w-5 h-4 text-mine-shaft-100" />
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="bg-mine-shaft-100 p-1 w-40" side="top">
+                <ul className="flex flex-col">
+                  <li className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer">
+                    Uncategorized
+                  </li>
+                  <li className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer">
+                    Currently Playing
+                  </li>
+                  <li className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer">
+                    Completed
+                  </li>
+                  <li className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer">
+                    Played
+                  </li>
+                  <li className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer">
+                    Not Played
+                  </li>
+                </ul>
+              </PopoverContent>
+            </Popover>
+          )}
+
+          <span className="flex items-center gap-2">{gameIcons()}</span>
+        </div>
       </div>
     </div>
   );

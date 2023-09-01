@@ -1,8 +1,20 @@
-import { setDoc, doc, query, collection, or, where, getDocs, getDoc } from 'firebase/firestore';
+import {
+  setDoc,
+  doc,
+  query,
+  collection,
+  or,
+  where,
+  getDocs,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+} from 'firebase/firestore';
 import { db } from '@/firebase/config';
-import { SaveUserToFirestoreInput } from '@/types/save-user-to-firestore-input';
 import { UniqueFieldValidationError } from '@/exceptions';
-import { UserInfo } from '@/types/user-info';
+import { SaveUserToFirestoreInput } from '@/types/save-user-to-firestore-input';
+import { GameInLibraryType, UserInfo } from '@/types/user-info';
+import { Game } from '@/types/game';
 
 export async function saveUserTofirestore({ email, uid, username }: SaveUserToFirestoreInput) {
   await setDoc(doc(db, 'users', uid), { email, username });
@@ -34,4 +46,11 @@ export async function getUserById(id: string) {
   const docRef = doc(db, 'users', id);
   const docSnap = await getDoc(docRef);
   return { id: docSnap.id, ...docSnap.data() } as UserInfo;
+}
+
+export async function addGameToUserLibrary(userId: string, game: Game, type: GameInLibraryType) {
+  const userRef = doc(db, 'users', userId);
+  await updateDoc(userRef, {
+    library: arrayUnion({ game, type }),
+  });
 }

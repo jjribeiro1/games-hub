@@ -3,10 +3,12 @@ import React from 'react';
 import { GameCard } from '@/components/GameCard';
 import { GameCardSkeleton } from '@/components/GameCardSkeleton';
 import { Button } from '@/components/ui/button';
-import useFetchAllGames from '@/hooks/useFetchAllGames';
 import Spinner from '@/components/ui/spinner';
+import useFetchAllGames from '@/hooks/useFetchAllGames';
+import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
 
 export default function GamesPage() {
+  const { loggedUserInfo } = useLoggedUserInfo()
   const { data, isLoading, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useFetchAllGames();
 
   return (
@@ -19,7 +21,7 @@ export default function GamesPage() {
             data?.pages.map((games) =>
               games.games.map((game) => (
                 <li key={game.id}>
-                  <GameCard game={game} />
+                  <GameCard game={game} loggedUserInfo={loggedUserInfo} />
                 </li>
               )),
             )
