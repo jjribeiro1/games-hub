@@ -51,7 +51,7 @@ export async function getUserById(id: string) {
 export async function addGameToUserLibrary(userId: string, game: GameInLibrary) {
   const userRef = doc(db, 'users', userId);
   await updateDoc(userRef, {
-    library: arrayUnion({ game }),
+    library: arrayUnion(game),
   });
 }
 
@@ -59,7 +59,7 @@ export async function removeGameFromUserLibrary(userId: string, gameId: string) 
   const userRef = doc(db, 'users', userId);
   const userDocSnap = await getDoc(userRef);
   const userInfo = { id: userDocSnap.id, ...userDocSnap.data() } as UserInfo;
-  const gameToRemove = userInfo.library.find((value) => value.game.id === gameId);
+  const gameToRemove = userInfo.library.find((game) => game.id === gameId);
 
   await updateDoc(userRef, {
     library: arrayRemove(gameToRemove),

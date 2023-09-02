@@ -22,7 +22,7 @@ interface GameCardProps {
 
 export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
   const [gameInUserLibrary, setGameInUserLibrary] = useState(
-    loggedUserInfo?.library?.some((value) => value.game.id === game.id),
+    loggedUserInfo?.library?.some((gameInLibrary) => gameInLibrary.id === game.id),
   );
   const { gameIcons } = useGameIcons(game);
 
