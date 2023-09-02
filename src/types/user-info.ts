@@ -8,7 +8,11 @@ export interface UserInfo {
 }
 
 export type UserLibrary = {
-  game: Game;
-  type: GameInLibraryType;
+  game: GameInLibrary;
 };
-export type GameInLibraryType = 'Uncategorized' | 'Currently Playing' | 'Completed' | 'Played' | 'Not Played';
+
+export type GameInLibrary = {
+  type: GameInLibraryOptions;
+} & Game;
+
+export type GameInLibraryOptions = 'Uncategorized' | 'Currently Playing' | 'Completed' | 'Played' | 'Not Played';

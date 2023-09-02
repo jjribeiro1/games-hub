@@ -13,8 +13,7 @@ import {
 import { db } from '@/firebase/config';
 import { UniqueFieldValidationError } from '@/exceptions';
 import { SaveUserToFirestoreInput } from '@/types/save-user-to-firestore-input';
-import { GameInLibraryType, UserInfo } from '@/types/user-info';
-import { Game } from '@/types/game';
+import { GameInLibrary, UserInfo } from '@/types/user-info';
 
 export async function saveUserTofirestore({ email, uid, username }: SaveUserToFirestoreInput) {
   await setDoc(doc(db, 'users', uid), { email, username });
@@ -48,9 +47,9 @@ export async function getUserById(id: string) {
   return { id: docSnap.id, ...docSnap.data() } as UserInfo;
 }
 
-export async function addGameToUserLibrary(userId: string, game: Game, type: GameInLibraryType) {
+export async function addGameToUserLibrary(userId: string, game: GameInLibrary) {
   const userRef = doc(db, 'users', userId);
   await updateDoc(userRef, {
-    library: arrayUnion({ game, type }),
+    library: arrayUnion({ game }),
   });
 }

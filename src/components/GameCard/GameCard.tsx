@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import useGameIcons from './useGameIcons';
 import { addGameToUserLibrary } from '@/services/user';
 import { Game } from '@/types/game';
-import { UserInfo } from '@/types/user-info';
+import { GameInLibraryOptions, UserInfo } from '@/types/user-info';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
 
@@ -26,13 +26,14 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
   );
   const { gameIcons } = useGameIcons(game);
 
-  const handleAddGameToLibrary = async () => {
+  const handleAddGameToLibrary = async (type: GameInLibraryOptions) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to add a game to your library');
       return;
     }
     try {
-      await addGameToUserLibrary(loggedUserInfo?.id as string, game, 'Uncategorized');
+      const gameData = { ...game, type };
+      await addGameToUserLibrary(loggedUserInfo?.id as string, gameData);
       queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
       setGameInUserLibrary(true);
       toast.success('Game added to your library');
@@ -67,7 +68,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
             <Button
               type="button"
               className="bg-mine-shaft-600 hover:bg-mine-shaft-700 h-min w-min py-0.5 px-2"
-              onClick={handleAddGameToLibrary}
+              onClick={() => handleAddGameToLibrary('Uncategorized')}
             >
               <HiPlus className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
             </Button>
@@ -102,7 +103,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
                   </li>
                   <li className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer">
                     Not Played
-                  </li>
+                  </li>          
                 </ul>
               </PopoverContent>
             </Popover>
