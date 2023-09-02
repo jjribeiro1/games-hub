@@ -106,12 +106,21 @@ export default function NavBar() {
             <>
               <li>
                 <Avatar>
-                  <AvatarFallback
-                    className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold capitalize cursor-pointer"
-                  >
+                  <AvatarFallback className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold capitalize cursor-pointer">
                     {displayName?.charAt(0) || currentUser.displayName?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
+              </li>
+
+              <li>
+                <Button
+                  type="button"
+                  variant={'link'}
+                  className="text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg"
+                  asChild
+                >
+                  <Link href={`/my-library`}>My Library</Link>
+                </Button>
               </li>
 
               <li>
