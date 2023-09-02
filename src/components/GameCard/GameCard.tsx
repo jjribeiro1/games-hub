@@ -9,7 +9,7 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import useGameIcons from './useGameIcons';
-import { addGameToUserLibrary } from '@/services/user';
+import { addGameToUserLibrary, removeGameFromUserLibrary } from '@/services/user';
 import { Game } from '@/types/game';
 import { GameInLibraryOptions, UserInfo } from '@/types/user-info';
 import { toast } from 'react-toastify';
@@ -37,6 +37,22 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
       queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
       setGameInUserLibrary(true);
       toast.success('Game added to your library');
+    } catch (error) {
+      toast.error('An unexpected error happened');
+    }
+  };
+
+  const handleRemoveGameFromLibrary = async () => {
+    if (!loggedUserInfo) {
+      toast.error('You have to be logged in to remove a game from your library');
+      return;
+    }
+
+    try {
+      await removeGameFromUserLibrary(loggedUserInfo.id, game.id);
+      queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
+      setGameInUserLibrary(false);
+      toast.success('Game removed from your library');
     } catch (error) {
       toast.error('An unexpected error happened');
     }
@@ -103,7 +119,13 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
                   </li>
                   <li className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer">
                     Not Played
-                  </li>          
+                  </li>
+                  <li
+                    onClick={handleRemoveGameFromLibrary}
+                    className="text-red-600 font-medium hover:bg-red-600 hover:text-mine-shaft-50 text-center text-sm p-2 rounded cursor-pointer"
+                  >
+                    Delete from library
+                  </li>
                 </ul>
               </PopoverContent>
             </Popover>
