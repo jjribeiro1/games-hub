@@ -55,6 +55,22 @@ export async function addGameToUserLibrary(userId: string, game: GameInLibrary) 
   });
 }
 
+export async function updateGameTypeFromUserLibrary(userId: string, updatedGame: GameInLibrary) {
+  const userRef = doc(db, 'users', userId);
+  const userDocSnap = await getDoc(userRef);
+  const userInfo = { id: userDocSnap.id, ...userDocSnap.data() } as UserInfo;
+  const updatedLibrary = userInfo.library.map((gameInLibrary) => {
+    if (gameInLibrary.id === updatedGame.id) {
+      return updatedGame;
+    }
+
+    return gameInLibrary;
+  });
+  await updateDoc(userRef, {
+    library: updatedLibrary,
+  });
+}
+
 export async function removeGameFromUserLibrary(userId: string, gameId: string) {
   const userRef = doc(db, 'users', userId);
   const userDocSnap = await getDoc(userRef);
