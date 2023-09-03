@@ -15,7 +15,7 @@ import {
   updateGameTypeFromUserLibrary,
 } from '@/services/user';
 import { Game } from '@/types/game';
-import { GameInLibrary, GameInLibraryOptions, UserInfo } from '@/types/user-info';
+import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-info';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
 
@@ -29,9 +29,16 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
   const [gameIsInUserLibrary, setGameIsInUserLibrary] = useState<GameInLibrary | null>(
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null,
   );
-  const gameInLibraryType = gameIsInUserLibrary?.type;
+  const gameInLibraryType = gameIsInUserLibrary?.type || null;
+  const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
+    'Uncategorized',
+    'Currently Playing',
+    'Completed',
+    'Played',
+    'Not Played',
+  ];
 
-  const handleAddGameToLibrary = async (type: GameInLibraryOptions) => {
+  const handleAddGameToLibrary = async (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to add a game to your library');
       return;
@@ -47,7 +54,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     }
   };
 
-  const handleUpdateGameTypeFromUserLibrary = async (type: GameInLibraryOptions) => {
+  const handleUpdateGameTypeFromUserLibrary = async (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to make this action');
       return;
@@ -126,74 +133,21 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
               </PopoverTrigger>
               <PopoverContent className="bg-mine-shaft-100 p-1 w-44" side="top">
                 <ul className="flex flex-col">
-                  <li
-                    onClick={() => handleUpdateGameTypeFromUserLibrary('Uncategorized')}
-                    className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer"
-                  >
-                    {gameInLibraryType === 'Uncategorized' ? (
-                      <div className="flex items-center justify-center space-x-1">
-                        <span>Uncategorized</span>{' '}
-                        <BsCheck2 className="w-4 h-4 text-green-600" strokeWidth={1} />
-                      </div>
-                    ) : (
-                      'Uncategorized'
-                    )}
-                  </li>
-
-                  <li
-                    onClick={() => handleUpdateGameTypeFromUserLibrary('Currently Playing')}
-                    className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer"
-                  >
-                    {gameInLibraryType === 'Currently Playing' ? (
-                      <div className="flex items-center justify-center space-x-1">
-                        <span>Currently Playing</span>{' '}
-                        <BsCheck2 className="w-4 h-4 text-green-600" strokeWidth={1} />
-                      </div>
-                    ) : (
-                      'Currently Playing'
-                    )}
-                  </li>
-
-                  <li
-                    onClick={() => handleUpdateGameTypeFromUserLibrary('Completed')}
-                    className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer"
-                  >
-                    {gameInLibraryType === 'Completed' ? (
-                      <div className="flex items-center justify-center space-x-1">
-                        <span>Completed</span> <BsCheck2 className="w-4 h-4 text-green-600" strokeWidth={1} />
-                      </div>
-                    ) : (
-                      'Completed'
-                    )}
-                  </li>
-
-                  <li
-                    onClick={() => handleUpdateGameTypeFromUserLibrary('Played')}
-                    className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer"
-                  >
-                    {gameInLibraryType === 'Played' ? (
-                      <div className="flex items-center justify-center space-x-1">
-                        <span>Played</span> <BsCheck2 className="w-4 h-4 text-green-600" strokeWidth={1} />
-                      </div>
-                    ) : (
-                      'Played'
-                    )}
-                  </li>
-
-                  <li
-                    onClick={() => handleUpdateGameTypeFromUserLibrary('Not Played')}
-                    className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer"
-                  >
-                    {gameInLibraryType === 'Not Played' ? (
-                      <div className="flex items-center justify-center space-x-1">
-                        <span>Not Played</span>{' '}
-                        <BsCheck2 className="w-4 h-4 text-green-600" strokeWidth={1} />
-                      </div>
-                    ) : (
-                      'Not Played'
-                    )}
-                  </li>
-
+                  {popoverGameTypeOptions.map((value) => (
+                    <li
+                      key={value}
+                      onClick={() => handleUpdateGameTypeFromUserLibrary(value)}
+                      className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer"
+                    >
+                      {gameInLibraryType === value ? (
+                        <div className="flex items-center justify-center space-x-1">
+                          <span>{value}</span> <BsCheck2 className="w-4 h-4 text-green-600" strokeWidth={1} />
+                        </div>
+                      ) : (
+                        value
+                      )}
+                    </li>
+                  ))}
                   <li
                     onClick={handleRemoveGameFromLibrary}
                     className="text-red-600 font-medium hover:bg-red-600 hover:text-mine-shaft-50 text-center text-sm p-2 rounded cursor-pointer"
