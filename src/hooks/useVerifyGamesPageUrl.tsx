@@ -24,6 +24,6 @@ export default function useVerifyGamesPageUrl({ mappedPlatforms }: Props) {
     platformSlug,
     genreSlug,
     activeSortBy,
-    searchParams
+    searchParams,
   };
 }

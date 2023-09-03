@@ -17,10 +17,13 @@ export default function useGameIcons(game: Game) {
       ['pc', <BsWindows key={'pc'} className="text-mine-shaft-400 w-4 h-4" />],
       ['playstation', <BsPlaystation key={'playstation'} className="text-mine-shaft-400 w-5 h-5" />],
       ['xbox', <BsXbox key={'xbox'} className="text-mine-shaft-400 w-4 h-4" />],
-      ['nintendo-switch', <BsNintendoSwitch key={'nintendo-switch'} className="text-mine-shaft-400 w-4 h-4" />],
+      [
+        'nintendo-switch',
+        <BsNintendoSwitch key={'nintendo-switch'} className="text-mine-shaft-400 w-4 h-4" />,
+      ],
       ['android', <BsAndroid2 key={'android'} className="text-mine-shaft-400 w-4 h-4" />],
       ['ios', <MdPhoneIphone key={'ios'} className="text-mine-shaft-400 w-4 h-4" />],
-      ['web-browser',<BsBrowserChrome key={'web-browser'} className="text-mine-shaft-400 w-4 h-4" /> ]
+      ['web-browser', <BsBrowserChrome key={'web-browser'} className="text-mine-shaft-400 w-4 h-4" />],
     ]);
     const doublePlatforms = ['playstation-4', 'playstation-5', 'xbox-one', 'xbox-series-x'];
 

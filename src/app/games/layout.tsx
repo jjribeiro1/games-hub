@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import { FilterBar } from '@/components/FilterBar';
 import useFetchGenres from '@/hooks/useFetchGenres';

@@ -56,6 +56,6 @@ export default function useFetchGamesBySlug({ platformSlug, genreSlug, sortBy }:
 
   return {
     games: data as Game[],
-    isLoading
+    isLoading,
   };
 }

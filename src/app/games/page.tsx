@@ -8,7 +8,7 @@ import useFetchAllGames from '@/hooks/useFetchAllGames';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
 
 export default function GamesPage() {
-  const { loggedUserInfo } = useLoggedUserInfo()
+  const { loggedUserInfo } = useLoggedUserInfo();
   const { data, isLoading, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useFetchAllGames();
 
   return (

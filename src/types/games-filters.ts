@@ -5,5 +5,5 @@ export interface GamesFilters {
   sortBy?: {
     fieldPath: string;
     value: 'asc' | 'desc';
-  }
+  };
 }
