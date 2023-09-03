@@ -15,7 +15,7 @@ import {
   updateGameTypeFromUserLibrary,
 } from '@/services/user';
 import { Game } from '@/types/game';
-import { GameInLibraryOptions, UserInfo } from '@/types/user-info';
+import { GameInLibrary, GameInLibraryOptions, UserInfo } from '@/types/user-info';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
 
@@ -25,16 +25,11 @@ interface GameCardProps {
 }
 
 export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
-  const [gameIsInUserLibrary, setGameIsInUserLibrary] = useState(
-    loggedUserInfo?.library?.some((gameInLibrary) => gameInLibrary.id === game.id),
-  );
-  const [gameInLibraryType, setGameInLibraryType] = useState<GameInLibraryOptions>(
-    gameIsInUserLibrary
-      ? (loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id)
-          ?.type as GameInLibraryOptions)
-      : 'Uncategorized',
-  );
   const { gameIcons } = useGameIcons(game);
+  const [gameIsInUserLibrary, setGameIsInUserLibrary] = useState<GameInLibrary | null>(
+    loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null,
+  );
+  const gameInLibraryType = gameIsInUserLibrary?.type;
 
   const handleAddGameToLibrary = async (type: GameInLibraryOptions) => {
     if (!loggedUserInfo) {
@@ -42,11 +37,10 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
       return;
     }
     try {
-      const gameData = { ...game, type };
+      const gameData: GameInLibrary = { ...game, type };
       await addGameToUserLibrary(loggedUserInfo?.id as string, gameData);
       queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
-      setGameIsInUserLibrary(true);
-      setGameInLibraryType('Uncategorized');
+      setGameIsInUserLibrary(gameData);
       toast.success('Game added to your library');
     } catch (error) {
       toast.error('An unexpected error happened');
@@ -59,10 +53,10 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
       return;
     }
     try {
-      const updatedGame = { ...game, type };
+      const updatedGame: GameInLibrary = { ...game, type };
       await updateGameTypeFromUserLibrary(loggedUserInfo?.id as string, updatedGame);
       queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
-      setGameInLibraryType(type);
+      setGameIsInUserLibrary(updatedGame);
       toast.success('game category updated');
     } catch (error) {
       toast.error('An unexpected error happened');
@@ -78,7 +72,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     try {
       await removeGameFromUserLibrary(loggedUserInfo.id, game.id);
       queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
-      setGameIsInUserLibrary(false);
+      setGameIsInUserLibrary(null);
       toast.success('Game removed from your library');
     } catch (error) {
       toast.error('An unexpected error happened');
