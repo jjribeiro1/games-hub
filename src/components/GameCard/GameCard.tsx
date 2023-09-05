@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiPlus } from 'react-icons/hi';
@@ -18,6 +18,7 @@ import { Game } from '@/types/game';
 import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-info';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
+import { useMutation } from '@tanstack/react-query';
 
 interface GameCardProps {
   game: Game;
@@ -26,9 +27,7 @@ interface GameCardProps {
 
 export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
   const { gameIcons } = useGameIcons(game);
-  const [gameIsInUserLibrary, setGameIsInUserLibrary] = useState<GameInLibrary | null>(
-    loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null,
-  );
+  const gameIsInUserLibrary = loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
   const gameInLibraryType = gameIsInUserLibrary?.type || null;
   const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
@@ -38,16 +37,28 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     'Not Played',
   ];
 
-  const handleAddGameToLibrary = async (type: GameTypeInLibraryOption) => {
+  const addGameToUserLibraryMutation = useMutation({
+    mutationFn: (game: GameInLibrary) => addGameToUserLibrary(loggedUserInfo?.id as string, game),
+    onSuccess: (_, variables) => {
+      const newLibrary = loggedUserInfo?.library
+        ? [...(loggedUserInfo?.library?.map((game) => game) as GameInLibrary[]), variables]
+        : [variables];
+
+      queryClient.setQueryData<UserInfo>(['logged-user-info', loggedUserInfo?.id], {
+        ...(loggedUserInfo as UserInfo),
+        library: newLibrary,
+      });
+    },
+  });
+
+  const handleAddGameToUserLibrary = async (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to add a game to your library');
       return;
     }
     try {
       const gameData: GameInLibrary = { ...game, type };
-      await addGameToUserLibrary(loggedUserInfo?.id as string, gameData);
-      queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
-      setGameIsInUserLibrary(gameData);
+      addGameToUserLibraryMutation.mutate(gameData);
       toast.success('Game added to your library');
     } catch (error) {
       toast.error('An unexpected error happened');
@@ -63,7 +74,6 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
       const updatedGame: GameInLibrary = { ...game, type };
       await updateGameTypeFromUserLibrary(loggedUserInfo?.id as string, updatedGame);
       queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
-      setGameIsInUserLibrary(updatedGame);
       toast.success('game category updated');
     } catch (error) {
       toast.error('An unexpected error happened');
@@ -79,7 +89,6 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     try {
       await removeGameFromUserLibrary(loggedUserInfo.id, game.id);
       queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
-      setGameIsInUserLibrary(null);
       toast.success('Game removed from your library');
     } catch (error) {
       toast.error('An unexpected error happened');
@@ -112,7 +121,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
             <Button
               type="button"
               className="bg-mine-shaft-600 hover:bg-mine-shaft-700 h-min w-min py-0.5 px-2"
-              onClick={() => handleAddGameToLibrary('Uncategorized')}
+              onClick={() => handleAddGameToUserLibrary('Uncategorized')}
             >
               <HiPlus className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
             </Button>
