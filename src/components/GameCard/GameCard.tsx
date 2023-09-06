@@ -80,15 +80,25 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     }
   };
 
-  const handleRemoveGameFromLibrary = async () => {
+  const removeGameFromUserLibraryMutation = useMutation({
+    mutationFn: (gameId: string) => removeGameFromUserLibrary(loggedUserInfo?.id as string, gameId),
+    onSuccess: (_, variables) => {
+      const newLibrary = loggedUserInfo?.library.filter((game) => game.id !== variables) as GameInLibrary[];
+      queryClient.setQueryData<UserInfo>(['logged-user-info', loggedUserInfo?.id], {
+        ...(loggedUserInfo as UserInfo),
+        library: newLibrary,
+      });
+    },
+  });
+
+  const handleRemoveGameFromUserLibrary = async () => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to remove a game from your library');
       return;
     }
 
     try {
-      await removeGameFromUserLibrary(loggedUserInfo.id, game.id);
-      queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
+      removeGameFromUserLibraryMutation.mutate(game.id)
       toast.success('Game removed from your library');
     } catch (error) {
       toast.error('An unexpected error happened');
@@ -158,7 +168,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
                     </li>
                   ))}
                   <li
-                    onClick={handleRemoveGameFromLibrary}
+                    onClick={handleRemoveGameFromUserLibrary}
                     className="text-red-600 font-medium hover:bg-red-600 hover:text-mine-shaft-50 text-center text-sm p-2 rounded cursor-pointer"
                   >
                     Delete from library
