@@ -65,6 +65,17 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     }
   };
 
+  const updateGameTypeFromUserLibraryMutation = useMutation({
+    mutationFn: (updatedGame: GameInLibrary) => updateGameTypeFromUserLibrary(loggedUserInfo?.id as string, updatedGame),
+    onSuccess: (_, variables) => {
+      const newLibrary = loggedUserInfo?.library.map((game) => game.id === variables.id ? variables : game) as GameInLibrary[];
+      queryClient.setQueryData<UserInfo>(['logged-user-info', loggedUserInfo?.id], {
+        ...(loggedUserInfo as UserInfo),
+        library: newLibrary,
+      });
+    }
+  })
+
   const handleUpdateGameTypeFromUserLibrary = async (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to make this action');
@@ -72,8 +83,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     }
     try {
       const updatedGame: GameInLibrary = { ...game, type };
-      await updateGameTypeFromUserLibrary(loggedUserInfo?.id as string, updatedGame);
-      queryClient.invalidateQueries({ queryKey: ['logged-user-info', loggedUserInfo?.id] });
+      updateGameTypeFromUserLibraryMutation.mutate(updatedGame)
       toast.success('game category updated');
     } catch (error) {
       toast.error('An unexpected error happened');
