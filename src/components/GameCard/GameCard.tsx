@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HiPlus } from 'react-icons/hi';
 import { BsCheck2 } from 'react-icons/bs';
+import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronDown } from 'react-icons/fi';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
@@ -141,56 +142,103 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
         </p>
 
         <div className="flex items-center justify-between px-1 lg:mt-3 w-full">
-          {!gameIsInUserLibrary || !loggedUserInfo ? (
-            <Button
-              type="button"
-              className="bg-mine-shaft-600 hover:bg-mine-shaft-700 h-min w-min py-0.5 px-2"
-              onClick={() => handleAddGameToUserLibrary('Uncategorized')}
-            >
-              <HiPlus className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
-            </Button>
-          ) : (
+          <div className="flex items-center gap-2">
+            {!gameIsInUserLibrary || !loggedUserInfo ? (
+              <Button
+                type="button"
+                className="bg-mine-shaft-600 hover:bg-mine-shaft-700 h-min w-min py-0.5 px-2"
+                onClick={() => handleAddGameToUserLibrary('Uncategorized')}
+              >
+                <HiPlus className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
+              </Button>
+            ) : (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    className="bg-green-700 hover:bg-green-800 justify-between h-min w-16 py-0.5 px-0 rounded"
+                  >
+                    <BsCheck2 className="w-4 h-4 ml-1 text-mine-shaft-100" strokeWidth="1" />
+
+                    <span className="flex">
+                      <Separator orientation="vertical" className="h-4 text-mine-shaft-100 opacity-70" />
+                      <FiChevronDown className="w-4 h-4 text-mine-shaft-100" />
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="bg-mine-shaft-50 p-1 w-44" side="top">
+                  <ul className="flex flex-col">
+                    {popoverGameTypeOptions.map((value) => (
+                      <li
+                        key={value}
+                        onClick={() => handleUpdateGameTypeFromUserLibrary(value)}
+                        className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer"
+                      >
+                        {gameInLibraryType === value ? (
+                          <div className="flex items-center justify-center space-x-1">
+                            <span>{value}</span>{' '}
+                            <BsCheck2 className="w-4 h-4 text-green-600" strokeWidth={1} />
+                          </div>
+                        ) : (
+                          value
+                        )}
+                      </li>
+                    ))}
+                    <li
+                      onClick={handleRemoveGameFromUserLibrary}
+                      className="text-red-600 font-medium hover:bg-red-600 hover:text-mine-shaft-50 text-center text-sm p-2 rounded cursor-pointer"
+                    >
+                      Delete from library
+                    </li>
+                  </ul>
+                </PopoverContent>
+              </Popover>
+            )}
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   type="button"
-                  className="bg-green-700 hover:bg-green-800 justify-between h-5 w-16 py-1 px-0 rounded"
+                  className="bg-mine-shaft-600 hover:bg-mine-shaft-700 h-min w-min py-0.5 px-2"
                 >
-                  <BsCheck2 className="w-5 h-4 ml-1 text-mine-shaft-100" strokeWidth="1" />
-
-                  <span className="flex">
-                    <Separator orientation="vertical" className="h-4 text-mine-shaft-100 opacity-70" />
-                    <FiChevronDown className="w-5 h-4 text-mine-shaft-100" />
-                  </span>
+                  <BsThreeDots className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="bg-mine-shaft-100 p-1 w-44" side="top">
-                <ul className="flex flex-col">
-                  {popoverGameTypeOptions.map((value) => (
-                    <li
-                      key={value}
-                      onClick={() => handleUpdateGameTypeFromUserLibrary(value)}
-                      className="text-mine-shaft-950 font-medium hover:bg-mine-shaft-800 hover:text-mine-shaft-100 text-center text-sm p-2 rounded cursor-pointer"
-                    >
-                      {gameInLibraryType === value ? (
-                        <div className="flex items-center justify-center space-x-1">
-                          <span>{value}</span> <BsCheck2 className="w-4 h-4 text-green-600" strokeWidth={1} />
-                        </div>
-                      ) : (
-                        value
-                      )}
-                    </li>
-                  ))}
-                  <li
-                    onClick={handleRemoveGameFromUserLibrary}
-                    className="text-red-600 font-medium hover:bg-red-600 hover:text-mine-shaft-50 text-center text-sm p-2 rounded cursor-pointer"
+              <PopoverContent className="bg-mine-shaft-50 p-1 w-64" side="top">
+                <div className="flex flex-col gap-2 p-2">
+                  <p className="text-mine-shaft-950">Rate in one click</p>
+
+                  <div className="grid grid-cols-2">
+                    <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer">
+                      <Image src={'/images/target.svg'} width={40} height={40} alt="target" />
+                      <p className="text-sm text-mine-shaft-950 font-medium">Exceptional</p>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer">
+                      <Image src={'/images/thumbs-up.svg'} width={40} height={40} alt="thumbs up" />
+                      <p className="text-sm text-mine-shaft-950 font-medium">Recommended</p>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer">
+                      <Image src={'/images/neutral-face.svg'} width={40} height={40} alt="neutral face" />
+                      <p className="text-sm text-mine-shaft-950 font-medium">Meh</p>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer">
+                      <Image src={'/images/thumbs-down.svg'} width={40} height={40} alt="thumbs down" />
+                      <p className="text-sm text-mine-shaft-950 font-medium">Bad</p>
+                    </div>
+                  </div>
+
+                  <Button
+                    variant={'outline'}
+                    className="border border-mine-shaft-300/50 hover:bg-mine-shaft-200/30 transition-colors"
                   >
-                    Delete from library
-                  </li>
-                </ul>
+                    Write a review
+                  </Button>
+                </div>
               </PopoverContent>
             </Popover>
-          )}
+          </div>
 
           <span className="flex items-center gap-2">{gameIcons()}</span>
         </div>
