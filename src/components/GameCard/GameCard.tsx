@@ -27,7 +27,8 @@ interface GameCardProps {
 
 export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
   const { gameIcons } = useGameIcons(game);
-  const gameIsInUserLibrary = loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
+  const gameIsInUserLibrary =
+    loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
   const gameInLibraryType = gameIsInUserLibrary?.type || null;
   const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
@@ -66,15 +67,18 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
   };
 
   const updateGameTypeFromUserLibraryMutation = useMutation({
-    mutationFn: (updatedGame: GameInLibrary) => updateGameTypeFromUserLibrary(loggedUserInfo?.id as string, updatedGame),
+    mutationFn: (updatedGame: GameInLibrary) =>
+      updateGameTypeFromUserLibrary(loggedUserInfo?.id as string, updatedGame),
     onSuccess: (_, variables) => {
-      const newLibrary = loggedUserInfo?.library.map((game) => game.id === variables.id ? variables : game) as GameInLibrary[];
+      const newLibrary = loggedUserInfo?.library.map((game) =>
+        game.id === variables.id ? variables : game,
+      ) as GameInLibrary[];
       queryClient.setQueryData<UserInfo>(['logged-user-info', loggedUserInfo?.id], {
         ...(loggedUserInfo as UserInfo),
         library: newLibrary,
       });
-    }
-  })
+    },
+  });
 
   const handleUpdateGameTypeFromUserLibrary = async (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
@@ -83,7 +87,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     }
     try {
       const updatedGame: GameInLibrary = { ...game, type };
-      updateGameTypeFromUserLibraryMutation.mutate(updatedGame)
+      updateGameTypeFromUserLibraryMutation.mutate(updatedGame);
       toast.success('game category updated');
     } catch (error) {
       toast.error('An unexpected error happened');
@@ -108,7 +112,7 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
     }
 
     try {
-      removeGameFromUserLibraryMutation.mutate(game.id)
+      removeGameFromUserLibraryMutation.mutate(game.id);
       toast.success('Game removed from your library');
     } catch (error) {
       toast.error('An unexpected error happened');
