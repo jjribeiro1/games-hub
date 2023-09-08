@@ -6,9 +6,12 @@ import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import useFetchGamesBySlug from '@/hooks/useFetchGamesBySlug';
 import useVerifyGamesPageUrl from '@/hooks/useVerifyGamesPageUrl';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
+import useFetchReviewsFromUser from '@/hooks/useFetchReviewsFromUser';
+import { Review } from '@/types/review';
 
 export default function GamesSlugPage() {
   const { loggedUserInfo } = useLoggedUserInfo();
+  const { reviews } = useFetchReviewsFromUser();
   const { mappedPlatforms } = useFetchPlatforms();
   const { platformSlug, genreSlug, activeSortBy } = useVerifyGamesPageUrl({ mappedPlatforms });
 
@@ -31,7 +34,7 @@ export default function GamesSlugPage() {
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 place-items-center gap-x-4 gap-y-6">
           {games?.map((game) => (
             <li key={game.id}>
-              <GameCard game={game} loggedUserInfo={loggedUserInfo} />
+              <GameCard game={game} loggedUserInfo={loggedUserInfo} reviewsFromUser={reviews as Review[]} />
             </li>
           ))}
         </ul>

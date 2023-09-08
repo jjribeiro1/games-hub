@@ -17,20 +17,25 @@ import {
 } from '@/services/user';
 import { Game } from '@/types/game';
 import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-info';
+import { Review } from '@/types/review';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
 import { useMutation } from '@tanstack/react-query';
+import { deleteReview, rateInOneClick } from '@/services/review';
 
 interface GameCardProps {
   game: Game;
   loggedUserInfo: UserInfo | null | undefined;
+  reviewsFromUser?: Review[];
 }
 
-export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
+export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: GameCardProps) {
   const { gameIcons } = useGameIcons(game);
   const gameIsInUserLibrary =
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
   const gameInLibraryType = gameIsInUserLibrary?.type || null;
+  const gameHasBeenReviewedByUser = reviewsFromUser?.find((review) => review.gameId === game.id);
+
   const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
     'Currently Playing',
@@ -52,6 +57,26 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
       });
     },
   });
+
+  const handleReviewInOneClick = async (rate: string) => {
+    try {
+      await rateInOneClick(loggedUserInfo?.id as string, game.id, rate);
+      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
+      toast.success('your review has been successfully submitted');
+    } catch (error) {
+      toast.error('unexpected error');
+    }
+  };
+
+  const handleDeleteReview = async () => {
+    try {
+      await deleteReview(loggedUserInfo?.id as string, game.id);
+      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
+      toast.success('Your review has been removed');
+    } catch (error) {
+      toast.error('unexpected error');
+    }
+  };
 
   const handleAddGameToUserLibrary = async (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
@@ -205,29 +230,60 @@ export default function GameCard({ game, loggedUserInfo }: GameCardProps) {
               </PopoverTrigger>
               <PopoverContent className="bg-mine-shaft-50 p-1 w-64" side="top">
                 <div className="flex flex-col gap-2 p-2">
-                  <p className="text-mine-shaft-950">Rate in one click</p>
+                  {gameHasBeenReviewedByUser ? (
+                    <>
+                      <p className="text-mine-shaft-950">Your review</p>
+                      <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 bg-mine-shaft-200/30">
+                        <Image src={'/images/target.svg'} width={40} height={40} alt="target" />
+                        <p className="text-sm text-mine-shaft-950 font-medium">
+                          {gameHasBeenReviewedByUser.rate}
+                        </p>
+                        <p
+                          onClick={handleDeleteReview}
+                          className="text-sm text-red-500 font-medium cursor-pointer"
+                        >
+                          delete
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-mine-shaft-950">Rate in one click</p>
+                      <div className="grid grid-cols-2">
+                        <div
+                          onClick={() => handleReviewInOneClick('Exceptional')}
+                          className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer"
+                        >
+                          <Image src={'/images/target.svg'} width={40} height={40} alt="target" />
+                          <p className="text-sm text-mine-shaft-950 font-medium">Exceptional</p>
+                        </div>
 
-                  <div className="grid grid-cols-2">
-                    <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer">
-                      <Image src={'/images/target.svg'} width={40} height={40} alt="target" />
-                      <p className="text-sm text-mine-shaft-950 font-medium">Exceptional</p>
-                    </div>
+                        <div
+                          onClick={() => handleReviewInOneClick('Recommended')}
+                          className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer"
+                        >
+                          <Image src={'/images/thumbs-up.svg'} width={40} height={40} alt="thumbs up" />
+                          <p className="text-sm text-mine-shaft-950 font-medium">Recommended</p>
+                        </div>
 
-                    <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer">
-                      <Image src={'/images/thumbs-up.svg'} width={40} height={40} alt="thumbs up" />
-                      <p className="text-sm text-mine-shaft-950 font-medium">Recommended</p>
-                    </div>
+                        <div
+                          onClick={() => handleReviewInOneClick('Meh')}
+                          className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer"
+                        >
+                          <Image src={'/images/neutral-face.svg'} width={40} height={40} alt="neutral face" />
+                          <p className="text-sm text-mine-shaft-950 font-medium">Meh</p>
+                        </div>
 
-                    <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer">
-                      <Image src={'/images/neutral-face.svg'} width={40} height={40} alt="neutral face" />
-                      <p className="text-sm text-mine-shaft-950 font-medium">Meh</p>
-                    </div>
-
-                    <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer">
-                      <Image src={'/images/thumbs-down.svg'} width={40} height={40} alt="thumbs down" />
-                      <p className="text-sm text-mine-shaft-950 font-medium">Bad</p>
-                    </div>
-                  </div>
+                        <div
+                          onClick={() => handleReviewInOneClick('Bad')}
+                          className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer"
+                        >
+                          <Image src={'/images/thumbs-down.svg'} width={40} height={40} alt="thumbs down" />
+                          <p className="text-sm text-mine-shaft-950 font-medium">Bad</p>
+                        </div>
+                      </div>
+                    </>
+                  )}
 
                   <Button
                     variant={'outline'}
