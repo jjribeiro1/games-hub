@@ -21,7 +21,7 @@ import { Review } from '@/types/review';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
 import { useMutation } from '@tanstack/react-query';
-import { deleteReview, rateInOneClick } from '@/services/review';
+import { deleteReview, createReview } from '@/services/review';
 
 interface GameCardProps {
   game: Game;
@@ -60,7 +60,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
 
   const handleReviewInOneClick = async (rate: string) => {
     try {
-      await rateInOneClick(loggedUserInfo?.id as string, game.id, rate);
+      await createReview(loggedUserInfo?.id as string, game.id, rate);
       queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
       toast.success('your review has been successfully submitted');
     } catch (error) {

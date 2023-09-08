@@ -3,4 +3,5 @@ export interface Review {
   userId: string;
   gameId: string;
   rate: string;
+  comment: string;
 }
