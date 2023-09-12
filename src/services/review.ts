@@ -1,5 +1,6 @@
 import { db } from '@/firebase/config';
-import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { Review } from '@/types/review';
 
 export async function createReview(userId: string, gameId: string, rate: string, comment: string = '') {
   const reviewId = `${userId}_${gameId}`;
@@ -17,4 +18,15 @@ export async function getAllReviewsFromUser(userId: string) {
   const snapshot = await getDocs(q);
 
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function getReviewById(userId: string, gameId: string) {
+  const docRef = doc(db, 'reviews', `${userId}_${gameId}`);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    return null;
+  }
+
+  return { id: docSnap.id, ...docSnap.data() } as Review;
 }
