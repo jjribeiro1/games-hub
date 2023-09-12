@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiPlus } from 'react-icons/hi';
@@ -22,6 +22,7 @@ import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
 import { useMutation } from '@tanstack/react-query';
 import { deleteReview, createReview } from '@/services/review';
+import WriteReviewDialog from './WriteReviewDialog';
 
 interface GameCardProps {
   game: Game;
@@ -30,6 +31,7 @@ interface GameCardProps {
 }
 
 export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: GameCardProps) {
+  const [openReviewModal, setOpenReviewModal] = useState(false);
   const { gameIcons } = useGameIcons(game);
   const gameIsInUserLibrary =
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
@@ -286,11 +288,13 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                   )}
 
                   <Button
+                    onClick={() => setOpenReviewModal(true)}
                     variant={'outline'}
                     className="border border-mine-shaft-300/50 hover:bg-mine-shaft-200/30 transition-colors"
                   >
                     Write a review
                   </Button>
+                  <WriteReviewDialog open={openReviewModal} onOpenChange={setOpenReviewModal} gameTitle={game.title}/>
                 </div>
               </PopoverContent>
             </Popover>
