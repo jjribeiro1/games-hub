@@ -294,7 +294,14 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                   >
                     Write a review
                   </Button>
-                  <WriteReviewDialog open={openReviewModal} onOpenChange={setOpenReviewModal} gameTitle={game.title}/>
+                  {openReviewModal ? (
+                    <WriteReviewDialog
+                      open={openReviewModal}
+                      onOpenChange={setOpenReviewModal}
+                      userId={loggedUserInfo?.id as string}
+                      game={game}
+                    />
+                  ) : null}
                 </div>
               </PopoverContent>
             </Popover>

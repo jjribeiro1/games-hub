@@ -1,21 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
+import { Game } from '@/types/game';
 
 interface WriteReviewDialogProps {
   open: boolean;
   onOpenChange: (value: boolean) => void;
-  gameTitle: string;
+  userId: string;
+  game: Game;
 }
 
-export default function WriteReviewDialog({ open, onOpenChange, gameTitle }: WriteReviewDialogProps) {
+export default function WriteReviewDialog({ open, onOpenChange, userId, game }: WriteReviewDialogProps) {
+  const [commentValue, setCommentValue] = useState('');
+  const maxCommentLength = 140;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-mine-shaft-950 p-6">
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-3xl text-mine-shaft-100 font-semibold">{gameTitle}</DialogTitle>
+          <DialogTitle className="text-3xl text-mine-shaft-100 font-semibold">{game.title}</DialogTitle>
           <div className="flex items-center justify-between gap-2 w-full">
             <Button
               type="button"
@@ -58,10 +63,17 @@ export default function WriteReviewDialog({ open, onOpenChange, gameTitle }: Wri
         <Textarea
           className="text-lg text-mine-shaft-950 font-medium placeholder:text-mine-shaft-900 placeholder:text-sm"
           placeholder="write a review"
+          onChange={(e) => setCommentValue(e.target.value)}
+          maxLength={maxCommentLength}
         />
-        <Button className="bg-cyan-700 hover:bg-cyan-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-lg font-medium w-1/2 my-0 mx-auto">
-          Publish
-        </Button>
+        <div className="text-mine-shaft-50 text-sm text-end">
+          {`${commentValue.length} / ${maxCommentLength}`}
+        </div>
+        <DialogFooter>
+          <Button className="bg-cyan-700 hover:bg-cyan-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-lg font-medium w-1/2 my-0 mx-auto">
+            Publish
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
