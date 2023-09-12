@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { getReviewById } from '@/services/review';
 import { Game } from '@/types/game';
+import { RateOptions } from '@/types/review';
 
 interface WriteReviewDialogProps {
   open: boolean;
@@ -16,47 +19,33 @@ export default function WriteReviewDialog({ open, onOpenChange, userId, game }: 
   const [commentValue, setCommentValue] = useState('');
   const maxCommentLength = 140;
 
+  const { data } = useQuery({
+    queryKey: ['get-review-by-id', userId, game.id],
+    queryFn: () => getReviewById(userId, game.id),
+  });
+
+  const reviewRateOptions: RateOptions[] = ['Exceptional', 'Recommended', 'Meh', 'Bad'];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-mine-shaft-950 p-6">
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-3xl text-mine-shaft-100 font-semibold">{game.title}</DialogTitle>
           <div className="flex items-center justify-between gap-2 w-full">
-            <Button
-              type="button"
-              className="bg-inherit hover:bg-mine-shaft-50 h-12 gap-1 p-1 border rounded-lg transition-colors group"
-            >
-              <Image src={'/images/target.svg'} width={30} height={30} alt="target" />
-              <p className="text-sm text-mine-shaft-100 font-medium group-hover:text-mine-shaft-950">
-                Exceptional
-              </p>
-            </Button>
-
-            <Button
-              type="button"
-              className="bg-inherit hover:bg-mine-shaft-50 h-12 gap-1 p-1 border rounded-lg transition-colors group"
-            >
-              <Image src={'/images/thumbs-up.svg'} width={30} height={30} alt="thumbs up" />
-              <p className="text-sm text-mine-shaft-100 font-medium group-hover:text-mine-shaft-950">
-                Recommended
-              </p>
-            </Button>
-
-            <Button
-              type="button"
-              className="bg-inherit hover:bg-mine-shaft-50 h-12 gap-1 p-1 border rounded-lg transition-colors group"
-            >
-              <Image src={'/images/neutral-face.svg'} width={30} height={30} alt="neutral face" />
-              <p className="text-sm text-mine-shaft-100 font-medium group-hover:text-mine-shaft-950">Meh</p>
-            </Button>
-
-            <Button
-              type="button"
-              className="bg-inherit hover:bg-mine-shaft-50 h-12 gap-1 p-1 border rounded-lg transition-colors group"
-            >
-              <Image src={'/images/thumbs-down.svg'} width={30} height={30} alt="thumbs down" />
-              <p className="text-sm text-mine-shaft-100 font-medium group-hover:text-mine-shaft-950">Bad</p>
-            </Button>
+            {reviewRateOptions.map((rate) => (
+              <Button
+                key={rate}
+                type="button"
+                className={` ${
+                  data?.rate === rate
+                    ? 'bg-mine-shaft-50 hover:bg-mine-shaft-100 text-mine-shaft-950'
+                    : 'bg-inherit hover:bg-mine-shaft-50 text-mine-shaft-100 hover:text-mine-shaft-950'
+                }  h-12 gap-1 p-1 border rounded-lg transition-colors group`}
+              >
+                <Image src={`/images/${rate}.svg`} width={30} height={30} alt="target" />
+                <p className={'text-sm font-medium'}>{rate}</p>
+              </Button>
+            ))}
           </div>
         </DialogHeader>
 
