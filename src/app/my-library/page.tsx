@@ -7,7 +7,7 @@ import { GameTypeInLibraryOption } from '@/types/user-info';
 
 export default function MyLibraryPage() {
   const { loggedUserInfo } = useLoggedUserInfo();
-  const library = loggedUserInfo?.library.map((game) => game);
+  const library = loggedUserInfo?.library?.map((game) => game);
   const accordionGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
     'Currently Playing',
@@ -22,17 +22,21 @@ export default function MyLibraryPage() {
         {accordionGameTypeOptions.map((option) => {
           const games = library?.filter((game) => game.type === option);
           return (
-            <AccordionItem key={option} value={option} disabled={games?.length === 0}>
-              <AccordionTrigger className="text-mine-shaft-100 text-lg">{`${option} (${games?.length})`}</AccordionTrigger>
-              <AccordionContent className="p-2">
-                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 place-items-center gap-x-4 gap-y-6">
-                  {games?.map((game) => (
-                    <li key={game.id}>
-                      <GameCard key={game.id} game={game} loggedUserInfo={loggedUserInfo} />
-                    </li>
-                  ))}
-                </ul>
-              </AccordionContent>
+            <AccordionItem key={option} value={option}>
+              <AccordionTrigger className="text-mine-shaft-100 text-lg">{`${option} (${
+                games?.length || 0
+              })`}</AccordionTrigger>
+              {games ? (
+                <AccordionContent className="p-2">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 place-items-center gap-x-4 gap-y-6">
+                    {games?.map((game) => (
+                      <li key={game.id}>
+                        <GameCard key={game.id} game={game} loggedUserInfo={loggedUserInfo} />
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionContent>
+              ) : null}
             </AccordionItem>
           );
         })}
