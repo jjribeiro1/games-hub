@@ -11,6 +11,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { RateOptions, Review } from '@/types/review';
+import { Game } from '@/types/game';
 
 export async function createReview(userId: string, gameId: string, rate: RateOptions, comment: string = '') {
   const reviewId = `${userId}_${gameId}`;
@@ -27,6 +28,13 @@ export async function getAllReviewsFromUser(userId: string) {
   const q = query(collection(db, 'reviews'), where('userId', '==', userId));
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function getAllReviewsFromGame(game: Game) {
+  const q = query(collection(db, 'reviews'), where('gameId', '==', game.id));
+  const snapshot = await getDocs(q);
+  const reviews = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return reviews as Review[];
 }
 
 export async function getReviewById(userId: string, gameId: string) {
