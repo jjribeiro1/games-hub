@@ -11,7 +11,7 @@ import { Game } from '@/types/game';
 
 export default function useGameIcons(game: Game) {
   const gameIcons = () => {
-    const platforms = game.platform;
+    const platforms = game?.platform;
     const platformKeys = new Set<string>();
     const iconsMap = new Map<string, React.JSX.Element>([
       ['pc', <BsWindows key={'pc'} className="text-mine-shaft-400 w-4 h-4" />],
@@ -27,7 +27,7 @@ export default function useGameIcons(game: Game) {
     ]);
     const doublePlatforms = ['playstation-4', 'playstation-5', 'xbox-one', 'xbox-series-x'];
 
-    platforms.forEach((platform) => {
+    platforms?.forEach((platform) => {
       if (doublePlatforms.includes(platform)) {
         if (platform === 'xbox-one' || platform === 'xbox-series-x') {
           platformKeys.add('xbox');
