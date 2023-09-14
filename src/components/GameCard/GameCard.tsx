@@ -62,26 +62,6 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     },
   });
 
-  const handleReviewInOneClick = async (rate: string) => {
-    try {
-      await createReview(loggedUserInfo?.id as string, game.id, rate);
-      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
-      toast.success('your review has been successfully submitted');
-    } catch (error) {
-      toast.error('unexpected error');
-    }
-  };
-
-  const handleDeleteReview = async () => {
-    try {
-      await deleteReview(loggedUserInfo?.id as string, game.id);
-      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
-      toast.success('Your review has been removed');
-    } catch (error) {
-      toast.error('unexpected error');
-    }
-  };
-
   const handleAddGameToUserLibrary = async (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to add a game to your library');
@@ -146,6 +126,26 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
       toast.success('Game removed from your library');
     } catch (error) {
       toast.error('An unexpected error happened');
+    }
+  };
+
+  const handleAddReviewWithoutCommentInOneClick = async (rate: RateOptions) => {
+    try {
+      await createReview(loggedUserInfo?.id as string, game.id, rate);
+      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
+      toast.success('your review has been successfully submitted');
+    } catch (error) {
+      toast.error('unexpected error');
+    }
+  };
+
+  const handleDeleteReviewWithoutComment = async () => {
+    try {
+      await deleteReview(loggedUserInfo?.id as string, gameHasBeenReviewedByUser?.gameId as string);
+      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
+      toast.success('Your review has been removed');
+    } catch (error) {
+      toast.error('unexpected error');
     }
   };
 
@@ -247,12 +247,21 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                         <p className="text-sm text-mine-shaft-950 font-medium">
                           {gameHasBeenReviewedByUser.rate}
                         </p>
-                        <p
-                          onClick={handleDeleteReview}
-                          className="text-sm text-red-500 font-medium cursor-pointer"
-                        >
-                          delete
-                        </p>
+                        {gameHasBeenReviewedByUser.comment ? (
+                          <p
+                            onClick={() => setOpenReviewModal(true)}
+                            className="text-sm text-mine-shaft-500 font-medium cursor-pointer"
+                          >
+                            Edit review
+                          </p>
+                        ) : (
+                          <p
+                            onClick={handleDeleteReviewWithoutComment}
+                            className="text-sm text-red-500 font-medium cursor-pointer"
+                          >
+                            Delete
+                          </p>
+                        )}
                       </div>
                     </>
                   ) : (
@@ -262,7 +271,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                         {reviewRateOptions.map((rate) => (
                           <div
                             key={rate}
-                            onClick={() => handleReviewInOneClick(rate)}
+                            onClick={() => handleAddReviewWithoutCommentInOneClick(rate)}
                             className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer"
                           >
                             <Image src={`/images/${rate}.svg`} width={40} height={40} alt="target" />
@@ -272,20 +281,23 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                       </div>
                     </>
                   )}
+                  {gameHasBeenReviewedByUser?.comment ? null : (
+                    <Button
+                      onClick={() => setOpenReviewModal(true)}
+                      variant={'outline'}
+                      className="border border-mine-shaft-300/50 hover:bg-mine-shaft-200/30 transition-colors"
+                    >
+                      Write a review
+                    </Button>
+                  )}
 
-                  <Button
-                    onClick={() => setOpenReviewModal(true)}
-                    variant={'outline'}
-                    className="border border-mine-shaft-300/50 hover:bg-mine-shaft-200/30 transition-colors"
-                  >
-                    Write a review
-                  </Button>
                   {openReviewModal ? (
                     <WriteReviewDialog
                       open={openReviewModal}
                       onOpenChange={setOpenReviewModal}
                       userId={loggedUserInfo?.id as string}
                       game={game}
+                      gameReviewedByUser={gameHasBeenReviewedByUser}
                     />
                   ) : null}
                 </div>
