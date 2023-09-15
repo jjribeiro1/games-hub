@@ -6,8 +6,6 @@ import { auth } from '@/firebase/config';
 interface AuthContextProps {
   currentUser: User | null;
   setCurrentUser: (value: User | null) => void;
-  displayName: string | null;
-  setDisplayName: (value: string | null) => void;
   loading: boolean;
 }
 
@@ -15,7 +13,6 @@ const AuthContext = createContext({} as AuthContextProps);
 
 export default function AuthContextProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [displayName, setDisplayName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +24,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser, displayName, setDisplayName, loading }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

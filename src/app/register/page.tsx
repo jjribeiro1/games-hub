@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { setDisplayName } = useAuthContext();
+  const { setCurrentUser } = useAuthContext();
 
   const form = useForm<z.infer<typeof registerUserSchema>>({
     resolver: zodResolver(registerUserSchema),
@@ -35,7 +35,7 @@ export default function RegisterPage() {
     try {
       const { email, password, username } = values;
       const newUser = await newUserAuthentication({ email, password, username });
-      setDisplayName(newUser?.displayName);
+      setCurrentUser({ ...newUser, displayName: username });
       router.push('/');
       toast.success('Your account has been successfully created');
     } catch (error: any) {

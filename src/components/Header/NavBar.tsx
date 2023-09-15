@@ -13,7 +13,7 @@ import { logout } from '@/services/authentication';
 export default function NavBar() {
   const { genres } = useFetchGenres();
   const { platforms } = useFetchPlatforms();
-  const { currentUser, displayName } = useAuthContext();
+  const { currentUser } = useAuthContext();
 
   return (
     <NavigationMenu.Root className="w-full flex items-center justify-between pb-1">
@@ -107,7 +107,7 @@ export default function NavBar() {
               <li>
                 <Avatar>
                   <AvatarFallback className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold capitalize cursor-pointer">
-                    {displayName?.charAt(0) || currentUser.displayName?.charAt(0)}
+                    {currentUser.displayName?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
               </li>
