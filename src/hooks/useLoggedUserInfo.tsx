@@ -4,12 +4,10 @@ import { getUserById } from '@/services/user';
 
 export default function useLoggedUserInfo() {
   const { currentUser } = useAuthContext();
-
-  const fetcher = currentUser ? getUserById(currentUser.uid) : null;
-
   const { data } = useQuery({
     queryKey: ['logged-user-info', currentUser?.uid],
-    queryFn: () => fetcher,
+    queryFn: () => getUserById(currentUser?.uid as string),
+    enabled: !!currentUser,
     staleTime: 1000 * 60 * 30,
     cacheTime: 1000 * 60 * 30,
   });
