@@ -50,7 +50,7 @@ export default function GameDetailsPage() {
             priority
           />
           <div className="flex items-center gap-2">
-            {game.isFree ? (
+            {game?.isFree ? (
               <Button className="w-[30%] text-mine-shaft-200 bg-mine-shaft-800 hover:bg-mine-shaft-800 rounded cursor-default">
                 FREE
               </Button>
