@@ -6,6 +6,7 @@ export default function useFetchGameById(id: string) {
   const { data, isLoading } = useQuery({
     queryKey: ['getGameById', id],
     queryFn: () => getGameById(id),
+    enabled: !!id,
     staleTime: 1000 * 60 * 10,
     cacheTime: 1000 * 60 * 10,
   });

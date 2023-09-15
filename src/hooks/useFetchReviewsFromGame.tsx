@@ -6,6 +6,7 @@ export default function useFetchReviewsFromGame(game: Game) {
   const { data, isLoading } = useQuery({
     queryKey: ['get-reviews-from-game', game?.id],
     queryFn: () => getAllReviewsFromGame(game),
+    enabled: !!game
   });
 
   return {
