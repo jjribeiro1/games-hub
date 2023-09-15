@@ -6,9 +6,12 @@ import { Button } from '@/components/ui/button';
 import Spinner from '@/components/ui/spinner';
 import useFetchAllGames from '@/hooks/useFetchAllGames';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
+import useFetchReviewsFromUser from '@/hooks/useFetchReviewsFromUser';
+import { Review } from '@/types/review';
 
 export default function GamesPage() {
   const { loggedUserInfo } = useLoggedUserInfo();
+  const { reviews } = useFetchReviewsFromUser();
   const { data, isLoading, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useFetchAllGames();
 
   return (
@@ -21,7 +24,7 @@ export default function GamesPage() {
             data?.pages.map((games) =>
               games.games.map((game) => (
                 <li key={game.id}>
-                  <GameCard game={game} loggedUserInfo={loggedUserInfo} />
+                  <GameCard game={game} loggedUserInfo={loggedUserInfo} reviewsFromUser={reviews as Review[]} />
                 </li>
               )),
             )
