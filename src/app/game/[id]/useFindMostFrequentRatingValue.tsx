@@ -16,7 +16,8 @@ export default function useFindMostFrequentRatingValue(reviews: Review[] | undef
     ratingMap.set(review.rate, (ratingMap.get(review.rate) || 0) + 1);
   }
 
-  const higher = Array.from(ratingMap.entries()).reduce((acc, [k, v]) => {
+  const higher = Array.from(ratingMap.entries()).reduce(
+    (acc, [k, v]) => {
       if (v > acc.value) {
         acc = { name: k, value: v };
       }
@@ -26,5 +27,22 @@ export default function useFindMostFrequentRatingValue(reviews: Review[] | undef
     { name: 'Exceptional', value: 0 } as { name: RateOptions; value: number },
   );
 
-  return { mostFrequentRating: higher };
+  const totalReviewsCount = reviews.length;
+  const colors = {
+    Exceptional: 'bg-green-500',
+    Recommended: 'bg-blue-500',
+    Meh: 'bg-yellow-500',
+    Bad: 'bg-red-500',
+  };
+
+  const allRatingsInfo = Array.from(ratingMap.entries()).map(([k, v]) => {
+    return {
+      name: k,
+      value: v,
+      bgColor: colors[k],
+      percentage: `${Math.round((v / totalReviewsCount) * 100)}`,
+    };
+  });
+
+  return { mostFrequentRating: higher, allRatingsInfo };
 }
