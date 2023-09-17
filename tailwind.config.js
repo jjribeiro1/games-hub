@@ -1,4 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+const dynamicClasses = [];
+
+for (let i = 0; i <= 99; i++) {
+  dynamicClasses.push(`w-[${i}%]`);
+}
 module.exports = {
   darkMode: ['class'],
   content: [
@@ -7,6 +12,7 @@ module.exports = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
+  safelist: dynamicClasses,
   theme: {
     container: {
       center: true,
