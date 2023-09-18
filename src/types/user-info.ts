@@ -2,6 +2,7 @@ import { Game } from './game';
 
 export interface UserInfo {
   id: string;
+  name: string;
   username: string;
   email: string;
   library: GameInLibrary[];

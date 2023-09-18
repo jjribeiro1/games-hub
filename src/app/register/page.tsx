@@ -20,6 +20,7 @@ export default function RegisterPage() {
   const form = useForm<z.infer<typeof registerUserSchema>>({
     resolver: zodResolver(registerUserSchema),
     defaultValues: {
+      name: '',
       username: '',
       email: '',
       password: '',
@@ -33,8 +34,8 @@ export default function RegisterPage() {
   ) {
     e?.preventDefault();
     try {
-      const { email, password, username } = values;
-      const newUser = await newUserAuthentication({ email, password, username });
+      const { email, password, username, name } = values;
+      const newUser = await newUserAuthentication({ email, password, username, name });
       setCurrentUser({ ...newUser, displayName: username });
       router.push('/');
       toast.success('Your account has been successfully created');
@@ -54,13 +55,32 @@ export default function RegisterPage() {
 
           <FormField
             control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-mine-shaft-100 font-medium">Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="your name"
+                    type="text"
+                    className="text-black font-semibold h-8"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="username"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-mine-shaft-100 font-medium">Username</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="username"
+                    placeholder="required to make login"
                     type="text"
                     className="text-black font-semibold h-8"
                     {...field}

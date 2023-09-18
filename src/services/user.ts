@@ -16,8 +16,8 @@ import { UniqueFieldValidationError } from '@/exceptions';
 import { SaveUserToFirestoreInput } from '@/types/save-user-to-firestore-input';
 import { GameInLibrary, UserInfo } from '@/types/user-info';
 
-export async function saveUserTofirestore({ email, uid, username }: SaveUserToFirestoreInput) {
-  await setDoc(doc(db, 'users', uid), { email, username });
+export async function saveUserTofirestore({ email, uid, username, name }: SaveUserToFirestoreInput) {
+  await setDoc(doc(db, 'users', uid), { email, username, name });
 }
 
 export async function checkUserUniqueFields(email: string, username: string) {

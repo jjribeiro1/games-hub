@@ -4,6 +4,11 @@ import { nonEmptyMessage } from '@/utils/non-empty-message';
 
 export const registerUserSchema = z
   .object({
+    name: z
+    .string()
+    .nonempty({ message: nonEmptyMessage('name') })
+    .min(3, { message: minLengthMessage('name', 3) }),
+
     username: z
       .string()
       .nonempty({ message: nonEmptyMessage('username') })

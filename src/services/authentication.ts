@@ -14,13 +14,13 @@ import {
 import { NewUserAuthenticationInput } from '@/types/new-user-auth-input';
 import { LoginInput } from '@/types/login-input';
 
-export async function newUserAuthentication({ email, password, username }: NewUserAuthenticationInput) {
+export async function newUserAuthentication({ email, password, username, name }: NewUserAuthenticationInput) {
   try {
     await checkUserUniqueFields(email, username);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     await updateProfile(user, { displayName: username });
-    await saveUserTofirestore({ email: user.email as string, uid: user.uid, username });
+    await saveUserTofirestore({ email: user.email as string, uid: user.uid, username, name });
 
     return user;
   } catch (error: any) {
