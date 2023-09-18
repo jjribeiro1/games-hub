@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMutation } from '@tanstack/react-query';
 import { HiPlus } from 'react-icons/hi';
 import { BsCheck2 } from 'react-icons/bs';
 import { BsThreeDots } from 'react-icons/bs';
@@ -12,17 +11,15 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import useGameIcons from './useGameIcons';
-import {
-  addGameToUserLibrary,
-  removeGameFromUserLibrary,
-  updateGameTypeFromUserLibrary,
-} from '@/services/user';
 import { deleteReview, createReview } from '@/services/review';
 import { Game } from '@/types/game';
 import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-info';
 import { RateOptions, Review } from '@/types/review';
 import { queryClient } from '@/providers';
 import { toast } from 'react-toastify';
+import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
+import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
+import { useRemoveGameFromUserLibrary } from '@/mutations/remove-game-from-user-library';
 
 interface GameCardProps {
   game: Game;
@@ -45,88 +42,35 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     'Played',
     'Not Played',
   ];
-
   const reviewRateOptions: RateOptions[] = ['Exceptional', 'Recommended', 'Meh', 'Bad'];
+  const addGameToUserLibraryMutation = useAddGameToUserLibrary();
+  const updateGameTypeFromUserLibraryMutation = useUpdateGameTypeFromUserLibrary();
+  const removeGameFromUserLibraryMutation = useRemoveGameFromUserLibrary();
 
-  const addGameToUserLibraryMutation = useMutation({
-    mutationFn: (game: GameInLibrary) => addGameToUserLibrary(loggedUserInfo?.id as string, game),
-    onSuccess: (_, variables) => {
-      const newLibrary = loggedUserInfo?.library
-        ? [...(loggedUserInfo?.library?.map((game) => game) as GameInLibrary[]), variables]
-        : [variables];
-
-      queryClient.setQueryData<UserInfo>(['logged-user-info', loggedUserInfo?.id], {
-        ...(loggedUserInfo as UserInfo),
-        library: newLibrary,
-      });
-    },
-  });
-
-  const handleAddGameToUserLibrary = async (type: GameTypeInLibraryOption) => {
+  const handleAddGameToUserLibrary = (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to add a game to your library');
       return;
     }
-    try {
-      const gameData: GameInLibrary = { ...game, type };
-      addGameToUserLibraryMutation.mutate(gameData);
-      toast.success('Game added to your library');
-    } catch (error) {
-      toast.error('An unexpected error happened');
-    }
+    const gameData: GameInLibrary = { ...game, type };
+    addGameToUserLibraryMutation.mutate({ loggedUserInfo, game: gameData });
   };
 
-  const updateGameTypeFromUserLibraryMutation = useMutation({
-    mutationFn: (updatedGame: GameInLibrary) =>
-      updateGameTypeFromUserLibrary(loggedUserInfo?.id as string, updatedGame),
-    onSuccess: (_, variables) => {
-      const newLibrary = loggedUserInfo?.library.map((game) =>
-        game.id === variables.id ? variables : game,
-      ) as GameInLibrary[];
-      queryClient.setQueryData<UserInfo>(['logged-user-info', loggedUserInfo?.id], {
-        ...(loggedUserInfo as UserInfo),
-        library: newLibrary,
-      });
-    },
-  });
-
-  const handleUpdateGameTypeFromUserLibrary = async (type: GameTypeInLibraryOption) => {
+  const handleUpdateGameTypeFromUserLibrary = (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to make this action');
       return;
     }
-    try {
-      const updatedGame: GameInLibrary = { ...game, type };
-      updateGameTypeFromUserLibraryMutation.mutate(updatedGame);
-      toast.success('game category updated');
-    } catch (error) {
-      toast.error('An unexpected error happened');
-    }
+    const updatedGame: GameInLibrary = { ...game, type };
+    updateGameTypeFromUserLibraryMutation.mutate({ loggedUserInfo, updatedGame });
   };
 
-  const removeGameFromUserLibraryMutation = useMutation({
-    mutationFn: (gameId: string) => removeGameFromUserLibrary(loggedUserInfo?.id as string, gameId),
-    onSuccess: (_, variables) => {
-      const newLibrary = loggedUserInfo?.library.filter((game) => game.id !== variables) as GameInLibrary[];
-      queryClient.setQueryData<UserInfo>(['logged-user-info', loggedUserInfo?.id], {
-        ...(loggedUserInfo as UserInfo),
-        library: newLibrary,
-      });
-    },
-  });
-
-  const handleRemoveGameFromUserLibrary = async () => {
+  const handleRemoveGameFromUserLibrary = () => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to remove a game from your library');
       return;
     }
-
-    try {
-      removeGameFromUserLibraryMutation.mutate(game.id);
-      toast.success('Game removed from your library');
-    } catch (error) {
-      toast.error('An unexpected error happened');
-    }
+    removeGameFromUserLibraryMutation.mutate({ loggedUserInfo, gameId: game.id });
   };
 
   const handleAddReviewWithoutCommentInOneClick = async (rate: RateOptions) => {
