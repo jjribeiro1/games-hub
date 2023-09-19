@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const dynamicClasses = [];
 
-for (let i = 0; i <= 99; i++) {
+for (let i = 0; i <= 100; i++) {
   dynamicClasses.push(`w-[${i}%]`);
 }
 module.exports = {
