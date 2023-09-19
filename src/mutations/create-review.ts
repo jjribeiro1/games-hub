@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/providers';
 import { createReview } from '@/services/review';
-import { CreateReviewInput, Review } from '@/types/review';
+import { CreateReviewInput } from '@/types/review';
 import { toast } from 'react-toastify';
 
 interface MutationProps extends CreateReviewInput {}
