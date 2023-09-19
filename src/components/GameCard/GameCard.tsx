@@ -11,16 +11,15 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import useGameIcons from './useGameIcons';
-import { deleteReview, createReview } from '@/services/review';
 import { Game } from '@/types/game';
 import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-info';
 import { RatingOptions, Review } from '@/types/review';
-import { queryClient } from '@/providers';
 import { toast } from 'react-toastify';
 import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
 import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
 import { useRemoveGameFromUserLibrary } from '@/mutations/remove-game-from-user-library';
 import { useCreateReviewWithoutComment } from '@/mutations/create-review-without-comment';
+import { useRemoveReviewWithoutComment } from '@/mutations/remove-review-without-comment';
 
 interface GameCardProps {
   game: Game;
@@ -48,6 +47,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
   const updateGameTypeFromUserLibraryMutation = useUpdateGameTypeFromUserLibrary();
   const removeGameFromUserLibraryMutation = useRemoveGameFromUserLibrary();
   const createReviewWithoutCommentMutation = useCreateReviewWithoutComment();
+  const removeReviewWithoutCommentMutation = useRemoveReviewWithoutComment();
 
   const handleAddGameToUserLibrary = (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
@@ -75,7 +75,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     removeGameFromUserLibraryMutation.mutate({ loggedUserInfo, gameId: game.id });
   };
 
-  const handleAddReviewWithoutComment = async (rating: RatingOptions) => {
+  const handleAddReviewWithoutComment = (rating: RatingOptions) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to create a review');
       return;
@@ -88,14 +88,15 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     });
   };
 
-  const handleDeleteReviewWithoutComment = async () => {
-    try {
-      await deleteReview(loggedUserInfo?.id as string, gameHasBeenReviewedByUser?.gameId as string);
-      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
-      toast.success('Your review has been removed');
-    } catch (error) {
-      toast.error('unexpected error');
+  const handleDeleteReviewWithoutComment = () => {
+    if (!loggedUserInfo || !gameHasBeenReviewedByUser) {
+      toast.error('You do not have permission to complete this action');
+      return;
     }
+    removeReviewWithoutCommentMutation.mutate({
+      userId: loggedUserInfo.id,
+      gameId: gameHasBeenReviewedByUser.gameId,
+    });
   };
 
   return (
