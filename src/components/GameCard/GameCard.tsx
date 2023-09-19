@@ -11,15 +11,16 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import useGameIcons from './useGameIcons';
-import { Game } from '@/types/game';
-import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-info';
-import { RatingOptions, Review } from '@/types/review';
-import { toast } from 'react-toastify';
 import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
 import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
 import { useRemoveGameFromUserLibrary } from '@/mutations/remove-game-from-user-library';
 import { useCreateReview } from '@/mutations/create-review';
-import { useRemoveReview } from '@/mutations/remove-review';
+import { useDeleteReview } from '@/mutations/delete-review';
+import { Game } from '@/types/game';
+import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-info';
+import { RatingOptions, Review } from '@/types/review';
+import { toast } from 'react-toastify';
+
 
 interface GameCardProps {
   game: Game;
@@ -34,7 +35,6 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
   const gameInLibraryType = gameIsInUserLibrary?.type || null;
   const gameHasBeenReviewedByUser = reviewsFromUser?.find((review) => review.gameId === game.id);
-
   const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
     'Currently Playing',
@@ -47,7 +47,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
   const updateGameTypeFromUserLibraryMutation = useUpdateGameTypeFromUserLibrary();
   const removeGameFromUserLibraryMutation = useRemoveGameFromUserLibrary();
   const createReviewWithoutCommentMutation = useCreateReview();
-  const removeReviewWithoutCommentMutation = useRemoveReview();
+  const deleteReviewWithoutCommentMutation = useDeleteReview();
 
   const handleAddGameToUserLibrary = (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
@@ -75,7 +75,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     removeGameFromUserLibraryMutation.mutate({ loggedUserInfo, gameId: game.id });
   };
 
-  const handleAddReviewWithoutComment = (rating: RatingOptions) => {
+  const handleCreateReviewWithoutComment = (rating: RatingOptions) => {
     if (!loggedUserInfo) {
       toast.error('You have to be logged in to create a review');
       return;
@@ -93,7 +93,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
       toast.error('You do not have permission to complete this action');
       return;
     }
-    removeReviewWithoutCommentMutation.mutate({
+    deleteReviewWithoutCommentMutation.mutate({
       userId: loggedUserInfo.id,
       gameId: gameHasBeenReviewedByUser.gameId,
     });
@@ -221,7 +221,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                         {reviewRatingOptions.map((rating) => (
                           <div
                             key={rating}
-                            onClick={() => handleAddReviewWithoutComment(rating)}
+                            onClick={() => handleCreateReviewWithoutComment(rating)}
                             className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer"
                           >
                             <Image src={`/images/${rating}.svg`} width={40} height={40} alt="target" />

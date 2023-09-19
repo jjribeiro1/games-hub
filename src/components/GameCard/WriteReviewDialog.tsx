@@ -4,8 +4,8 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useCreateReview } from '@/mutations/create-review';
-import { useRemoveReview } from '@/mutations/remove-review';
 import { useUpdateReview } from '@/mutations/update-review';
+import { useDeleteReview } from '@/mutations/delete-review';
 import { Game } from '@/types/game';
 import { RatingOptions, Review } from '@/types/review';
 import { toast } from 'react-toastify';
@@ -33,7 +33,7 @@ export default function WriteReviewDialog({
   const reviewRatingOptions: RatingOptions[] = ['Exceptional', 'Recommended', 'Meh', 'Bad'];
   const createReviewWithCommentMutation = useCreateReview();
   const updateReviewMutation = useUpdateReview();
-  const removeReviewMutation = useRemoveReview();
+  const deleteReviewMutation = useDeleteReview();
 
   const handleUpdateReview = async () => {
     if (!userId || !username || !gameReviewedByUser) {
@@ -65,7 +65,7 @@ export default function WriteReviewDialog({
       toast.error('You do not have permission to complete this action');
       return;
     }
-    removeReviewMutation.mutate({ userId, gameId: gameReviewedByUser.gameId });
+    deleteReviewMutation.mutate({ userId, gameId: gameReviewedByUser.gameId });
     onOpenChange(false);
   };
 
