@@ -18,8 +18,8 @@ import { toast } from 'react-toastify';
 import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
 import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
 import { useRemoveGameFromUserLibrary } from '@/mutations/remove-game-from-user-library';
-import { useCreateReviewWithoutComment } from '@/mutations/create-review-without-comment';
-import { useRemoveReviewWithoutComment } from '@/mutations/remove-review-without-comment';
+import { useCreateReview } from '@/mutations/create-review';
+import { useRemoveReview } from '@/mutations/remove-review-without-comment';
 
 interface GameCardProps {
   game: Game;
@@ -46,8 +46,8 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
   const addGameToUserLibraryMutation = useAddGameToUserLibrary();
   const updateGameTypeFromUserLibraryMutation = useUpdateGameTypeFromUserLibrary();
   const removeGameFromUserLibraryMutation = useRemoveGameFromUserLibrary();
-  const createReviewWithoutCommentMutation = useCreateReviewWithoutComment();
-  const removeReviewWithoutCommentMutation = useRemoveReviewWithoutComment();
+  const createReviewWithoutCommentMutation = useCreateReview();
+  const removeReviewWithoutCommentMutation = useRemoveReview();
 
   const handleAddGameToUserLibrary = (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
@@ -246,6 +246,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                       open={openReviewModal}
                       onOpenChange={setOpenReviewModal}
                       userId={loggedUserInfo?.id as string}
+                      username={loggedUserInfo?.username as string}
                       game={game}
                       gameReviewedByUser={gameHasBeenReviewedByUser}
                     />

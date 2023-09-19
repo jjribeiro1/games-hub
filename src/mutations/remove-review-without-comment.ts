@@ -8,7 +8,7 @@ interface MutationProps {
   gameId: string;
 }
 
-export function useRemoveReviewWithoutComment() {
+export function useRemoveReview() {
   return useMutation({
     mutationFn: ({ userId, gameId }: MutationProps) => deleteReview(userId, gameId),
 

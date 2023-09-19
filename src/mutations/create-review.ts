@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 interface MutationProps extends CreateReviewInput {}
 
-export function useCreateReviewWithoutComment() {
+export function useCreateReview() {
   return useMutation({
     mutationFn: ({ userId, username, gameId, rating, comment }: MutationProps) =>
       createReview({ userId, username, gameId, rating, comment }),
