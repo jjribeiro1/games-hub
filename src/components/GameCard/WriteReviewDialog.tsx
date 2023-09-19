@@ -8,20 +8,24 @@ import { Game } from '@/types/game';
 import { RatingOptions, Review } from '@/types/review';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
+import { useCreateReview } from '@/mutations/create-review';
 
 interface WriteReviewDialogProps {
   open: boolean;
   onOpenChange: (value: boolean) => void;
   userId: string;
+  username: string;
   game: Game;
   gameReviewedByUser: Review | undefined; 
 }
 
-export default function WriteReviewDialog({ open, onOpenChange, userId, gameReviewedByUser, game }: WriteReviewDialogProps) {
+export default function WriteReviewDialog({ open, onOpenChange, userId, username, gameReviewedByUser, game }: WriteReviewDialogProps) {
   const [commentValue, setCommentValue] = useState('');
   const [selectedRatingValue, setSelectedRatingValue] = useState<RatingOptions>();
   const maxCommentLength = 140;
   const reviewRatingOptions: RatingOptions[] = ['Exceptional', 'Recommended', 'Meh', 'Bad'];
+  const createReviewWithCommentMutation = useCreateReview();
+
 
   const handleUpdateReview = async () => {
     try {
@@ -35,16 +39,19 @@ export default function WriteReviewDialog({ open, onOpenChange, userId, gameRevi
     }
   };
 
-  const handleCreateReview = async () => {
-    try {
-      await createReview(userId, game.id, selectedRatingValue as RatingOptions, commentValue);
-      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', userId] });
-      toast.success('your review has been successfully submitted');
-    } catch (error) {
-      toast.error('Unexpected error');
-    } finally {
-      onOpenChange(false);
+  const handleCreateReviewWithComment = () => {
+    if (!userId || !username) {
+      toast.error('You do not have permission to complete this action');
+      return;
     }
+    createReviewWithCommentMutation.mutate({
+      userId,
+      username,
+      gameId: game.id,
+      rating: selectedRatingValue as RatingOptions,
+      comment: commentValue
+    })
+    onOpenChange(false)
   };
 
   const handleDeleteReview = async () => {
@@ -110,7 +117,7 @@ export default function WriteReviewDialog({ open, onOpenChange, userId, gameRevi
 
           <Button
             type="submit"
-            onClick={gameReviewedByUser ? handleUpdateReview : handleCreateReview}
+            onClick={gameReviewedByUser ? handleUpdateReview : handleCreateReviewWithComment}
             disabled={commentValue.length < 1 || !selectedRatingValue}
             className="bg-cyan-700 hover:bg-cyan-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-lg font-medium"
           >
