@@ -10,12 +10,12 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { RateOptions, Review } from '@/types/review';
+import { RatingOptions, Review } from '@/types/review';
 import { Game } from '@/types/game';
 
-export async function createReview(userId: string, gameId: string, rate: RateOptions, comment: string = '') {
+export async function createReview(userId: string, gameId: string, rating: RatingOptions, comment: string = '') {
   const reviewId = `${userId}_${gameId}`;
-  await setDoc(doc(db, 'reviews', reviewId), { userId, gameId, rate, comment });
+  await setDoc(doc(db, 'reviews', reviewId), { userId, gameId, rating, comment });
 }
 
 export async function deleteReview(userId: string, gameId: string) {
@@ -49,10 +49,10 @@ export async function getReviewById(userId: string, gameId: string) {
 }
 
 export async function updateReviewById(userId: string, gameId: string, data: Partial<Review>) {
-  const { comment, rate } = data;
+  const { comment, rating } = data;
   const docRef = doc(db, 'reviews', `${userId}_${gameId}`);
   await updateDoc(docRef, {
     comment,
-    rate,
+    rating,
   });
 }

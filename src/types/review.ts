@@ -1,9 +1,10 @@
 export interface Review {
   id: string;
   userId: string;
+  username: string;
   gameId: string;
-  rate: RateOptions;
+  rating: RatingOptions;
   comment: string;
 }
 
-export type RateOptions = 'Exceptional' | 'Recommended' | 'Meh' | 'Bad'
+export type RatingOptions = 'Exceptional' | 'Recommended' | 'Meh' | 'Bad'

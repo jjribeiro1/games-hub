@@ -1,11 +1,11 @@
-import { RateOptions, Review } from '@/types/review';
+import { RatingOptions, Review } from '@/types/review';
 
 export default function useFindMostFrequentRatingValue(reviews: Review[] | undefined) {
   if (!reviews || reviews.length === 0) {
     return {};
   }
 
-  const ratingMap = new Map<RateOptions, number>([
+  const ratingMap = new Map<RatingOptions, number>([
     ['Exceptional', 0],
     ['Recommended', 0],
     ['Meh', 0],
@@ -13,7 +13,7 @@ export default function useFindMostFrequentRatingValue(reviews: Review[] | undef
   ]);
 
   for (const review of reviews) {
-    ratingMap.set(review.rate, (ratingMap.get(review.rate) || 0) + 1);
+    ratingMap.set(review.rating, (ratingMap.get(review.rating) || 0) + 1);
   }
 
   const higher = Array.from(ratingMap.entries()).reduce(
@@ -24,7 +24,7 @@ export default function useFindMostFrequentRatingValue(reviews: Review[] | undef
 
       return acc;
     },
-    { name: 'Exceptional', value: 0 } as { name: RateOptions; value: number },
+    { name: 'Exceptional', value: 0 } as { name: RatingOptions; value: number },
   );
 
   const totalReviewsCount = reviews.length;

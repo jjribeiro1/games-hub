@@ -14,7 +14,7 @@ import useGameIcons from './useGameIcons';
 import { deleteReview, createReview } from '@/services/review';
 import { Game } from '@/types/game';
 import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-info';
-import { RateOptions, Review } from '@/types/review';
+import { RatingOptions, Review } from '@/types/review';
 import { queryClient } from '@/providers';
 import { toast } from 'react-toastify';
 import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
@@ -42,7 +42,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     'Played',
     'Not Played',
   ];
-  const reviewRateOptions: RateOptions[] = ['Exceptional', 'Recommended', 'Meh', 'Bad'];
+  const reviewRatingOptions: RatingOptions[] = ['Exceptional', 'Recommended', 'Meh', 'Bad'];
   const addGameToUserLibraryMutation = useAddGameToUserLibrary();
   const updateGameTypeFromUserLibraryMutation = useUpdateGameTypeFromUserLibrary();
   const removeGameFromUserLibraryMutation = useRemoveGameFromUserLibrary();
@@ -73,9 +73,9 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     removeGameFromUserLibraryMutation.mutate({ loggedUserInfo, gameId: game.id });
   };
 
-  const handleAddReviewWithoutCommentInOneClick = async (rate: RateOptions) => {
+  const handleAddReviewWithoutCommentInOneClick = async (rating: RatingOptions) => {
     try {
-      await createReview(loggedUserInfo?.id as string, game.id, rate);
+      await createReview(loggedUserInfo?.id as string, game.id, rating);
       queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
       toast.success('your review has been successfully submitted');
     } catch (error) {
@@ -183,13 +183,13 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                       <p className="text-mine-shaft-950">Your review</p>
                       <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 bg-mine-shaft-200/30">
                         <Image
-                          src={`/images/${gameHasBeenReviewedByUser.rate}.svg`}
+                          src={`/images/${gameHasBeenReviewedByUser.rating}.svg`}
                           width={40}
                           height={40}
                           alt="target"
                         />
                         <p className="text-sm text-mine-shaft-950 font-medium">
-                          {gameHasBeenReviewedByUser.rate}
+                          {gameHasBeenReviewedByUser.rating}
                         </p>
                         {gameHasBeenReviewedByUser.comment ? (
                           <p
@@ -212,14 +212,14 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                     <>
                       <p className="text-mine-shaft-950">Rate in one click</p>
                       <div className="grid grid-cols-2">
-                        {reviewRateOptions.map((rate) => (
+                        {reviewRatingOptions.map((rating) => (
                           <div
-                            key={rate}
-                            onClick={() => handleAddReviewWithoutCommentInOneClick(rate)}
+                            key={rating}
+                            onClick={() => handleAddReviewWithoutCommentInOneClick(rating)}
                             className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer"
                           >
-                            <Image src={`/images/${rate}.svg`} width={40} height={40} alt="target" />
-                            <p className="text-sm text-mine-shaft-950 font-medium">{rate}</p>
+                            <Image src={`/images/${rating}.svg`} width={40} height={40} alt="target" />
+                            <p className="text-sm text-mine-shaft-950 font-medium">{rating}</p>
                           </div>
                         ))}
                       </div>
