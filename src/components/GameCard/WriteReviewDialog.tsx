@@ -3,13 +3,12 @@ import Image from 'next/image';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { updateReviewById } from '@/services/review';
+import { useCreateReview } from '@/mutations/create-review';
+import { useRemoveReview } from '@/mutations/remove-review';
+import { useUpdateReview } from '@/mutations/update-review';
 import { Game } from '@/types/game';
 import { RatingOptions, Review } from '@/types/review';
 import { toast } from 'react-toastify';
-import { queryClient } from '@/providers';
-import { useCreateReview } from '@/mutations/create-review';
-import { useRemoveReview } from '@/mutations/remove-review';
 
 interface WriteReviewDialogProps {
   open: boolean;
@@ -33,21 +32,17 @@ export default function WriteReviewDialog({
   const maxCommentLength = 140;
   const reviewRatingOptions: RatingOptions[] = ['Exceptional', 'Recommended', 'Meh', 'Bad'];
   const createReviewWithCommentMutation = useCreateReview();
+  const updateReviewMutation = useUpdateReview();
   const removeReviewMutation = useRemoveReview();
 
   const handleUpdateReview = async () => {
-    try {
-      await updateReviewById(userId, gameReviewedByUser?.gameId as string, {
-        rating: selectedRatingValue,
-        comment: commentValue,
-      });
-      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', userId] });
-      toast.success('your updated review has been successfully submitted');
-    } catch (error) {
-      toast.error('Unexpected error');
-    } finally {
-      onOpenChange(false);
+    if (!userId || !username || !gameReviewedByUser) {
+      toast.error('You do not have permission to complete this action');
+      return;
     }
+    const data = { comment: commentValue, rating: selectedRatingValue };
+    updateReviewMutation.mutate({ userId, gameId: gameReviewedByUser.gameId, data });
+    onOpenChange(false);
   };
 
   const handleCreateReviewWithComment = () => {
