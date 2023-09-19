@@ -19,7 +19,7 @@ import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
 import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
 import { useRemoveGameFromUserLibrary } from '@/mutations/remove-game-from-user-library';
 import { useCreateReview } from '@/mutations/create-review';
-import { useRemoveReview } from '@/mutations/remove-review-without-comment';
+import { useRemoveReview } from '@/mutations/remove-review';
 
 interface GameCardProps {
   game: Game;
