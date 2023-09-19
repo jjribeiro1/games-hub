@@ -13,6 +13,7 @@ export function useCreateReview() {
 
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', variables.userId] });
+      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-game', variables.gameId] });
       toast.success('your review has been successfully submitted');
     },
 
