@@ -19,7 +19,7 @@ export async function newUserAuthentication({ email, password, username, name }:
     await checkUserUniqueFields(email, username);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    await updateProfile(user, { displayName: username });
+    await updateProfile(user, { displayName: name });
     await saveUserTofirestore({ email: user.email as string, uid: user.uid, username, name });
 
     return user;
