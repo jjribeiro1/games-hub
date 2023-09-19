@@ -10,12 +10,12 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { RatingOptions, Review } from '@/types/review';
+import { CreateReviewInput, Review } from '@/types/review';
 import { Game } from '@/types/game';
 
-export async function createReview(userId: string, gameId: string, rating: RatingOptions, comment: string = '') {
+export async function createReview({ userId, username, gameId, rating, comment = '' }: CreateReviewInput) {
   const reviewId = `${userId}_${gameId}`;
-  await setDoc(doc(db, 'reviews', reviewId), { userId, gameId, rating, comment });
+  await setDoc(doc(db, 'reviews', reviewId), { userId, username, gameId, rating, comment });
 }
 
 export async function deleteReview(userId: string, gameId: string) {

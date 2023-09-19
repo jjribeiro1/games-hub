@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
 import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
 import { useRemoveGameFromUserLibrary } from '@/mutations/remove-game-from-user-library';
+import { useCreateReviewWithoutComment } from '@/mutations/create-review-without-comment';
 
 interface GameCardProps {
   game: Game;
@@ -46,6 +47,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
   const addGameToUserLibraryMutation = useAddGameToUserLibrary();
   const updateGameTypeFromUserLibraryMutation = useUpdateGameTypeFromUserLibrary();
   const removeGameFromUserLibraryMutation = useRemoveGameFromUserLibrary();
+  const createReviewWithoutCommentMutation = useCreateReviewWithoutComment();
 
   const handleAddGameToUserLibrary = (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
@@ -73,14 +75,17 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     removeGameFromUserLibraryMutation.mutate({ loggedUserInfo, gameId: game.id });
   };
 
-  const handleAddReviewWithoutCommentInOneClick = async (rating: RatingOptions) => {
-    try {
-      await createReview(loggedUserInfo?.id as string, game.id, rating);
-      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', loggedUserInfo?.id] });
-      toast.success('your review has been successfully submitted');
-    } catch (error) {
-      toast.error('unexpected error');
+  const handleAddReviewWithoutComment = async (rating: RatingOptions) => {
+    if (!loggedUserInfo) {
+      toast.error('You have to be logged in to create a review');
+      return;
     }
+    createReviewWithoutCommentMutation.mutate({
+      userId: loggedUserInfo.id,
+      username: loggedUserInfo.username,
+      gameId: game.id,
+      rating,
+    });
   };
 
   const handleDeleteReviewWithoutComment = async () => {
@@ -215,7 +220,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                         {reviewRatingOptions.map((rating) => (
                           <div
                             key={rating}
-                            onClick={() => handleAddReviewWithoutCommentInOneClick(rating)}
+                            onClick={() => handleAddReviewWithoutComment(rating)}
                             className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 hover:bg-mine-shaft-200/30 transition-colors cursor-pointer"
                           >
                             <Image src={`/images/${rating}.svg`} width={40} height={40} alt="target" />

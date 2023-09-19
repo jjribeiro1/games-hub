@@ -7,4 +7,12 @@ export interface Review {
   comment: string;
 }
 
-export type RatingOptions = 'Exceptional' | 'Recommended' | 'Meh' | 'Bad'
+export interface CreateReviewInput {
+  userId: string;
+  username: string;
+  gameId: string;
+  rating: RatingOptions;
+  comment?: string;
+}
+
+export type RatingOptions = 'Exceptional' | 'Recommended' | 'Meh' | 'Bad';
