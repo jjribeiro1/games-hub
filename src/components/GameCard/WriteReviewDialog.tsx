@@ -3,12 +3,13 @@ import Image from 'next/image';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { createReview, deleteReview, updateReviewById } from '@/services/review';
+import { updateReviewById } from '@/services/review';
 import { Game } from '@/types/game';
 import { RatingOptions, Review } from '@/types/review';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/providers';
 import { useCreateReview } from '@/mutations/create-review';
+import { useRemoveReview } from '@/mutations/remove-review';
 
 interface WriteReviewDialogProps {
   open: boolean;
@@ -16,20 +17,30 @@ interface WriteReviewDialogProps {
   userId: string;
   username: string;
   game: Game;
-  gameReviewedByUser: Review | undefined; 
+  gameReviewedByUser: Review | undefined;
 }
 
-export default function WriteReviewDialog({ open, onOpenChange, userId, username, gameReviewedByUser, game }: WriteReviewDialogProps) {
+export default function WriteReviewDialog({
+  open,
+  onOpenChange,
+  userId,
+  username,
+  gameReviewedByUser,
+  game,
+}: WriteReviewDialogProps) {
   const [commentValue, setCommentValue] = useState('');
   const [selectedRatingValue, setSelectedRatingValue] = useState<RatingOptions>();
   const maxCommentLength = 140;
   const reviewRatingOptions: RatingOptions[] = ['Exceptional', 'Recommended', 'Meh', 'Bad'];
   const createReviewWithCommentMutation = useCreateReview();
-
+  const removeReviewMutation = useRemoveReview();
 
   const handleUpdateReview = async () => {
     try {
-      await updateReviewById(userId, gameReviewedByUser?.gameId as string, { rating: selectedRatingValue, comment: commentValue });
+      await updateReviewById(userId, gameReviewedByUser?.gameId as string, {
+        rating: selectedRatingValue,
+        comment: commentValue,
+      });
       queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', userId] });
       toast.success('your updated review has been successfully submitted');
     } catch (error) {
@@ -49,21 +60,18 @@ export default function WriteReviewDialog({ open, onOpenChange, userId, username
       username,
       gameId: game.id,
       rating: selectedRatingValue as RatingOptions,
-      comment: commentValue
-    })
-    onOpenChange(false)
+      comment: commentValue,
+    });
+    onOpenChange(false);
   };
 
-  const handleDeleteReview = async () => {
-    try {
-      await deleteReview(userId, gameReviewedByUser?.gameId as string);
-      queryClient.invalidateQueries({ queryKey: ['get-reviews-from-user', userId] });
-      toast.success('Your review has been removed');
-    } catch (error) {
-      toast.error('Unexpected error');
-    } finally {
-      onOpenChange(false);
+  const handleDeleteReview = () => {
+    if (!userId || !username || !gameReviewedByUser) {
+      toast.error('You do not have permission to complete this action');
+      return;
     }
+    removeReviewMutation.mutate({ userId, gameId: gameReviewedByUser.gameId });
+    onOpenChange(false);
   };
 
   useEffect(() => {
