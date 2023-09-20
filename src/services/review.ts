@@ -33,8 +33,8 @@ export async function getAllReviewsFromUser(userId: string) {
 export async function getAllReviewsFromGame(game: Game) {
   const q = query(collection(db, 'reviews'), where('gameId', '==', game.id));
   const snapshot = await getDocs(q);
-  const reviews = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  return reviews as Review[];
+  const reviews = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Review[];
+  return reviews;
 }
 
 export async function getReviewById(userId: string, gameId: string) {
