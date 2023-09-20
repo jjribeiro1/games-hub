@@ -11,8 +11,11 @@ export default function useFetchReviewsFromGame(game: Game) {
     cacheTime: 1000 * 60 * 10,
   });
 
+  const reviewsWithComment = data?.filter((review) => Boolean(review.comment))
+
   return {
     reviewsFromGame: data,
     isLoadingReviewsFromGame: isLoading,
+    reviewsWithComment
   };
 }

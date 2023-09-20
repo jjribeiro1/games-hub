@@ -6,6 +6,8 @@ import { useParams } from 'next/navigation';
 import { Timestamp } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import GameImageSkeleton from './GameImageSkeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { FiPlayCircle } from 'react-icons/fi';
 import { BiChevronRight } from 'react-icons/bi';
@@ -13,16 +15,17 @@ import useFetchGameById from '@/hooks/useFetchGameById';
 import useFetchReviewsFromGame from '@/hooks/useFetchReviewsFromGame';
 import useGameIcons from '@/components/GameCard/useGameIcons';
 import useFindMostFrequentRatingValue from './useFindMostFrequentRatingValue';
-import { timestampToDate } from '@/utils/timestamp-to-date';
 import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import useFetchGenres from '@/hooks/useFetchGenres';
+import { timestampToDate } from '@/utils/timestamp-to-date';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function GameDetailsPage() {
   const [openCollapsible, setOpenCollapsable] = useState(false);
   const params = useParams();
   const id = params.id as string;
   const { game, isLoading } = useFetchGameById(id);
-  const { reviewsFromGame, isLoadingReviewsFromGame } = useFetchReviewsFromGame(game);
+  const { reviewsFromGame, reviewsWithComment, isLoadingReviewsFromGame } = useFetchReviewsFromGame(game);
   const { mostFrequentRating, allRatingsInfo } = useFindMostFrequentRatingValue(reviewsFromGame);
   const { mappedPlatforms } = useFetchPlatforms();
   const { mappedGenres } = useFetchGenres();
@@ -128,7 +131,7 @@ export default function GameDetailsPage() {
 
             {allRatingsInfo ? (
               <div className="flex flex-col w-full gap-4">
-                <div className="h-10">
+                <div className="h-8 flex flex-nowrap">
                   <span
                     className={`bg-green-500 inline-block h-full rounded-l-lg w-[${allRatingsInfo.at(0)
                       ?.percentage}%] hover:shadow-2xl hover:shadow-mine-shaft-400 hover:brightness-110 cursor-pointer`}
@@ -319,6 +322,64 @@ export default function GameDetailsPage() {
               </div>
             ) : null}
           </section>
+        </article>
+
+        <article className="flex flex-col items-center gap-4 py-12">
+          <h2 className="text-mine-shaft-100 text-2xl font-medium">{game?.title} reviews and comments</h2>
+
+          <Tabs defaultValue="reviews" className="flex flex-col gap-6 w-full max-w-3xl">
+            <TabsList className="bg-inherit flex gap-4">
+              <TabsTrigger value="reviews" asChild>
+                <Button className="bg-inherit hover:bg-inherit text-mine-shaft-400 text-lg data-[state=active]:text-mine-shaft-100 data-[state=active]:underline gap-2">
+                  Reviews
+                  <span className="text-sm mb-4 no-underline">{reviewsWithComment?.length}</span>
+                </Button>
+              </TabsTrigger>
+              <TabsTrigger value="comments" asChild>
+                <Button className="bg-inherit hover:bg-inherit text-mine-shaft-400 text-lg data-[state=active]:text-mine-shaft-100 data-[state=active]:underline">
+                  Comments
+                </Button>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="reviews">
+              <ul className="flex flex-col gap-4">
+                {reviewsWithComment?.map((review) => (
+                  <li key={review.id}>
+                    <Card className="bg-zinc-900/50 border-2 border-mine-shaft-600 rounded">
+                      <CardHeader className="flex flex-row items-center gap-2">
+                        <CardTitle className="text-mine-shaft-200 font-medium underline">
+                          {review.rating}
+                        </CardTitle>
+                        <Image
+                          src={`/images/${review.rating}.svg`}
+                          alt="image that represent a review rating"
+                          width={30}
+                          height={30}
+                        />
+                      </CardHeader>
+
+                      <CardContent>
+                        <p className="text-mine-shaft-300"> {review.comment}</p>
+                      </CardContent>
+                      <CardFooter className="gap-2">
+                        <Avatar>
+                          <AvatarFallback
+                            className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold 
+                          h-9 w-9 capitalize cursor-pointer"
+                          >
+                            {review.username.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <p className="text-mine-shaft-200">{review.username}</p>
+                      </CardFooter>
+                    </Card>
+                  </li>
+                ))}
+              </ul>
+            </TabsContent>
+            <TabsContent value="comments">Comments tabs.</TabsContent>
+          </Tabs>
         </article>
       </main>
     </>
