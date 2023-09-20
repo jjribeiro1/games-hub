@@ -11,6 +11,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { FiPlayCircle } from 'react-icons/fi';
 import { BiChevronRight } from 'react-icons/bi';
+import { AiOutlinePlus } from 'react-icons/ai';
 import useFetchGameById from '@/hooks/useFetchGameById';
 import useFetchReviewsFromGame from '@/hooks/useFetchReviewsFromGame';
 import useGameIcons from '@/components/GameCard/useGameIcons';
@@ -18,13 +19,17 @@ import useFindMostFrequentRatingValue from './useFindMostFrequentRatingValue';
 import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import useFetchGenres from '@/hooks/useFetchGenres';
 import { timestampToDate } from '@/utils/timestamp-to-date';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import useFetchCommentsFromGame from '@/hooks/useFetchCommentsFromGame';
+import WriteCommentDialog from './WriteCommentDialog';
 
 export default function GameDetailsPage() {
   const [openCollapsible, setOpenCollapsable] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const params = useParams();
   const id = params.id as string;
   const { game, isLoading } = useFetchGameById(id);
+  const { commentsFromGame } = useFetchCommentsFromGame(id);
   const { reviewsFromGame, reviewsWithComment, isLoadingReviewsFromGame } = useFetchReviewsFromGame(game);
   const { mostFrequentRating, allRatingsInfo } = useFindMostFrequentRatingValue(reviewsFromGame);
   const { mappedPlatforms } = useFetchPlatforms();
@@ -332,12 +337,13 @@ export default function GameDetailsPage() {
               <TabsTrigger value="reviews" asChild>
                 <Button className="bg-inherit hover:bg-inherit text-mine-shaft-400 text-lg data-[state=active]:text-mine-shaft-100 data-[state=active]:underline gap-2">
                   Reviews
-                  <span className="text-sm mb-4 no-underline">{reviewsWithComment?.length}</span>
+                  <span className="text-sm mb-4 no-underline">{reviewsWithComment?.length || 0}</span>
                 </Button>
               </TabsTrigger>
               <TabsTrigger value="comments" asChild>
-                <Button className="bg-inherit hover:bg-inherit text-mine-shaft-400 text-lg data-[state=active]:text-mine-shaft-100 data-[state=active]:underline">
+                <Button className="bg-inherit hover:bg-inherit text-mine-shaft-400 text-lg data-[state=active]:text-mine-shaft-100 data-[state=active]:underline gap-2">
                   Comments
+                  <span className="text-sm mb-4 no-underline">{commentsFromGame?.length || 0}</span>
                 </Button>
               </TabsTrigger>
             </TabsList>
@@ -378,7 +384,44 @@ export default function GameDetailsPage() {
                 ))}
               </ul>
             </TabsContent>
-            <TabsContent value="comments">Comments tabs.</TabsContent>
+            <TabsContent value="comments" className="flex flex-col gap-6 items-center">
+              <Button
+                type="button"
+                onClick={() => setOpenDialog(true)}
+                className="bg-mine-shaft-800 hover:bg-mine-shaft-700 flex flex-col gap-2 py-4 h-min w-[80%] rounded-sm"
+              >
+                <AiOutlinePlus className="w-6 h-6 self-start" />
+                <span className="self-start text-lg">Write a comment</span>
+              </Button>
+              {openDialog ? (
+                <WriteCommentDialog open={openDialog} onOpenChange={setOpenDialog} gameId={id} />
+              ) : null}
+              <ul className="flex flex-col gap-4 w-full">
+                {commentsFromGame?.map((comment) => (
+                  <li key={comment.id}>
+                    <Card className="bg-zinc-900/50 border-2 border-mine-shaft-600 rounded">
+                      <CardContent>
+                        <p className="text-mine-shaft-300 pt-5">{comment.text}</p>
+                      </CardContent>
+                      <CardFooter className="gap-2">
+                        <Avatar>
+                          <AvatarFallback
+                            className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold 
+                          h-9 w-9 capitalize cursor-pointer"
+                          >
+                            {comment.username.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <p className="text-mine-shaft-200">{comment.username}</p>
+                        <span className="text-mine-shaft-400 text-xs">
+                          {timestampToDate(comment.createdAt as unknown as Timestamp)}
+                        </span>
+                      </CardFooter>
+                    </Card>
+                  </li>
+                ))}
+              </ul>
+            </TabsContent>
           </Tabs>
         </article>
       </main>
