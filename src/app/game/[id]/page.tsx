@@ -7,9 +7,9 @@ import { Timestamp } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import GameImageSkeleton from './GameImageSkeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { CommentCard } from '@/components/CommentCard';
+import { ReviewCard } from '@/components/ReviewCard';
 import { FiPlayCircle } from 'react-icons/fi';
 import { BiChevronRight } from 'react-icons/bi';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -20,7 +20,6 @@ import useFindMostFrequentRatingValue from './useFindMostFrequentRatingValue';
 import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import useFetchGenres from '@/hooks/useFetchGenres';
 import { timestampToDate } from '@/utils/timestamp-to-date';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import useFetchCommentsFromGame from '@/hooks/useFetchCommentsFromGame';
 import WriteCommentDialog from './WriteCommentDialog';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
@@ -38,7 +37,6 @@ export default function GameDetailsPage() {
   const { mappedPlatforms } = useFetchPlatforms();
   const { mappedGenres } = useFetchGenres();
   const { gameIcons } = useGameIcons(game);
-
 
   return (
     <>
@@ -356,34 +354,7 @@ export default function GameDetailsPage() {
               <ul className="flex flex-col gap-4">
                 {reviewsWithComment?.map((review) => (
                   <li key={review.id}>
-                    <Card className="bg-zinc-900/50 border-2 border-mine-shaft-600 rounded">
-                      <CardHeader className="flex flex-row items-center gap-2">
-                        <CardTitle className="text-mine-shaft-200 font-medium underline">
-                          {review.rating}
-                        </CardTitle>
-                        <Image
-                          src={`/images/${review.rating}.svg`}
-                          alt="image that represent a review rating"
-                          width={30}
-                          height={30}
-                        />
-                      </CardHeader>
-
-                      <CardContent>
-                        <p className="text-mine-shaft-300"> {review.comment}</p>
-                      </CardContent>
-                      <CardFooter className="gap-2">
-                        <Avatar>
-                          <AvatarFallback
-                            className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold 
-                          h-9 w-9 capitalize cursor-pointer"
-                          >
-                            {review.username.charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <p className="text-mine-shaft-200">{review.username}</p>
-                      </CardFooter>
-                    </Card>
+                    <ReviewCard review={review} />
                   </li>
                 ))}
               </ul>
