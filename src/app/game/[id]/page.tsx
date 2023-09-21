@@ -354,7 +354,7 @@ export default function GameDetailsPage() {
               <ul className="flex flex-col gap-4">
                 {reviewsWithComment?.map((review) => (
                   <li key={review.id}>
-                    <ReviewCard review={review} />
+                    <ReviewCard review={review} loggedUserInfo={loggedUserInfo} game={game} />
                   </li>
                 ))}
               </ul>
