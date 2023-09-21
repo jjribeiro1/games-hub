@@ -44,10 +44,10 @@ export default function GameDetailsPage() {
   const [openCollapsible, setOpenCollapsable] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const params = useParams();
-  const id = params.id as string;
+  const gameId = params.id as string;
   const { loggedUserInfo } = useLoggedUserInfo();
-  const { game, isLoading } = useFetchGameById(id);
-  const { commentsFromGame } = useFetchCommentsFromGame(id);
+  const { game, isLoading } = useFetchGameById(gameId);
+  const { commentsFromGame } = useFetchCommentsFromGame(gameId);
   const { reviewsFromGame, reviewsWithComment, isLoadingReviewsFromGame } = useFetchReviewsFromGame(game);
   const { mostFrequentRating, allRatingsInfo } = useFindMostFrequentRatingValue(reviewsFromGame);
   const { mappedPlatforms } = useFetchPlatforms();
@@ -422,7 +422,7 @@ export default function GameDetailsPage() {
                 <span className="self-start text-lg">Write a comment</span>
               </Button>
               {openDialog ? (
-                <WriteCommentDialog open={openDialog} onOpenChange={setOpenDialog} gameId={id} />
+                <WriteCommentDialog open={openDialog} onOpenChange={setOpenDialog} gameId={gameId} />
               ) : null}
               <ul className="flex flex-col gap-4 w-full">
                 {commentsFromGame?.map((comment) => (
