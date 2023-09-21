@@ -24,7 +24,11 @@ export default function GamesPage() {
             data?.pages.map((games) =>
               games.games.map((game) => (
                 <li key={game.id}>
-                  <GameCard game={game} loggedUserInfo={loggedUserInfo} reviewsFromUser={reviews as Review[]} />
+                  <GameCard
+                    game={game}
+                    loggedUserInfo={loggedUserInfo}
+                    reviewsFromUser={reviews as Review[]}
+                  />
                 </li>
               )),
             )

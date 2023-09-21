@@ -50,7 +50,7 @@ export default function useFetchGamesBySlug({ platformSlug, genreSlug, sortBy }:
   const { data, isLoading } = useQuery({
     queryKey: ['fetch-games-by-slug', platformSlug, genreSlug, sortBy],
     queryFn: fetcher,
-    enabled: (platformSlug || genreSlug) ? true : false,
+    enabled: platformSlug || genreSlug ? true : false,
     staleTime: 1000 * 60 * 10,
     cacheTime: 1000 * 60 * 10,
   });

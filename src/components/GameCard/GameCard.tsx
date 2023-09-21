@@ -33,7 +33,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
   const gameIsInUserLibrary =
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
   const gameInLibraryType = gameIsInUserLibrary?.type || null;
-  const gameHasBeenReviewedByUser = reviewsFromUser?.some((review) => review.userId === loggedUserInfo?.id)
+  const gameHasBeenReviewedByUser = reviewsFromUser?.some((review) => review.userId === loggedUserInfo?.id);
   const oldReviewData = reviewsFromUser?.find((review) => review.gameId === game.id);
   const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
@@ -194,9 +194,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                           height={40}
                           alt="target"
                         />
-                        <p className="text-sm text-mine-shaft-950 font-medium">
-                          {oldReviewData?.rating}
-                        </p>
+                        <p className="text-sm text-mine-shaft-950 font-medium">{oldReviewData?.rating}</p>
                         {oldReviewData?.comment ? (
                           <p
                             onClick={() => setOpenReviewModal(true)}

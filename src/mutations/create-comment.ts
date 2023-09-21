@@ -13,7 +13,7 @@ export default function useCreateComment() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['get-comments-from-game'] });
-      toast.success("your comment has been successfully submited")
+      toast.success('your comment has been successfully submited');
     },
 
     onError: () => {
