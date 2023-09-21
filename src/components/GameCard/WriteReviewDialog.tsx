@@ -16,7 +16,7 @@ interface WriteReviewDialogProps {
   userId: string;
   username: string;
   game: Game;
-  gameReviewedByUser: Review | undefined;
+  gameHasBeenReviewedByUser: Review | undefined;
 }
 
 export default function WriteReviewDialog({
@@ -24,7 +24,7 @@ export default function WriteReviewDialog({
   onOpenChange,
   userId,
   username,
-  gameReviewedByUser,
+  gameHasBeenReviewedByUser,
   game,
 }: WriteReviewDialogProps) {
   const [commentValue, setCommentValue] = useState('');
@@ -36,12 +36,12 @@ export default function WriteReviewDialog({
   const deleteReviewMutation = useDeleteReview();
 
   const handleUpdateReview = async () => {
-    if (!userId || !username || !gameReviewedByUser) {
+    if (!userId || !username || !gameHasBeenReviewedByUser) {
       toast.error('You do not have permission to complete this action');
       return;
     }
     const data = { comment: commentValue, rating: selectedRatingValue };
-    updateReviewMutation.mutate({ userId, gameId: gameReviewedByUser.gameId, data });
+    updateReviewMutation.mutate({ userId, gameId: gameHasBeenReviewedByUser.gameId, data });
     onOpenChange(false);
   };
 
@@ -61,18 +61,18 @@ export default function WriteReviewDialog({
   };
 
   const handleDeleteReview = () => {
-    if (!userId || !username || !gameReviewedByUser) {
+    if (!userId || !username || !gameHasBeenReviewedByUser) {
       toast.error('You do not have permission to complete this action');
       return;
     }
-    deleteReviewMutation.mutate({ userId, gameId: gameReviewedByUser.gameId });
+    deleteReviewMutation.mutate({ userId, gameId: gameHasBeenReviewedByUser.gameId });
     onOpenChange(false);
   };
 
   useEffect(() => {
-    if (gameReviewedByUser) {
-      setSelectedRatingValue(gameReviewedByUser.rating);
-      setCommentValue(gameReviewedByUser.comment);
+    if (gameHasBeenReviewedByUser) {
+      setSelectedRatingValue(gameHasBeenReviewedByUser.rating);
+      setCommentValue(gameHasBeenReviewedByUser.comment);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -112,7 +112,7 @@ export default function WriteReviewDialog({
           {`${commentValue.length} / ${maxCommentLength}`}
         </div>
         <DialogFooter>
-          {gameReviewedByUser ? (
+          {gameHasBeenReviewedByUser ? (
             <Button type="button" variant={'destructive'} onClick={handleDeleteReview}>
               Delete
             </Button>
@@ -120,7 +120,7 @@ export default function WriteReviewDialog({
 
           <Button
             type="submit"
-            onClick={gameReviewedByUser ? handleUpdateReview : handleCreateReviewWithComment}
+            onClick={gameHasBeenReviewedByUser ? handleUpdateReview : handleCreateReviewWithComment}
             disabled={commentValue.length < 1 || !selectedRatingValue}
             className="bg-cyan-700 hover:bg-cyan-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-lg font-medium"
           >

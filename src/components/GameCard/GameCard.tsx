@@ -248,7 +248,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                       userId={loggedUserInfo?.id as string}
                       username={loggedUserInfo?.username as string}
                       game={game}
-                      gameReviewedByUser={gameHasBeenReviewedByUser}
+                      gameHasBeenReviewedByUser={gameHasBeenReviewedByUser}
                     />
                   ) : null}
                 </div>
