@@ -42,7 +42,7 @@ export default function WriteReviewDialog({
       toast.error('You do not have permission to complete this action');
       return;
     }
-    const data = { comment: commentValue, rating: selectedRatingValue };
+    const data = { comment: commentValue, rating: selectedRatingValue, userId: oldReviewData?.userId };
     updateReviewMutation.mutate({ userId, gameId: oldReviewData?.gameId as string, data });
     onOpenChange(false);
   };
