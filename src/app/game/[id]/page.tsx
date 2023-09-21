@@ -63,7 +63,6 @@ export default function GameDetailsPage() {
     deleteCommentMutation.mutate({ commentId: comment.id });
   };
 
-
   return (
     <>
       <div className="absolute w-full opacity-10 -z-50 h-[60%]">
@@ -301,35 +300,35 @@ export default function GameDetailsPage() {
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">OS</h3>
                   <p className="text-mine-shaft-100 hover:text-mine-shaft-200">
-                    {game?.minimum_system_requirements.os}
+                    {game?.minimum_system_requirements?.os || 'Runs in any web browser'}
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">Processor</h3>
                   <p className="text-mine-shaft-100 hover:text-mine-shaft-200">
-                    {game?.minimum_system_requirements.processor}
+                    {game?.minimum_system_requirements?.processor || 'Only web browser is required'}
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">Memory</h3>
                   <p className="text-mine-shaft-100 hover:text-mine-shaft-200">
-                    {game?.minimum_system_requirements.memory}
+                    {game?.minimum_system_requirements?.memory || 'Only web browser is required'}
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">Graphics</h3>
                   <p className="text-mine-shaft-100 hover:text-mine-shaft-200">
-                    {game?.minimum_system_requirements.graphics}
+                    {game?.minimum_system_requirements?.graphics || 'None'}
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">Storage</h3>
                   <p className="text-mine-shaft-100 hover:text-mine-shaft-200">
-                    {game?.minimum_system_requirements.storage}
+                    {game?.minimum_system_requirements?.storage || 'None'}
                   </p>
                 </div>
               </div>
@@ -452,7 +451,7 @@ export default function GameDetailsPage() {
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
                                   onClick={() => handleDeleteComment(comment)}
-                                  type='button'
+                                  type="button"
                                   className="bg-red-500 hover:bg-red-500 text-mine-shaft-50"
                                 >
                                   Yes, delete my comment
