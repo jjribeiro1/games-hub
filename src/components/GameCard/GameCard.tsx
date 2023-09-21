@@ -6,7 +6,7 @@ import { HiPlus } from 'react-icons/hi';
 import { BsCheck2 } from 'react-icons/bs';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronDown } from 'react-icons/fi';
-import WriteReviewDialog from './WriteReviewDialog';
+import { WriteReviewDialog } from '@/components/WriteReviewDialog';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';

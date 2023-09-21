@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverTrigger } from '@/components/ui/popover';
 import { Review } from '@/types/review';
 import { PopoverContent } from '@radix-ui/react-popover';
-import WriteReviewDialog from '../GameCard/WriteReviewDialog';
+import { WriteReviewDialog } from '@/components/WriteReviewDialog'
 import { UserInfo } from '@/types/user-info';
 import { Game } from '@/types/game';
 
