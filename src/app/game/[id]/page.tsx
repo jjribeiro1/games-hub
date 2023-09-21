@@ -9,22 +9,10 @@ import GameImageSkeleton from './GameImageSkeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-
+import { CommentCard } from '@/components/CommentCard';
 import { FiPlayCircle } from 'react-icons/fi';
 import { BiChevronRight } from 'react-icons/bi';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { BsTrash } from 'react-icons/bs';
 import useFetchGameById from '@/hooks/useFetchGameById';
 import useFetchReviewsFromGame from '@/hooks/useFetchReviewsFromGame';
 import useGameIcons from '@/components/GameCard/useGameIcons';
@@ -36,9 +24,6 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import useFetchCommentsFromGame from '@/hooks/useFetchCommentsFromGame';
 import WriteCommentDialog from './WriteCommentDialog';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
-import useDeleteComment from '@/mutations/delete-comment';
-import { toast } from 'react-toastify';
-import { Comment } from '@/types/comment';
 
 export default function GameDetailsPage() {
   const [openCollapsible, setOpenCollapsable] = useState(false);
@@ -52,16 +37,8 @@ export default function GameDetailsPage() {
   const { mostFrequentRating, allRatingsInfo } = useFindMostFrequentRatingValue(reviewsFromGame);
   const { mappedPlatforms } = useFetchPlatforms();
   const { mappedGenres } = useFetchGenres();
-  const deleteCommentMutation = useDeleteComment();
   const { gameIcons } = useGameIcons(game);
 
-  const handleDeleteComment = (comment: Comment) => {
-    if (!loggedUserInfo || comment.userId !== loggedUserInfo.id) {
-      toast.error('You do not have permission to complete this action');
-      return;
-    }
-    deleteCommentMutation.mutate({ commentId: comment.id });
-  };
 
   return (
     <>
@@ -426,59 +403,7 @@ export default function GameDetailsPage() {
               <ul className="flex flex-col gap-4 w-full">
                 {commentsFromGame?.map((comment) => (
                   <li key={comment.id}>
-                    <Card className="bg-zinc-900/50 border-2 border-mine-shaft-600 rounded">
-                      <CardHeader className="pb-2">
-                        {loggedUserInfo?.id === comment.userId ? (
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                type="button"
-                                className="bg-inherit hover:bg-inherit h-min w-min py-0.5 px-2 self-end rounded-sm"
-                              >
-                                <BsTrash className="text-red-500 w-4 h-4" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent className="bg-mine-shaft-950">
-                              <AlertDialogHeader>
-                                <AlertDialogTitle className="text-2xl text-mine-shaft-100 font-semibold">
-                                  Are you absolutely sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="text-mine-shaft-200">
-                                  This action cannot be undone. This will permanently delete your comment
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleDeleteComment(comment)}
-                                  type="button"
-                                  className="bg-red-500 hover:bg-red-500 text-mine-shaft-50"
-                                >
-                                  Yes, delete my comment
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        ) : null}
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-mine-shaft-300 pt-5">{comment.text}</p>
-                      </CardContent>
-                      <CardFooter className="gap-2">
-                        <Avatar>
-                          <AvatarFallback
-                            className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold 
-                          h-9 w-9 capitalize cursor-pointer"
-                          >
-                            {comment.username.charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <p className="text-mine-shaft-200">{comment.username}</p>
-                        <span className="text-mine-shaft-400 text-xs">
-                          {timestampToDate(comment.createdAt as unknown as Timestamp)}
-                        </span>
-                      </CardFooter>
-                    </Card>
+                    <CommentCard loggedUserInfo={loggedUserInfo} comment={comment} />
                   </li>
                 ))}
               </ul>
