@@ -122,7 +122,7 @@ export default function WriteReviewDialog({
 
           <Button
             type="submit"
-            onClick={gameHasBeenReviewedByUser ? handleUpdateReview : handleCreateReviewWithComment}
+            onClick={oldReviewData ? handleUpdateReview : handleCreateReviewWithComment}
             disabled={commentValue.length < 1 || !selectedRatingValue}
             className="bg-cyan-700 hover:bg-cyan-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-lg font-medium"
           >
