@@ -7,6 +7,17 @@ import { BsCheck2 } from 'react-icons/bs';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronDown } from 'react-icons/fi';
 import { WriteReviewDialog } from '@/components/WriteReviewDialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -203,12 +214,31 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                             Edit review
                           </p>
                         ) : (
-                          <p
-                            onClick={handleDeleteReviewWithoutComment}
-                            className="text-sm text-red-500 font-medium cursor-pointer"
-                          >
-                            Delete
-                          </p>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <p className="text-sm text-red-500 font-medium cursor-pointer">Delete</p>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-mine-shaft-950">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="text-2xl text-mine-shaft-100 font-semibold">
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription className="text-mine-shaft-200">
+                                  This action cannot be undone. This will permanently delete your review
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={handleDeleteReviewWithoutComment}
+                                  type="button"
+                                  className="bg-red-500 hover:bg-red-500 text-mine-shaft-50"
+                                >
+                                  Yes, delete my review
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         )}
                       </div>
                     </>
