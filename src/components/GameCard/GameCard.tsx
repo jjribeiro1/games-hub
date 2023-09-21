@@ -21,7 +21,6 @@ import { GameInLibrary, GameTypeInLibraryOption, UserInfo } from '@/types/user-i
 import { RatingOptions, Review } from '@/types/review';
 import { toast } from 'react-toastify';
 
-
 interface GameCardProps {
   game: Game;
   loggedUserInfo: UserInfo | null | undefined;
@@ -34,7 +33,8 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
   const gameIsInUserLibrary =
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
   const gameInLibraryType = gameIsInUserLibrary?.type || null;
-  const gameHasBeenReviewedByUser = reviewsFromUser?.find((review) => review.gameId === game.id);
+  const gameHasBeenReviewedByUser = reviewsFromUser?.some((review) => review.userId === loggedUserInfo?.id)
+  const oldReviewData = reviewsFromUser?.find((review) => review.gameId === game.id);
   const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
     'Currently Playing',
@@ -95,7 +95,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     }
     deleteReviewWithoutCommentMutation.mutate({
       userId: loggedUserInfo.id,
-      gameId: gameHasBeenReviewedByUser.gameId,
+      gameId: oldReviewData?.gameId as string,
     });
   };
 
@@ -189,15 +189,15 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                       <p className="text-mine-shaft-950">Your review</p>
                       <div className="flex flex-col items-center gap-1 border border-mine-shaft-300/50 p-2 bg-mine-shaft-200/30">
                         <Image
-                          src={`/images/${gameHasBeenReviewedByUser.rating}.svg`}
+                          src={`/images/${oldReviewData?.rating}.svg`}
                           width={40}
                           height={40}
                           alt="target"
                         />
                         <p className="text-sm text-mine-shaft-950 font-medium">
-                          {gameHasBeenReviewedByUser.rating}
+                          {oldReviewData?.rating}
                         </p>
-                        {gameHasBeenReviewedByUser.comment ? (
+                        {oldReviewData?.comment ? (
                           <p
                             onClick={() => setOpenReviewModal(true)}
                             className="text-sm text-mine-shaft-500 font-medium cursor-pointer"
@@ -231,7 +231,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                       </div>
                     </>
                   )}
-                  {gameHasBeenReviewedByUser?.comment ? null : (
+                  {oldReviewData?.comment ? null : (
                     <Button
                       onClick={() => setOpenReviewModal(true)}
                       variant={'outline'}
@@ -248,7 +248,8 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                       userId={loggedUserInfo?.id as string}
                       username={loggedUserInfo?.username as string}
                       game={game}
-                      gameHasBeenReviewedByUser={gameHasBeenReviewedByUser}
+                      gameHasBeenReviewedByUser={gameHasBeenReviewedByUser as boolean}
+                      oldReviewData={oldReviewData}
                     />
                   ) : null}
                 </div>

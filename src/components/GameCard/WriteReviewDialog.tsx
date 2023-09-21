@@ -16,7 +16,8 @@ interface WriteReviewDialogProps {
   userId: string;
   username: string;
   game: Game;
-  gameHasBeenReviewedByUser: Review | undefined;
+  gameHasBeenReviewedByUser: boolean;
+  oldReviewData: Review | undefined;
 }
 
 export default function WriteReviewDialog({
@@ -26,6 +27,7 @@ export default function WriteReviewDialog({
   username,
   gameHasBeenReviewedByUser,
   game,
+  oldReviewData,
 }: WriteReviewDialogProps) {
   const [commentValue, setCommentValue] = useState('');
   const [selectedRatingValue, setSelectedRatingValue] = useState<RatingOptions>();
@@ -41,7 +43,7 @@ export default function WriteReviewDialog({
       return;
     }
     const data = { comment: commentValue, rating: selectedRatingValue };
-    updateReviewMutation.mutate({ userId, gameId: gameHasBeenReviewedByUser.gameId, data });
+    updateReviewMutation.mutate({ userId, gameId: oldReviewData?.gameId as string, data });
     onOpenChange(false);
   };
 
@@ -65,14 +67,14 @@ export default function WriteReviewDialog({
       toast.error('You do not have permission to complete this action');
       return;
     }
-    deleteReviewMutation.mutate({ userId, gameId: gameHasBeenReviewedByUser.gameId });
+    deleteReviewMutation.mutate({ userId, gameId: oldReviewData?.gameId as string });
     onOpenChange(false);
   };
 
   useEffect(() => {
     if (gameHasBeenReviewedByUser) {
-      setSelectedRatingValue(gameHasBeenReviewedByUser.rating);
-      setCommentValue(gameHasBeenReviewedByUser.comment);
+      setSelectedRatingValue(oldReviewData?.rating);
+      setCommentValue(oldReviewData?.comment as string);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
