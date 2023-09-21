@@ -20,8 +20,8 @@ export function useUpdateReview() {
       toast.success('your updated review has been successfully submitted');
     },
 
-    onError: () => {
-      toast.error('An unexpected error happened');
+    onError: (err: any) => {
+      toast.error(err.message);
     },
   });
 }

@@ -49,6 +49,9 @@ export async function getReviewById(userId: string, gameId: string) {
 }
 
 export async function updateReviewById(userId: string, gameId: string, data: Partial<Review>) {
+  if (userId !== data.userId) {
+    throw new Error('You do not have permission to make this action');
+  }
   const { comment, rating } = data;
   const docRef = doc(db, 'reviews', `${userId}_${gameId}`);
   await updateDoc(docRef, {
