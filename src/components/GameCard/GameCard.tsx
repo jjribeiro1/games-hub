@@ -33,7 +33,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
   const gameIsInUserLibrary =
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
   const gameInLibraryType = gameIsInUserLibrary?.type || null;
-  const gameHasBeenReviewedByUser = reviewsFromUser?.some((review) => review.userId === loggedUserInfo?.id);
+  const gameHasBeenReviewedByUser = reviewsFromUser?.some((review) => review.gameId === game.id);
   const oldReviewData = reviewsFromUser?.find((review) => review.gameId === game.id);
   const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
