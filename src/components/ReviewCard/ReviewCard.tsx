@@ -15,9 +15,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverTrigger } from '@/components/ui/popover';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Review } from '@/types/review';
-import { PopoverContent } from '@radix-ui/react-popover';
 import { WriteReviewDialog } from '@/components/WriteReviewDialog';
 import { useDeleteReview } from '@/mutations/delete-review';
 import { UserInfo } from '@/types/user-info';
@@ -53,7 +52,7 @@ export default function ReviewCard({ loggedUserInfo, game, review }: ReviewCardP
                 <BsThreeDots className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="bg-mine-shaft-50 flex flex-col p-1 rounded">
+            <PopoverContent className="bg-mine-shaft-50 flex flex-col p-1 w-max rounded">
               <div className="flex flex-col gap-2">
                 <span
                   onClick={() => setOpenReviewModal(true)}
