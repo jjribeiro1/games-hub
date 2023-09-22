@@ -23,10 +23,12 @@ import { timestampToDate } from '@/utils/timestamp-to-date';
 import useFetchCommentsFromGame from '@/hooks/useFetchCommentsFromGame';
 import WriteCommentDialog from './WriteCommentDialog';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
+import { RequireSignInAlert } from '@/components/RequireSignInAlert';
 
 export default function GameDetailsPage() {
   const [openCollapsible, setOpenCollapsable] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openRequireSignInAlert, setOpenRequireSignInAlert] = useState(false);
   const params = useParams();
   const gameId = params.id as string;
   const { loggedUserInfo } = useLoggedUserInfo();
@@ -362,12 +364,15 @@ export default function GameDetailsPage() {
             <TabsContent value="comments" className="flex flex-col gap-6 items-center">
               <Button
                 type="button"
-                onClick={() => setOpenDialog(true)}
+                onClick={loggedUserInfo ? () => setOpenDialog(true) : () => setOpenRequireSignInAlert(true)}
                 className="bg-mine-shaft-800 hover:bg-mine-shaft-700 flex flex-col gap-2 py-4 h-min w-[80%] rounded-sm"
               >
                 <AiOutlinePlus className="w-6 h-6 self-start" />
                 <span className="self-start text-lg">Write a comment</span>
               </Button>
+              {openRequireSignInAlert ? (
+                <RequireSignInAlert open={openRequireSignInAlert} onOpenChange={setOpenRequireSignInAlert} />
+              ) : null}
               {openDialog ? (
                 <WriteCommentDialog open={openDialog} onOpenChange={setOpenDialog} gameId={gameId} />
               ) : null}
