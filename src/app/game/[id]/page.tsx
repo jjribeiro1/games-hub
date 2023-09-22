@@ -176,17 +176,6 @@ export default function GameDetailsPage() {
               </div>
             ) : null}
           </section>
-
-          <section className="flex flex-col gap-2 w-[25%]">
-            <iframe
-              className="w-full h-48"
-              src="https://www.youtube-nocookie.com/embed/innmNewjkuk?si=O6atuM6fMYlBTbpV"
-              title="YouTube video player"
-            ></iframe>
-            <div className="bg-mine-shaft-800 py-2 rounded">
-              <p className="text-mine-shaft-200 text-center">OFFICIAL TRAILER</p>
-            </div>
-          </section>
         </article>
 
         <article className="flex gap-4 py-4 w-full">
