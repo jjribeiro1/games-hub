@@ -84,12 +84,12 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
 
   const handleRemoveGameFromUserLibrary = () => {
     if (!loggedUserInfo) {
-      toast.error('You have to be logged in to remove a game from your library');
+      toast.error('You must be logged in to remove a game from your library');
       return;
     }
     removeGameFromUserLibraryMutation.mutate({ loggedUserInfo, gameId: game.id });
   };
-
+  
   const handleCreateReviewWithoutComment = (rating: RatingOptions) => {
     if (!loggedUserInfo) {
       setSignInAlertMessage('You must be logged in to make a review');
