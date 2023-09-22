@@ -2,6 +2,8 @@
 import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { BiCheckboxChecked } from 'react-icons/bi';
+import { FiChevronDown } from 'react-icons/fi';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,12 +11,10 @@ import {
   DropdownMenuPortal,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { BiCheckboxChecked } from 'react-icons/bi';
-import { FiChevronDown } from 'react-icons/fi';
+import { Button } from '@/components/ui/button';
+import useVerifyGamesPageUrlfrom from '@/hooks/useVerifyGamesPageUrl';
 import { Genre } from '@/types/genre';
 import { Platform } from '@/types/platform';
-import useVerifyGamesPageUrlfrom from '@/hooks/useVerifyGamesPageUrl';
 
 interface FilterBarProps {
   genres: Genre[];

@@ -16,9 +16,9 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
-import { Review } from '@/types/review';
 import { WriteReviewDialog } from '@/components/WriteReviewDialog';
 import { useDeleteReview } from '@/mutations/delete-review';
+import { Review } from '@/types/review';
 import { UserInfo } from '@/types/user-info';
 import { Game } from '@/types/game';
 

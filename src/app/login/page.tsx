@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +11,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { loginSchema } from '@/lib/schemas/login-input';
 import { login } from '@/services/authentication';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const router = useRouter();

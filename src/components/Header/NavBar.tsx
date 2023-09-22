@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { FiChevronDown } from 'react-icons/fi';
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import useFetchGenres from '@/hooks/useFetchGenres';
 import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import { useAuthContext } from '@/context/auth-context';

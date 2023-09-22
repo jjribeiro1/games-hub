@@ -15,9 +15,9 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import useDeleteComment from '@/mutations/delete-comment';
 import { Comment } from '@/types/comment';
 import { UserInfo } from '@/types/user-info';
-import useDeleteComment from '@/mutations/delete-comment';
 import { timestampToDate } from '@/utils/timestamp-to-date';
 import { toast } from 'react-toastify';
 

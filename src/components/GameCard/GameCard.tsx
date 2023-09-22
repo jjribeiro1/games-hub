@@ -19,9 +19,9 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { RequireSignInAlert } from '@/components/RequireSignInAlert';
-import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import useGameIcons from './useGameIcons';
 import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
 import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
@@ -89,7 +89,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     }
     removeGameFromUserLibraryMutation.mutate({ loggedUserInfo, gameId: game.id });
   };
-  
+
   const handleCreateReviewWithoutComment = (rating: RatingOptions) => {
     if (!loggedUserInfo) {
       setSignInAlertMessage('You must be logged in to make a review');
