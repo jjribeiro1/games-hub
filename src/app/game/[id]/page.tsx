@@ -371,7 +371,11 @@ export default function GameDetailsPage() {
                 <span className="self-start text-lg">Write a comment</span>
               </Button>
               {openRequireSignInAlert ? (
-                <RequireSignInAlert open={openRequireSignInAlert} onOpenChange={setOpenRequireSignInAlert} />
+                <RequireSignInAlert
+                  open={openRequireSignInAlert}
+                  onOpenChange={setOpenRequireSignInAlert}
+                  message="You must be logged in to make a comment"
+                />
               ) : null}
               {openDialog ? (
                 <WriteCommentDialog open={openDialog} onOpenChange={setOpenDialog} gameId={gameId} />

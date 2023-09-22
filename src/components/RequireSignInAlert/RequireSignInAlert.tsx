@@ -13,15 +13,16 @@ import {
 interface RequireSignInDialogProps {
   open: boolean;
   onOpenChange: (value: boolean) => void;
+  message: string
 }
-export default function RequireSignInAlert({ open, onOpenChange }: RequireSignInDialogProps) {
+export default function RequireSignInAlert({ open, onOpenChange, message }: RequireSignInDialogProps) {
   const router = useRouter();
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="bg-mine-shaft-950">
         <AlertDialogHeader>
           <AlertDialogDescription className="text-mine-shaft-200 text-lg">
-            You must be logged in to complete this action
+            {message}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
