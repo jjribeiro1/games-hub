@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { RequireSignInAlert } from '@/components/RequireSignInAlert';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -40,6 +41,8 @@ interface GameCardProps {
 
 export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: GameCardProps) {
   const [openReviewModal, setOpenReviewModal] = useState(false);
+  const [openRequireSignInAlert, setOpenRequireSignInAlert] = useState(false);
+  const [signInAlertMessage, setSignInAlertMessage] = useState('');
   const { gameIcons } = useGameIcons(game);
   const gameIsInUserLibrary =
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
@@ -62,7 +65,8 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
 
   const handleAddGameToUserLibrary = (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
-      toast.error('You have to be logged in to add a game to your library');
+      setSignInAlertMessage('You must be logged in to add a game to your library');
+      setOpenRequireSignInAlert(true);
       return;
     }
     const gameData: GameInLibrary = { ...game, type };
@@ -88,7 +92,8 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
 
   const handleCreateReviewWithoutComment = (rating: RatingOptions) => {
     if (!loggedUserInfo) {
-      toast.error('You have to be logged in to create a review');
+      setSignInAlertMessage('You must be logged in to make a review');
+      setOpenRequireSignInAlert(true);
       return;
     }
     createReviewWithoutCommentMutation.mutate({
@@ -261,25 +266,20 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                   )}
                   {oldReviewData?.comment ? null : (
                     <Button
-                      onClick={() => setOpenReviewModal(true)}
+                      onClick={
+                        loggedUserInfo
+                          ? () => setOpenReviewModal(true)
+                          : () => {
+                              setSignInAlertMessage('You must be logged in to make a review');
+                              setOpenRequireSignInAlert(true);
+                            }
+                      }
                       variant={'outline'}
                       className="border border-mine-shaft-300/50 hover:bg-mine-shaft-200/30 transition-colors"
                     >
                       Write a review
                     </Button>
                   )}
-
-                  {openReviewModal ? (
-                    <WriteReviewDialog
-                      open={openReviewModal}
-                      onOpenChange={setOpenReviewModal}
-                      userId={loggedUserInfo?.id as string}
-                      username={loggedUserInfo?.username as string}
-                      game={game}
-                      gameHasBeenReviewedByUser={gameHasBeenReviewedByUser as boolean}
-                      oldReviewData={oldReviewData}
-                    />
-                  ) : null}
                 </div>
               </PopoverContent>
             </Popover>
@@ -288,6 +288,25 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
           <span className="flex items-center gap-2">{gameIcons()}</span>
         </div>
       </div>
+      {openReviewModal ? (
+        <WriteReviewDialog
+          open={openReviewModal}
+          onOpenChange={setOpenReviewModal}
+          userId={loggedUserInfo?.id as string}
+          username={loggedUserInfo?.username as string}
+          game={game}
+          gameHasBeenReviewedByUser={gameHasBeenReviewedByUser as boolean}
+          oldReviewData={oldReviewData}
+        />
+      ) : null}
+
+      {openRequireSignInAlert ? (
+        <RequireSignInAlert
+          open={openRequireSignInAlert}
+          onOpenChange={setOpenRequireSignInAlert}
+          message={signInAlertMessage}
+        />
+      ) : null}
     </div>
   );
 }
