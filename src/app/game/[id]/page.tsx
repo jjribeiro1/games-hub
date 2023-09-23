@@ -178,12 +178,12 @@ export default function GameDetailsPage() {
           </section>
         </article>
 
-        <article className="flex gap-4 py-4 w-full">
-          <section className="flex flex-col gap-6 w-[50%]">
+        <article className="flex flex-col items-center xl:flex-row xl:justify-normal xl:items-start gap-4 py-4 w-full">
+          <section className="flex flex-col gap-6 xl:w-[50%]">
             <Collapsible
               open={openCollapsible}
               onOpenChange={setOpenCollapsable}
-              className="flex flex-col gap-4"
+              className="flex flex-col items-center xl:items-start gap-4"
             >
               <div className="flex items-center gap-2">
                 <h2 className="text-mine-shaft-100 text-3xl font-medium">About {game?.title}</h2>
@@ -202,10 +202,12 @@ export default function GameDetailsPage() {
                 <p className="text-mine-shaft-200">{game?.description}</p>
               </CollapsibleContent>
             </Collapsible>
-            <div className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col items-center xl:items-start gap-4 xl:w-full">
               <h2 className="text-mine-shaft-100 text-3xl font-medium">Additional Information</h2>
 
-              <div className="grid grid-cols-2 gap-y-6 gap-x-2 w-full">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-6 gap-x-2 w-full">
+              {/* <div className="grid grid-cols-2 gap-y-6 gap-x-2 w-full"> */}
+
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">Platforms</h3>
                   <ul className="flex flex-wrap gap-1.5">
@@ -258,11 +260,11 @@ export default function GameDetailsPage() {
             </div>
           </section>
 
-          <section className="flex flex-col gap-6 w-[50%]">
-            <div className="flex flex-col gap-4">
+          <section className="flex flex-col gap-6 xl:w-[50%]">
+            <div className="flex flex-col items-center xl:items-start gap-4">
               <h2 className="text-mine-shaft-100 text-3xl font-medium">Minimum System Requirements</h2>
 
-              <div className="grid grid-cols-2 gap-y-6 gap-x-2 w-full">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-6 gap-x-2 w-full">
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">OS</h3>
                   <p className="text-mine-shaft-100 hover:text-mine-shaft-200">
@@ -301,10 +303,10 @@ export default function GameDetailsPage() {
             </div>
 
             {game?.screenshots ? (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col items-center xl:items-start gap-4">
                 <h2 className="text-mine-shaft-100 text-3xl font-medium">Screenshots</h2>
 
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   {game?.screenshots.map((screenshot) => (
                     <Image
                       key={screenshot}
