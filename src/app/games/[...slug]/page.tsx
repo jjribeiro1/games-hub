@@ -2,7 +2,6 @@
 import React from 'react';
 import { GameCard } from '@/components/GameCard';
 import Spinner from '@/components/ui/spinner';
-import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import useFetchGamesBySlug from '@/hooks/useFetchGamesBySlug';
 import useVerifyGamesPageUrl from '@/hooks/useVerifyGamesPageUrl';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
@@ -12,8 +11,7 @@ import { Review } from '@/types/review';
 export default function GamesSlugPage() {
   const { loggedUserInfo } = useLoggedUserInfo();
   const { reviews } = useFetchReviewsFromUser();
-  const { mappedPlatforms } = useFetchPlatforms();
-  const { platformSlug, genreSlug, activeSortBy } = useVerifyGamesPageUrl({ mappedPlatforms });
+  const { platformSlug, genreSlug, activeSortBy } = useVerifyGamesPageUrl();
 
   const sortByMap = new Map<string, { fieldPath: string; value: 'asc' | 'desc' }>([
     ['release_date', { fieldPath: 'release_date', value: 'desc' }],
