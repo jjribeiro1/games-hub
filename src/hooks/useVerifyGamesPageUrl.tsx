@@ -1,12 +1,10 @@
 'use client';
 import { useParams, useSearchParams } from 'next/navigation';
+import useFetchPlatforms from './useFetchPlatforms';
 
-interface Props {
-  mappedPlatforms: Map<string, string>;
-}
-
-export default function useVerifyGamesPageUrl({ mappedPlatforms }: Props) {
+export default function useVerifyGamesPageUrl() {
   const { slug } = useParams();
+  const { mappedPlatforms } = useFetchPlatforms()
   const searchParams = useSearchParams();
   const activeSortBy = searchParams.get('sort_by') as string;
   let platformSlug: string | null = null;

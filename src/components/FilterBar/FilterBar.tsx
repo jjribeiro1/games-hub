@@ -26,9 +26,7 @@ interface FilterBarProps {
 export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatforms }: FilterBarProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { platformSlug, genreSlug, activeSortBy, searchParams } = useVerifyGamesPageUrlfrom({
-    mappedPlatforms,
-  });
+  const { platformSlug, genreSlug, activeSortBy, searchParams } = useVerifyGamesPageUrlfrom();
 
   const sortByQueryStringMap = new Map<string, { name: string; slug: string }>([
     ['relevance', { name: 'Relevance', slug: 'relevance' }],
