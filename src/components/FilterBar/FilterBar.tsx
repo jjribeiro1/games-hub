@@ -2,6 +2,8 @@
 import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { BiCheckboxChecked } from 'react-icons/bi';
+import { FiChevronDown } from 'react-icons/fi';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,12 +11,10 @@ import {
   DropdownMenuPortal,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { BiCheckboxChecked } from 'react-icons/bi';
-import { FiChevronDown } from 'react-icons/fi';
+import { Button } from '@/components/ui/button';
+import useVerifyGamesPageUrlfrom from '@/hooks/useVerifyGamesPageUrl';
 import { Genre } from '@/types/genre';
 import { Platform } from '@/types/platform';
-import useVerifyGamesPageUrlfrom from '@/hooks/useVerifyGamesPageUrl';
 
 interface FilterBarProps {
   genres: Genre[];
@@ -117,33 +117,35 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
         </DropdownMenuPortal>
       </DropdownMenu>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
-            <span className="text-mine-shaft-400 text-xs sm:text-sm md:text-base font-semibold flex items-center">
-              Sort By: <BiCheckboxChecked className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
-            </span>
+      {!platformSlug && !genreSlug ? null : (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
+              <span className="text-mine-shaft-400 text-xs sm:text-sm md:text-base font-semibold flex items-center">
+                Sort By: <BiCheckboxChecked className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+              </span>
 
-            <span className="text-mine-shaft-200 text-xs md:text-base flex items-center ml-1">
-              {activeSortBy ? sortByQueryStringMap.get(activeSortBy)?.name : 'Relevance'}
-              <FiChevronDown className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
-            </span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuPortal>
-          <DropdownMenuContent className="w-48 bg-mine-shaft-100">
-            {Array.from(sortByQueryStringMap.values()).map((option) => (
-              <DropdownMenuItem
-                key={option.name}
-                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
-                onClick={() => handleSortByClick(option.slug)}
-              >
-                {option.name}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenuPortal>
-      </DropdownMenu>
+              <span className="text-mine-shaft-200 text-xs md:text-base flex items-center ml-1">
+                {activeSortBy ? sortByQueryStringMap.get(activeSortBy)?.name : 'Relevance'}
+                <FiChevronDown className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuContent className="w-48 bg-mine-shaft-100">
+              {Array.from(sortByQueryStringMap.values()).map((option) => (
+                <DropdownMenuItem
+                  key={option.name}
+                  className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+                  onClick={() => handleSortByClick(option.slug)}
+                >
+                  {option.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenuPortal>
+        </DropdownMenu>
+      )}
     </div>
   );
 }

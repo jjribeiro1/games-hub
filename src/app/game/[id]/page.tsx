@@ -3,30 +3,32 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { Timestamp } from 'firebase/firestore';
+import { FiPlayCircle } from 'react-icons/fi';
+import { BiChevronRight } from 'react-icons/bi';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { Button } from '@/components/ui/button';
 import GameImageSkeleton from './GameImageSkeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { CommentCard } from '@/components/CommentCard';
 import { ReviewCard } from '@/components/ReviewCard';
-import { FiPlayCircle } from 'react-icons/fi';
-import { BiChevronRight } from 'react-icons/bi';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { RequireSignInAlert } from '@/components/RequireSignInAlert';
+import WriteCommentDialog from './WriteCommentDialog';
 import useFetchGameById from '@/hooks/useFetchGameById';
 import useFetchReviewsFromGame from '@/hooks/useFetchReviewsFromGame';
 import useGameIcons from '@/components/GameCard/useGameIcons';
 import useFindMostFrequentRatingValue from './useFindMostFrequentRatingValue';
 import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import useFetchGenres from '@/hooks/useFetchGenres';
-import { timestampToDate } from '@/utils/timestamp-to-date';
 import useFetchCommentsFromGame from '@/hooks/useFetchCommentsFromGame';
-import WriteCommentDialog from './WriteCommentDialog';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
+import { Timestamp } from 'firebase/firestore';
+import { timestampToDate } from '@/utils/timestamp-to-date';
 
 export default function GameDetailsPage() {
   const [openCollapsible, setOpenCollapsable] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openRequireSignInAlert, setOpenRequireSignInAlert] = useState(false);
   const params = useParams();
   const gameId = params.id as string;
   const { loggedUserInfo } = useLoggedUserInfo();
@@ -95,7 +97,7 @@ export default function GameDetailsPage() {
                   <BiChevronRight />
                 </li>
                 <li className="flex items-center gap-2">
-                  <Link href={'/games'}>Games</Link>
+                  <Link href={'/'}>Games</Link>
                   <BiChevronRight />
                 </li>
               </ul>
@@ -174,25 +176,14 @@ export default function GameDetailsPage() {
               </div>
             ) : null}
           </section>
-
-          <section className="flex flex-col gap-2 w-[25%]">
-            <iframe
-              className="w-full h-48"
-              src="https://www.youtube-nocookie.com/embed/innmNewjkuk?si=O6atuM6fMYlBTbpV"
-              title="YouTube video player"
-            ></iframe>
-            <div className="bg-mine-shaft-800 py-2 rounded">
-              <p className="text-mine-shaft-200 text-center">OFFICIAL TRAILER</p>
-            </div>
-          </section>
         </article>
 
-        <article className="flex gap-4 py-4 w-full">
-          <section className="flex flex-col gap-6 w-[50%]">
+        <article className="flex flex-col items-center xl:flex-row xl:justify-normal xl:items-start gap-4 py-4 w-full">
+          <section className="flex flex-col gap-6 xl:w-[50%]">
             <Collapsible
               open={openCollapsible}
               onOpenChange={setOpenCollapsable}
-              className="flex flex-col gap-4"
+              className="flex flex-col items-center xl:items-start gap-4"
             >
               <div className="flex items-center gap-2">
                 <h2 className="text-mine-shaft-100 text-3xl font-medium">About {game?.title}</h2>
@@ -211,10 +202,12 @@ export default function GameDetailsPage() {
                 <p className="text-mine-shaft-200">{game?.description}</p>
               </CollapsibleContent>
             </Collapsible>
-            <div className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col items-center xl:items-start gap-4 xl:w-full">
               <h2 className="text-mine-shaft-100 text-3xl font-medium">Additional Information</h2>
 
-              <div className="grid grid-cols-2 gap-y-6 gap-x-2 w-full">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-6 gap-x-2 w-full">
+              {/* <div className="grid grid-cols-2 gap-y-6 gap-x-2 w-full"> */}
+
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">Platforms</h3>
                   <ul className="flex flex-wrap gap-1.5">
@@ -267,11 +260,11 @@ export default function GameDetailsPage() {
             </div>
           </section>
 
-          <section className="flex flex-col gap-6 w-[50%]">
-            <div className="flex flex-col gap-4">
+          <section className="flex flex-col gap-6 xl:w-[50%]">
+            <div className="flex flex-col items-center xl:items-start gap-4">
               <h2 className="text-mine-shaft-100 text-3xl font-medium">Minimum System Requirements</h2>
 
-              <div className="grid grid-cols-2 gap-y-6 gap-x-2 w-full">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-6 gap-x-2 w-full">
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">OS</h3>
                   <p className="text-mine-shaft-100 hover:text-mine-shaft-200">
@@ -310,10 +303,10 @@ export default function GameDetailsPage() {
             </div>
 
             {game?.screenshots ? (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col items-center xl:items-start gap-4">
                 <h2 className="text-mine-shaft-100 text-3xl font-medium">Screenshots</h2>
 
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   {game?.screenshots.map((screenshot) => (
                     <Image
                       key={screenshot}
@@ -362,12 +355,19 @@ export default function GameDetailsPage() {
             <TabsContent value="comments" className="flex flex-col gap-6 items-center">
               <Button
                 type="button"
-                onClick={() => setOpenDialog(true)}
+                onClick={loggedUserInfo ? () => setOpenDialog(true) : () => setOpenRequireSignInAlert(true)}
                 className="bg-mine-shaft-800 hover:bg-mine-shaft-700 flex flex-col gap-2 py-4 h-min w-[80%] rounded-sm"
               >
                 <AiOutlinePlus className="w-6 h-6 self-start" />
                 <span className="self-start text-lg">Write a comment</span>
               </Button>
+              {openRequireSignInAlert ? (
+                <RequireSignInAlert
+                  open={openRequireSignInAlert}
+                  onOpenChange={setOpenRequireSignInAlert}
+                  message="You must be logged in to make a comment"
+                />
+              ) : null}
               {openDialog ? (
                 <WriteCommentDialog open={openDialog} onOpenChange={setOpenDialog} gameId={gameId} />
               ) : null}

@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
 import { GameCard } from '@/components/GameCard';
+import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
 import { GameTypeInLibraryOption } from '@/types/user-info';
 
 export default function MyLibraryPage() {

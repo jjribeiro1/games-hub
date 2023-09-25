@@ -6,10 +6,22 @@ import { HiPlus } from 'react-icons/hi';
 import { BsCheck2 } from 'react-icons/bs';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronDown } from 'react-icons/fi';
-import WriteReviewDialog from './WriteReviewDialog';
-import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { WriteReviewDialog } from '@/components/WriteReviewDialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { RequireSignInAlert } from '@/components/RequireSignInAlert';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import useGameIcons from './useGameIcons';
 import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
 import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
@@ -29,11 +41,13 @@ interface GameCardProps {
 
 export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: GameCardProps) {
   const [openReviewModal, setOpenReviewModal] = useState(false);
+  const [openRequireSignInAlert, setOpenRequireSignInAlert] = useState(false);
+  const [signInAlertMessage, setSignInAlertMessage] = useState('');
   const { gameIcons } = useGameIcons(game);
   const gameIsInUserLibrary =
     loggedUserInfo?.library?.find((gameInLibrary) => gameInLibrary.id === game.id) || null;
   const gameInLibraryType = gameIsInUserLibrary?.type || null;
-  const gameHasBeenReviewedByUser = reviewsFromUser?.some((review) => review.userId === loggedUserInfo?.id);
+  const gameHasBeenReviewedByUser = reviewsFromUser?.some((review) => review.gameId === game.id);
   const oldReviewData = reviewsFromUser?.find((review) => review.gameId === game.id);
   const popoverGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
@@ -51,7 +65,8 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
 
   const handleAddGameToUserLibrary = (type: GameTypeInLibraryOption) => {
     if (!loggedUserInfo) {
-      toast.error('You have to be logged in to add a game to your library');
+      setSignInAlertMessage('You must be logged in to add a game to your library');
+      setOpenRequireSignInAlert(true);
       return;
     }
     const gameData: GameInLibrary = { ...game, type };
@@ -69,7 +84,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
 
   const handleRemoveGameFromUserLibrary = () => {
     if (!loggedUserInfo) {
-      toast.error('You have to be logged in to remove a game from your library');
+      toast.error('You must be logged in to remove a game from your library');
       return;
     }
     removeGameFromUserLibraryMutation.mutate({ loggedUserInfo, gameId: game.id });
@@ -77,7 +92,8 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
 
   const handleCreateReviewWithoutComment = (rating: RatingOptions) => {
     if (!loggedUserInfo) {
-      toast.error('You have to be logged in to create a review');
+      setSignInAlertMessage('You must be logged in to make a review');
+      setOpenRequireSignInAlert(true);
       return;
     }
     createReviewWithoutCommentMutation.mutate({
@@ -203,12 +219,31 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                             Edit review
                           </p>
                         ) : (
-                          <p
-                            onClick={handleDeleteReviewWithoutComment}
-                            className="text-sm text-red-500 font-medium cursor-pointer"
-                          >
-                            Delete
-                          </p>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <p className="text-sm text-red-500 font-medium cursor-pointer">Delete</p>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-mine-shaft-950">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="text-2xl text-mine-shaft-100 font-semibold">
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription className="text-mine-shaft-200">
+                                  This action cannot be undone. This will permanently delete your review
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={handleDeleteReviewWithoutComment}
+                                  type="button"
+                                  className="bg-red-500 hover:bg-red-500 text-mine-shaft-50"
+                                >
+                                  Yes, delete my review
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         )}
                       </div>
                     </>
@@ -231,25 +266,20 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                   )}
                   {oldReviewData?.comment ? null : (
                     <Button
-                      onClick={() => setOpenReviewModal(true)}
+                      onClick={
+                        loggedUserInfo
+                          ? () => setOpenReviewModal(true)
+                          : () => {
+                              setSignInAlertMessage('You must be logged in to make a review');
+                              setOpenRequireSignInAlert(true);
+                            }
+                      }
                       variant={'outline'}
                       className="border border-mine-shaft-300/50 hover:bg-mine-shaft-200/30 transition-colors"
                     >
                       Write a review
                     </Button>
                   )}
-
-                  {openReviewModal ? (
-                    <WriteReviewDialog
-                      open={openReviewModal}
-                      onOpenChange={setOpenReviewModal}
-                      userId={loggedUserInfo?.id as string}
-                      username={loggedUserInfo?.username as string}
-                      game={game}
-                      gameHasBeenReviewedByUser={gameHasBeenReviewedByUser as boolean}
-                      oldReviewData={oldReviewData}
-                    />
-                  ) : null}
                 </div>
               </PopoverContent>
             </Popover>
@@ -258,6 +288,25 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
           <span className="flex items-center gap-2">{gameIcons()}</span>
         </div>
       </div>
+      {openReviewModal ? (
+        <WriteReviewDialog
+          open={openReviewModal}
+          onOpenChange={setOpenReviewModal}
+          userId={loggedUserInfo?.id as string}
+          username={loggedUserInfo?.username as string}
+          game={game}
+          gameHasBeenReviewedByUser={gameHasBeenReviewedByUser as boolean}
+          oldReviewData={oldReviewData}
+        />
+      ) : null}
+
+      {openRequireSignInAlert ? (
+        <RequireSignInAlert
+          open={openRequireSignInAlert}
+          onOpenChange={setOpenRequireSignInAlert}
+          message={signInAlertMessage}
+        />
+      ) : null}
     </div>
   );
 }
