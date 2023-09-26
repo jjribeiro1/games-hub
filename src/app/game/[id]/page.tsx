@@ -97,7 +97,7 @@ export default function GameDetailsPage() {
                   <BiChevronRight />
                 </li>
                 <li className="flex items-center gap-2">
-                  <Link href={'/'}>Games</Link>
+                  <Link href={'/games'}>Games</Link>
                   <BiChevronRight />
                 </li>
               </ul>
