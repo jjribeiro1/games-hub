@@ -206,8 +206,6 @@ export default function GameDetailsPage() {
               <h2 className="text-mine-shaft-100 text-3xl font-medium">Additional Information</h2>
 
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-6 gap-x-2 w-full">
-              {/* <div className="grid grid-cols-2 gap-y-6 gap-x-2 w-full"> */}
-
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">Platforms</h3>
                   <ul className="flex flex-wrap gap-1.5">

@@ -2,7 +2,6 @@
 import React from 'react';
 import { GameCard } from '@/components/GameCard';
 import Spinner from '@/components/ui/spinner';
-import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import useFetchGamesBySlug from '@/hooks/useFetchGamesBySlug';
 import useVerifyGamesPageUrl from '@/hooks/useVerifyGamesPageUrl';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
