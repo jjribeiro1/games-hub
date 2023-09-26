@@ -7,7 +7,7 @@ export default function BackToTop() {
     <Button
       type="button"
       size={"icon"}
-      className="bg-inherit hover:bg-inherit"
+      className="bg-transparent hover:bg-transparent absolute right-6 -top-12"
       onClick={() => {
         scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       }}

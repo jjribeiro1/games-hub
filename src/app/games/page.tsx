@@ -3,7 +3,6 @@ import React from 'react';
 import { GameCard } from '@/components/GameCard';
 import { GameCardSkeleton } from '@/components/GameCardSkeleton';
 import { Button } from '@/components/ui/button';
-import { BackToTop } from '@/components/BackToTop';
 import Spinner from '@/components/ui/spinner';
 import useFetchAllGames from '@/hooks/useFetchAllGames';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
@@ -36,7 +35,7 @@ export default function GamesPage() {
           )}
         </ul>
       </section>
-      <section className="flex items-center w-full">
+      <section className="flex justify-center w-full">
         {data ? (
           <>
             <Button
@@ -49,7 +48,6 @@ export default function GamesPage() {
               {isFetchingNextPage ? 'Loading more...' : hasNextPage ? 'Load More' : 'Nothing more to load'}
             </Button>
 
-            <BackToTop />
           </>
         ) : null}
 
