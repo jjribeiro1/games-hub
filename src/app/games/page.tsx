@@ -21,8 +21,8 @@ export default function GamesPage() {
           {isLoading ? (
             <GameCardSkeleton quantity={8} />
           ) : (
-            data?.pages.map((games) =>
-              games.games.map((game) => (
+            data?.pages.map((group) =>
+              group.games.map((game) => (
                 <li key={game.id}>
                   <GameCard
                     game={game}
