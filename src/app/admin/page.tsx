@@ -141,7 +141,7 @@ export default function AdminPage() {
         release_date: new Date(data.release_date),
         platform: data.platform.map((platform) => platform.name),
         genre: data.genre.map((genre) => genre.name),
-      };      
+      };
       await createGame(createGameInput);
       toast.success('Jogo criado com sucesso');
     } catch (error: any) {

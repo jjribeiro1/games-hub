@@ -47,7 +47,6 @@ export default function GamesPage() {
             >
               {isFetchingNextPage ? 'Loading more...' : hasNextPage ? 'Load More' : 'Nothing more to load'}
             </Button>
-
           </>
         ) : null}
 

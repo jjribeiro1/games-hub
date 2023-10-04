@@ -27,7 +27,7 @@ const baseGameSchema = z.object({
   game_url: z.string().min(3, { message: minLengthMessage('url do jogo', 3) }),
   thumbnail: z.string(),
   screenshots: z.array(z.string()),
-  createdAt: z.date()
+  createdAt: z.date(),
 });
 
 export const createGameSchema = baseGameSchema.extend({

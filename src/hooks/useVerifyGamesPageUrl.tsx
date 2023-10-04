@@ -4,7 +4,7 @@ import useFetchPlatforms from './useFetchPlatforms';
 
 export default function useVerifyGamesPageUrl() {
   const { slug } = useParams();
-  const { mappedPlatforms } = useFetchPlatforms()
+  const { mappedPlatforms } = useFetchPlatforms();
   const searchParams = useSearchParams();
   const activeSortBy = searchParams.get('sort_by') as string;
   let platformSlug: string | null = null;

@@ -8,8 +8,14 @@ interface RecentCardGame {
 export default function RecentCardGame({ game }: RecentCardGame) {
   return (
     <div className="bg-mine-shaft-900 flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-md">
-      <div className='self-center'>
-        <Image src={game.thumbnail} alt={`${game.title} thumbnail`} width={250} height={141} className="aspect-auto rounded" />
+      <div className="self-center">
+        <Image
+          src={game.thumbnail}
+          alt={`${game.title} thumbnail`}
+          width={250}
+          height={141}
+          className="aspect-auto rounded"
+        />
       </div>
 
       <div className="flex flex-col gap-4 sm:w-1/2">
