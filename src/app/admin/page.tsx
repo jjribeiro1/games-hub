@@ -54,6 +54,7 @@ export default function AdminPage() {
       isFree: true,
       thumbnail: '',
       screenshots: ['', ''],
+      createdAt: new Date(),
       minimum_system_requirements: {
         os: '',
         processor: '',
@@ -137,9 +138,10 @@ export default function AdminPage() {
       setDisableButton(true);
       const createGameInput = {
         ...data,
+        release_date: new Date(data.release_date),
         platform: data.platform.map((platform) => platform.name),
         genre: data.genre.map((genre) => genre.name),
-      };
+      };      
       await createGame(createGameInput);
       toast.success('Jogo criado com sucesso');
     } catch (error: any) {

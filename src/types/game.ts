@@ -11,10 +11,11 @@ export interface Game {
   minimum_system_requirements: MinimumSystemRequirements;
   platform: string[];
   publisher: string;
-  release_date: string;
+  release_date: Date;
   screenshots: string[];
   short_description: string;
   thumbnail: string;
+  createdAt: Date;
 }
 
 export interface CreateGameInput extends Omit<Game, 'id'> {}
