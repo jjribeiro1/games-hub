@@ -7,7 +7,7 @@ export default function RecentGames() {
   const { games } = useFetchRecentGames();
 
   return (
-    <section className="flex flex-col gap-4 items-center justify-center px-4">
+    <section className="flex flex-col gap-4 items-center justify-center px-4 pt-10 pb-16">
       <h2 className="text-mine-shaft-100 text-2xl">Recently Added</h2>
       <ul className="flex flex-col gap-4">
         {games?.map((game) => (
