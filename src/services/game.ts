@@ -98,3 +98,10 @@ export async function getGameById(id: string) {
   const docSnap = await getDoc(docRef);
   return { id: docSnap.id, ...docSnap.data() } as Game;
 }
+
+export async function getRecentGames() {
+  const q = query(collection(db, 'games'), limit(8), orderBy('createdAt', 'desc'));
+  const snapshot = await getDocs(q);
+  const games = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Game[];
+  return games;
+}
