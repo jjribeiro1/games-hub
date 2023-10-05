@@ -55,14 +55,6 @@ export default function NavBar() {
                   </NavigationMenu.Link>
                 </li>
               ))}
-              <li
-                className='bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-sm
-                flex items-center cursor-pointer"'
-              >
-                <Link href={'/genres'} className="w-full p-2 inline-block">
-                  Show all genres
-                </Link>
-              </li>
             </ul>
           </NavigationMenu.Content>
         </NavigationMenu.Item>
@@ -97,15 +89,6 @@ export default function NavBar() {
                   </NavigationMenu.Link>
                 </li>
               ))}
-              <li
-                className="
-              bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-sm
-               flex items-center cursor-pointer"
-              >
-                <Link href={'/platforms'} className="w-full p-2 inline-block">
-                  Show all platforms
-                </Link>
-              </li>
             </ul>
           </NavigationMenu.Content>
         </NavigationMenu.Item>
