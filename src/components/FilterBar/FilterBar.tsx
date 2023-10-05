@@ -68,7 +68,8 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
             {platforms?.map((platform) => (
               <DropdownMenuItem
                 key={platform.id}
-                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+                asChild
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded cursor-pointer"
               >
                 <Link
                   href={genreSlug ? `/games/${platform.slug}/${genreSlug}` : `/games/${platform.slug}`}
@@ -78,7 +79,7 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
                 </Link>
               </DropdownMenuItem>
             ))}
-            <DropdownMenuItem className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded">
+            <DropdownMenuItem asChild className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded">
               <Link href={`/games/${genreSlug ?? ''}`}>All platforms</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -103,7 +104,8 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
             {genres?.map((genre) => (
               <DropdownMenuItem
                 key={genre.id}
-                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+                asChild
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded cursor-pointer"
               >
                 <Link
                   href={platformSlug ? `/games/${platformSlug}/${genre.slug}` : `/games/${genre.slug}`}
@@ -135,7 +137,7 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
             {Array.from(sortByQueryStringMap.values()).map((option) => (
               <DropdownMenuItem
                 key={option.name}
-                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded cursor-pointer"
                 onClick={() => handleSortByClick(option.slug)}
               >
                 {option.name}
