@@ -36,7 +36,7 @@ import { toast } from 'react-toastify';
 interface GameCardProps {
   game: Game;
   loggedUserInfo: UserInfo | null | undefined;
-  reviewsFromUser?: Review[];
+  reviewsFromUser: Review[];
 }
 
 export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: GameCardProps) {

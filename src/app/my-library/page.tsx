@@ -3,10 +3,13 @@ import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { GameCard } from '@/components/GameCard';
 import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
+import useFetchReviewsFromUser from '@/hooks/useFetchReviewsFromUser';
 import { GameTypeInLibraryOption } from '@/types/user-info';
+import { Review } from '@/types/review';
 
 export default function MyLibraryPage() {
   const { loggedUserInfo } = useLoggedUserInfo();
+  const { reviews } = useFetchReviewsFromUser();
   const library = loggedUserInfo?.library?.map((game) => game);
   const accordionGameTypeOptions: GameTypeInLibraryOption[] = [
     'Uncategorized',
@@ -31,7 +34,12 @@ export default function MyLibraryPage() {
                   <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 place-items-center gap-x-4 gap-y-6">
                     {games?.map((game) => (
                       <li key={game.id}>
-                        <GameCard key={game.id} game={game} loggedUserInfo={loggedUserInfo} />
+                        <GameCard
+                          key={game.id}
+                          game={game}
+                          loggedUserInfo={loggedUserInfo}
+                          reviewsFromUser={reviews as Review[]}
+                        />
                       </li>
                     ))}
                   </ul>
