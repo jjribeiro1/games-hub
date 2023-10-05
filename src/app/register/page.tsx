@@ -45,13 +45,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="flex items-center justify-center w-full h-screen">
+    <main className="flex items-center justify-center w-full min-h-screen py-16 lg:py-0">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col space-y-6 bg-mine-shaft-900 rounded p-6"
+          className="flex flex-col space-y-6 bg-mine-shaft-900 rounded px-6 py-2 sm:py-6"
         >
-          <p className="text-mine-shaft-200 text-2xl text-center">Create My Account</p>
+          <p className="text-mine-shaft-200 text-lg sm:text-2xl text-center">Create My Account</p>
 
           <FormField
             control={form.control}
@@ -80,7 +80,7 @@ export default function RegisterPage() {
                 <FormLabel className="text-mine-shaft-100 font-medium">Username</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="required to make login"
+                    placeholder="ex: gamermaster42"
                     type="text"
                     className="text-black font-semibold h-8"
                     {...field}
@@ -118,12 +118,7 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel className="text-mine-shaft-100 font-medium">Password</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="password"
-                      type="password"
-                      className="text-black font-semibold h-8"
-                      {...field}
-                    />
+                    <Input type="password" className="text-black font-semibold h-8" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
