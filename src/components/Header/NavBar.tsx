@@ -114,29 +114,37 @@ export default function NavBar() {
       <div className="sm:flex sm:items-center sm:gap-2">
         {currentUser ? (
           <>
-            <Avatar>
-              <AvatarFallback className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold capitalize cursor-pointer">
-                {currentUser.displayName?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="mr-5" asChild>
+                <Avatar className="h-7 w-7 sm:w-9 sm:h-9">
+                  <AvatarFallback
+                    className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 sm:text-lg font-semibold capitalize 
+              cursor-pointer"
+                  >
+                    {currentUser.displayName?.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
 
-            <Button
-              type="button"
-              variant={'link'}
-              className="text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg"
-              asChild
-            >
-              <Link href={`/my-library`}>My Library</Link>
-            </Button>
-
-            <Button
-              type="button"
-              variant={'link'}
-              className="text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg"
-              onClick={logout}
-            >
-              logout
-            </Button>
+              <DropdownMenuContent className="border border-mine-shaft-500 divide-y divide-mine-shaft-500 p-0">
+                <DropdownMenuItem className="p-0 bg-mine-shaft-700 hover:bg-mine-shaft-800" asChild>
+                  <Link
+                    href={`/my-library`}
+                    className="bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 justify-center 
+                    text-xs py-2 w-full cursor-pointer"
+                  >
+                    My Library
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={logout}
+                  className="bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 justify-center 
+                    text-xs py-2 w-full cursor-pointer"
+                >
+                  logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </>
         ) : (
           <>
@@ -157,6 +165,7 @@ export default function NavBar() {
             >
               <Link href={'/register'}>Register</Link>
             </Button>
+
             <DropdownMenu>
               <DropdownMenuTrigger className="sm:hidden">
                 <RxHamburgerMenu className="text-mine-shaft-200 h-5 w-5" />
