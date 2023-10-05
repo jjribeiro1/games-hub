@@ -35,7 +35,7 @@ export default function WriteCommentDialog({ open, onOpenChange, gameId }: Write
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-mine-shaft-950 p-6">
+      <DialogContent className="bg-mine-shaft-950 p-6 max-w-[350px] sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-3xl text-mine-shaft-100 font-semibold">Comment text</DialogTitle>
         </DialogHeader>
@@ -50,7 +50,7 @@ export default function WriteCommentDialog({ open, onOpenChange, gameId }: Write
           {`${commentValue.length} / ${maxCommentLength}`}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className='gap-3 sm:gap-0'>
           <Button type="button" variant={'destructive'} onClick={() => onOpenChange(false)}>
             Cancel
           </Button>

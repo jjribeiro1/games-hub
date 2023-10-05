@@ -81,10 +81,10 @@ export default function WriteReviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-mine-shaft-950 p-6">
+      <DialogContent className="bg-mine-shaft-950 p-6 max-w-[350px] sm:max-w-lg">
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-3xl text-mine-shaft-100 font-semibold">{game.title}</DialogTitle>
-          <div className="flex items-center justify-between gap-2 w-full">
+          <div className="grid grid-cols-2 sm:flex sm:items-center sm:justify-between gap-2 w-full">
             {reviewRatingOptions.map((rating) => (
               <Button
                 key={rating}
@@ -113,7 +113,7 @@ export default function WriteReviewDialog({
         <div className="text-mine-shaft-50 text-sm text-end">
           {`${commentValue.length} / ${maxCommentLength}`}
         </div>
-        <DialogFooter>
+        <DialogFooter className='gap-2 sm:gap-0'>
           {gameHasBeenReviewedByUser ? (
             <Button type="button" variant={'destructive'} onClick={handleDeleteReview}>
               Delete

@@ -223,7 +223,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                             <AlertDialogTrigger asChild>
                               <p className="text-sm text-red-500 font-medium cursor-pointer">Delete</p>
                             </AlertDialogTrigger>
-                            <AlertDialogContent className="bg-mine-shaft-950">
+                            <AlertDialogContent className="bg-mine-shaft-950 max-w-[350px] sm:max-w-lg">
                               <AlertDialogHeader>
                                 <AlertDialogTitle className="text-2xl text-mine-shaft-100 font-semibold">
                                   Are you absolutely sure?

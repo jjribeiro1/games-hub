@@ -19,11 +19,11 @@ export default function RequireSignInAlert({ open, onOpenChange, message }: Requ
   const router = useRouter();
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="bg-mine-shaft-950">
+      <AlertDialogContent className="bg-mine-shaft-950 max-w-[350px] sm:max-w-lg">
         <AlertDialogHeader>
           <AlertDialogDescription className="text-mine-shaft-200 text-lg">{message}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className='gap-2 sm:gap-0'>
           <AlertDialogCancel>Back</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => router.push('/login')}

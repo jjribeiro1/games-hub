@@ -50,7 +50,7 @@ export default function CommentCard({ loggedUserInfo, comment }: CommentCardProp
                 <BsTrash className="text-red-500 w-4 h-4" />
               </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-mine-shaft-950">
+            <AlertDialogContent className="bg-mine-shaft-950 max-w-[350px] sm:max-w-lg">
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-2xl text-mine-shaft-100 font-semibold">
                   Are you absolutely sure?
