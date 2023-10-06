@@ -1,5 +1,6 @@
 'use client';
 import React, { useRef, useState } from 'react';
+import { redirect } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,8 +14,14 @@ import { Input } from '@/components/ui/input';
 import { createGame } from '@/services/game';
 import { AddDocFirebaseError, UploadImageError } from '@/exceptions';
 import { getImageDownloadUrl, uploadFile } from '@/services/storage';
+import useLoggedUserInfo from '@/hooks/useLoggedUserInfo';
 
 export default function AdminPage() {
+  const { loggedUserInfo } = useLoggedUserInfo();
+  const isAdmin = loggedUserInfo?.email === process.env.NEXT_PUBLIC_IS_ADMIN;
+  if (!isAdmin) {
+    redirect('/');
+  }
   const [id, setId] = useState('');
   const [disableButton, setDisableButton] = useState(false);
   const [resource, setResource] = useState<RootObject | null>(null);
@@ -154,6 +161,8 @@ export default function AdminPage() {
       setDisableButton(false);
     }
   };
+
+  console.log('here 2');
 
   return (
     <div className="bg-[#fafafa] flex flex-col gap-8 w-full px-8 pb-4">
