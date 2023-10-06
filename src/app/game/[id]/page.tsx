@@ -160,11 +160,11 @@ export default function GameDetailsPage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 sm:flex gap-2">
+                <div className="grid grid-cols-2 sm:flex gap-2 sm:gap-4">
                   {allRatingsInfo.map((rating, i) => (
                     <div
                       key={i}
-                      className="flex items-center border-2 border-transparent hover:border-mine-shaft-400 rounded-l-3xl rounded-r-3xl gap-2 cursor-pointer"
+                      className="flex items-center gap-2"
                     >
                       <span className={`inline-blockblock h-3 w-3 rounded-full ${rating.bgColor}`}></span>
                       <span className="text-mine-shaft-100 text-sm font-semibold">{rating.name}</span>
