@@ -6,6 +6,7 @@ export interface UserInfo {
   username: string;
   email: string;
   library: GameInLibrary[];
+  isAdmin: boolean;
 }
 
 export type GameInLibrary = {
