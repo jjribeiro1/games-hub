@@ -40,6 +40,7 @@ interface GameCardProps {
 }
 
 export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: GameCardProps) {
+  const [openGameInLibraryPopover, setOpenGameInLibraryPopover] = useState(false)
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [openRequireSignInAlert, setOpenRequireSignInAlert] = useState(false);
   const [signInAlertMessage, setSignInAlertMessage] = useState('');
@@ -80,6 +81,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     }
     const updatedGame: GameInLibrary = { ...game, type };
     updateGameTypeFromUserLibraryMutation.mutate({ loggedUserInfo, updatedGame });
+    setOpenGameInLibraryPopover(false)
   };
 
   const handleRemoveGameFromUserLibrary = () => {
@@ -147,7 +149,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                 <HiPlus className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
               </Button>
             ) : (
-              <Popover>
+              <Popover open={openGameInLibraryPopover} onOpenChange={setOpenGameInLibraryPopover}>
                 <PopoverTrigger asChild>
                   <Button
                     type="button"
