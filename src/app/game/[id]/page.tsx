@@ -42,21 +42,21 @@ export default function GameDetailsPage() {
 
   return (
     <>
-      <div className="absolute w-full opacity-10 -z-50 h-[60%]">
-        {!isLoading ? (
-          <Image
-            className="object-cover"
-            src={game?.screenshots[0] as string}
-            alt={`imagem do jogo ${game?.title} como background da página`}
-            priority
-            fill
-            sizes="(min-width: 300px, 100%)"
-          />
-        ) : null}
-      </div>
-      <main className="py-8 px-6 w-full min-h-screen">
-        <article className="flex gap-8 py-4 w-full">
-          <section className="flex flex-col gap-2 w-[25%]">
+      <main className="relative pb-8 w-full min-h-screen">
+        <div className="absolute w-full opacity-10 -z-50 h-80 sm:h-[400px]">
+          {!isLoading ? (
+            <Image
+              className="object-cover"
+              src={game?.screenshots[0] as string}
+              alt={`${game?.title} background image`}
+              priority
+              fill
+              sizes="(min-width: 300px, 100%)"
+            />
+          ) : null}
+        </div>
+        <article className="flex gap-8 sm:px-6 sm:gap-12 py-4 w-full">
+          <section className="hidden md:flex flex-col gap-2">
             {!isLoading ? (
               <>
                 <Image
@@ -89,36 +89,38 @@ export default function GameDetailsPage() {
             )}
           </section>
 
-          <section className="flex flex-col gap-2 w-[50%]">
-            <nav className="text-mine-shaft-100 text-xs flex items-center gap-2">
+          <section className="flex flex-col gap-2 w-full">
+            <nav className="text-mine-shaft-100 text-xs flex justify-center md:justify-normal gap-2">
               <ul className="flex items-center gap-2">
                 <li className="flex items-center gap-2">
                   <Link href={'/'}>Home</Link>
                   <BiChevronRight />
                 </li>
                 <li className="flex items-center gap-2">
-                  <Link href={'/'}>Games</Link>
+                  <Link href={'/games'}>Games</Link>
                   <BiChevronRight />
                 </li>
               </ul>
               <span>{game?.title}</span>
             </nav>
 
-            <div className="space-y-4">
+            <div className="flex flex-col items-center md:items-start gap-4 pb-4">
               <div className="flex items-center gap-4">
-                <span className="bg-mine-shaft-100 text-mine-shaft-950 text-sm px-2 rounded">
+                <span className="bg-mine-shaft-100 text-mine-shaft-950 text-xs sm:text-sm py-0.5 px-2 rounded">
                   {timestampToDate(game?.release_date as unknown as Timestamp)}
                 </span>
                 <span className="flex items-center gap-2">{gameIcons()}</span>
               </div>
 
-              <h1 className="text-6xl text-mine-shaft-50 font-semibold">{game?.title}</h1>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-mine-shaft-50 font-semibold">
+                {game?.title}
+              </h1>
             </div>
 
-            <div className="space-y-2">
+            <div className="pl-4 md:pl-0 space-y-2 my-0 mx-auto md:mx-0">
               {mostFrequentRating ? (
                 <div className="flex items-center gap-2">
-                  <span className="text-mine-shaft-100 text-lg">{mostFrequentRating.name}</span>
+                  <span className="text-mine-shaft-100 text-base md:text-lg">{mostFrequentRating.name}</span>
                   <Image
                     src={`/images/${mostFrequentRating.name}.svg`}
                     alt="image of most frequent rating"
@@ -129,20 +131,17 @@ export default function GameDetailsPage() {
               ) : null}
 
               {!isLoadingReviewsFromGame ? (
-                <Button
-                  size={'sm'}
-                  className="text-mine-shaft-400 hover:text-mine-shaft-500 bg-inherit hover:bg-inherit underline px-0"
-                >
+                <p className="text-mine-shaft-400 hover:text-mine-shaft-500 text-sm sm:text-base tracking-wider underline underline-offset-4">
                   {reviewsFromGame?.length || 0} RATINGS
-                </Button>
+                </p>
               ) : null}
             </div>
 
             {allRatingsInfo ? (
-              <div className="flex flex-col w-full gap-4">
-                <div className="h-8 flex flex-nowrap">
+              <div className="flex flex-col w-full gap-4 p-4 md:pl-0 items-center md:items-start">
+                <div className="h-6 md:h-8 w-[75%] flex flex-nowrap">
                   <span
-                    className={`bg-green-500 inline-block h-full rounded-l-lg w-[${allRatingsInfo.at(0)
+                    className={`bg-green-500 inline-block h-full w-[${allRatingsInfo.at(0)
                       ?.percentage}%] hover:shadow-2xl hover:shadow-mine-shaft-400 hover:brightness-110 cursor-pointer`}
                   />
 
@@ -156,30 +155,39 @@ export default function GameDetailsPage() {
                   />
 
                   <span
-                    className={`bg-red-500 inline-block h-full rounded-r-lg w-[${allRatingsInfo.at(3)
+                    className={`bg-red-500 inline-block h-full w-[${allRatingsInfo.at(3)
                       ?.percentage}%] hover:shadow-xl hover:shadow-mine-shaft-400 hover:brightness-110 cursor-pointer`}
                   />
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="grid grid-cols-2 sm:flex gap-2 sm:gap-4">
                   {allRatingsInfo.map((rating, i) => (
-                    <Button
+                    <div
                       key={i}
-                      className="bg-inherit hover:bg-inherit border-2 border-transparent hover:border-mine-shaft-400 rounded-l-3xl rounded-r-3xl px-2 gap-2"
+                      className="flex items-center gap-2"
                     >
-                      <span className={`h-3 w-3 rounded-full ${rating.bgColor}`}></span>
-                      <span className="text-sm font-semibold">{rating.name}</span>
+                      <span className={`inline-blockblock h-3 w-3 rounded-full ${rating.bgColor}`}></span>
+                      <span className="text-mine-shaft-100 text-sm font-semibold">{rating.name}</span>
                       <span className="text-mine-shaft-300 text-sm">{rating.value}</span>
-                    </Button>
+                    </div>
                   ))}
                 </div>
               </div>
             ) : null}
+
+            <Button
+              className="md:hidden text-mine-shaft-200 bg-cyan-700 hover:bg-cyan-800 rounded w-max my-2 mx-auto"
+              asChild
+            >
+              <Link href={`${game?.game_url}`} target="_blank">
+                PLAY NOW <FiPlayCircle className="h-[18px] w-[18px] ml-1" />
+              </Link>
+            </Button>
           </section>
         </article>
 
-        <article className="flex flex-col items-center xl:flex-row xl:justify-normal xl:items-start gap-4 py-4 w-full">
-          <section className="flex flex-col gap-6 xl:w-[50%]">
+        <article className="flex flex-col items-center xl:flex-row xl:justify-normal xl:items-start gap-4 px-6 py-12 w-full">
+          <section className="flex flex-col gap-10 py-6 xl:w-[50%]">
             <Collapsible
               open={openCollapsible}
               onOpenChange={setOpenCollapsable}
@@ -206,8 +214,6 @@ export default function GameDetailsPage() {
               <h2 className="text-mine-shaft-100 text-3xl font-medium">Additional Information</h2>
 
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-y-6 gap-x-2 w-full">
-              {/* <div className="grid grid-cols-2 gap-y-6 gap-x-2 w-full"> */}
-
                 <div className="flex flex-col gap-1">
                   <h3 className="text-mine-shaft-400 font-semibold">Platforms</h3>
                   <ul className="flex flex-wrap gap-1.5">
@@ -260,7 +266,7 @@ export default function GameDetailsPage() {
             </div>
           </section>
 
-          <section className="flex flex-col gap-6 xl:w-[50%]">
+          <section className="flex flex-col gap-10 py-6 xl:w-[50%]">
             <div className="flex flex-col items-center xl:items-start gap-4">
               <h2 className="text-mine-shaft-100 text-3xl font-medium">Minimum System Requirements</h2>
 
@@ -306,15 +312,15 @@ export default function GameDetailsPage() {
               <div className="flex flex-col items-center xl:items-start gap-4">
                 <h2 className="text-mine-shaft-100 text-3xl font-medium">Screenshots</h2>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
                   {game?.screenshots.map((screenshot) => (
                     <Image
                       key={screenshot}
                       className="aspect-video rounded-t-md"
                       src={screenshot}
                       alt={`screenshot of game ${game.title}`}
-                      width={320}
-                      height={180}
+                      width={290}
+                      height={163}
                       priority
                     />
                   ))}
@@ -324,7 +330,7 @@ export default function GameDetailsPage() {
           </section>
         </article>
 
-        <article className="flex flex-col items-center gap-4 py-12">
+        <article className="flex flex-col items-center gap-4 px-6 py-12">
           <h2 className="text-mine-shaft-100 text-2xl font-medium">{game?.title} reviews and comments</h2>
 
           <Tabs defaultValue="reviews" className="flex flex-col gap-6 w-full max-w-3xl">

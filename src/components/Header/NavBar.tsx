@@ -2,9 +2,16 @@
 import React from 'react';
 import Link from 'next/link';
 import { FiChevronDown } from 'react-icons/fi';
+import { RxHamburgerMenu } from 'react-icons/rx';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 import useFetchGenres from '@/hooks/useFetchGenres';
 import useFetchPlatforms from '@/hooks/useFetchPlatforms';
 import { useAuthContext } from '@/context/auth-context';
@@ -16,11 +23,11 @@ export default function NavBar() {
   const { currentUser } = useAuthContext();
 
   return (
-    <NavigationMenu.Root className="w-full flex items-center justify-between pb-1">
-      <NavigationMenu.List className="flex items-center gap-10">
+    <NavigationMenu.Root className="w-full flex items-center justify-between pb-2">
+      <NavigationMenu.List className="flex items-center gap-3 sm:gap-5 md:gap-10">
         <NavigationMenu.Item className="relative">
           <NavigationMenu.Trigger
-            className="text-mine-shaft-200 text-base sm:text-lg group flex items-center gap-2 "
+            className="text-mine-shaft-200 text-sm sm:text-base md:text-lg group flex items-center gap-2 "
             onPointerMove={(e) => e.preventDefault()}
             onPointerLeave={(e) => e.preventDefault()}
           >
@@ -41,26 +48,20 @@ export default function NavBar() {
               bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-sm
                 flex items-center cursor-pointer"
                 >
-                  <Link href={`/games/${genre.slug}`} className="w-full p-2 inline-block">
-                    {genre.name}
-                  </Link>
+                  <NavigationMenu.Link asChild>
+                    <Link href={`/games/${genre.slug}`} className="w-full p-2 inline-block">
+                      {genre.name}
+                    </Link>
+                  </NavigationMenu.Link>
                 </li>
               ))}
-              <li
-                className='bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-sm
-                flex items-center cursor-pointer"'
-              >
-                <Link href={'/genres'} className="w-full p-2 inline-block">
-                  Show all genres
-                </Link>
-              </li>
             </ul>
           </NavigationMenu.Content>
         </NavigationMenu.Item>
 
         <NavigationMenu.Item className="relative">
           <NavigationMenu.Trigger
-            className="text-mine-shaft-200 text-base sm:text-lg group flex items-center gap-2 "
+            className="text-mine-shaft-200 text-sm sm:text-base md:text-lg group flex items-center gap-2 "
             onPointerMove={(e) => e.preventDefault()}
             onPointerLeave={(e) => e.preventDefault()}
           >
@@ -81,84 +82,100 @@ export default function NavBar() {
               bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-sm
                flex items-center cursor-pointer"
                 >
-                  <Link href={`/games/${platform.slug}`} className="w-full p-2 inline-block">
-                    {platform.name}
-                  </Link>
+                  <NavigationMenu.Link asChild>
+                    <Link href={`/games/${platform.slug}`} className="w-full p-2 inline-block">
+                      {platform.name}
+                    </Link>
+                  </NavigationMenu.Link>
                 </li>
               ))}
-              <li
-                className="
-              bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 text-sm
-               flex items-center cursor-pointer"
-              >
-                <Link href={'/platforms'} className="w-full p-2 inline-block">
-                  Show all platforms
-                </Link>
-              </li>
             </ul>
           </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu.List>
 
-      <div>
-        <ul className="flex items-center gap-2">
-          {currentUser ? (
-            <>
-              <li>
-                <Avatar>
-                  <AvatarFallback className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 text-lg font-semibold capitalize cursor-pointer">
+      <div className="sm:flex sm:items-center sm:gap-2">
+        {currentUser ? (
+          <>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="mr-5" asChild>
+                <Avatar className="h-7 w-7 sm:w-9 sm:h-9">
+                  <AvatarFallback
+                    className="bg-mine-shaft-100 hover:bg-mine-shaft-200 text-mine-shaft-900 sm:text-lg font-semibold capitalize 
+              cursor-pointer"
+                  >
                     {currentUser.displayName?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-              </li>
+              </DropdownMenuTrigger>
 
-              <li>
-                <Button
-                  type="button"
-                  variant={'link'}
-                  className="text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg"
-                  asChild
-                >
-                  <Link href={`/my-library`}>My Library</Link>
-                </Button>
-              </li>
-
-              <li>
-                <Button
-                  type="button"
-                  variant={'link'}
-                  className="text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg"
+              <DropdownMenuContent className="border border-mine-shaft-500 divide-y divide-mine-shaft-500 p-0">
+                <DropdownMenuItem className="p-0 bg-mine-shaft-700 hover:bg-mine-shaft-800" asChild>
+                  <Link
+                    href={`/my-library`}
+                    className="bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 justify-center 
+                    text-xs py-2 w-full cursor-pointer"
+                  >
+                    My Library
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   onClick={logout}
+                  className="bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 justify-center 
+                    text-xs py-2 w-full cursor-pointer"
                 >
                   logout
-                </Button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <Button
-                  type="button"
-                  variant={'link'}
-                  asChild
-                  className="text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg"
-                >
-                  <Link href={'/login'}>Login</Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  type="button"
-                  variant={'link'}
-                  asChild
-                  className="text-mine-shaft-200 hover:text-mine-shaft-300 text-base sm:text-lg"
-                >
-                  <Link href={'/register'}>Register</Link>
-                </Button>
-              </li>
-            </>
-          )}
-        </ul>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
+        ) : (
+          <>
+            <Button
+              type="button"
+              variant={'link'}
+              asChild
+              className="hidden sm:inline-flex text-mine-shaft-200 hover:text-mine-shaft-300 text-sm sm:text-base md:text-lg"
+            >
+              <Link href={'/login'}>Login</Link>
+            </Button>
+
+            <Button
+              type="button"
+              variant={'link'}
+              asChild
+              className="hidden sm:inline-flex text-mine-shaft-200 hover:text-mine-shaft-300 text-sm sm:text-base md:text-lg"
+            >
+              <Link href={'/register'}>Register</Link>
+            </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="sm:hidden">
+                <RxHamburgerMenu className="text-mine-shaft-200 h-5 w-5" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="border border-mine-shaft-500 divide-y divide-mine-shaft-500 p-0 rounded">
+                <DropdownMenuItem className="p-0 bg-mine-shaft-700 hover:bg-mine-shaft-800" asChild>
+                  <Link
+                    href={'/login'}
+                    className="bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 justify-center 
+                    text-xs py-2 w-full cursor-pointer"
+                  >
+                    Login
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="p-0 bg-mine-shaft-700 hover:bg-mine-shaft-800" asChild>
+                  <Link
+                    href={'/register'}
+                    className="bg-mine-shaft-700 hover:bg-mine-shaft-800 text-mine-shaft-50 hover:text-mine-shaft-100 justify-center 
+                    text-xs py-2 w-full cursor-pointer"
+                  >
+                    Register
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
+        )}
       </div>
     </NavigationMenu.Root>
   );

@@ -36,10 +36,11 @@ import { toast } from 'react-toastify';
 interface GameCardProps {
   game: Game;
   loggedUserInfo: UserInfo | null | undefined;
-  reviewsFromUser?: Review[];
+  reviewsFromUser: Review[];
 }
 
 export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: GameCardProps) {
+  const [openGameInLibraryPopover, setOpenGameInLibraryPopover] = useState(false)
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [openRequireSignInAlert, setOpenRequireSignInAlert] = useState(false);
   const [signInAlertMessage, setSignInAlertMessage] = useState('');
@@ -80,6 +81,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
     }
     const updatedGame: GameInLibrary = { ...game, type };
     updateGameTypeFromUserLibraryMutation.mutate({ loggedUserInfo, updatedGame });
+    setOpenGameInLibraryPopover(false)
   };
 
   const handleRemoveGameFromUserLibrary = () => {
@@ -147,7 +149,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                 <HiPlus className="w-4 h-4 text-mine-shaft-100 hover:text-mine-shaft-200" />
               </Button>
             ) : (
-              <Popover>
+              <Popover open={openGameInLibraryPopover} onOpenChange={setOpenGameInLibraryPopover}>
                 <PopoverTrigger asChild>
                   <Button
                     type="button"
@@ -223,7 +225,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
                             <AlertDialogTrigger asChild>
                               <p className="text-sm text-red-500 font-medium cursor-pointer">Delete</p>
                             </AlertDialogTrigger>
-                            <AlertDialogContent className="bg-mine-shaft-950">
+                            <AlertDialogContent className="bg-mine-shaft-950 max-w-[350px] sm:max-w-lg">
                               <AlertDialogHeader>
                                 <AlertDialogTitle className="text-2xl text-mine-shaft-100 font-semibold">
                                   Are you absolutely sure?

@@ -68,7 +68,8 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
             {platforms?.map((platform) => (
               <DropdownMenuItem
                 key={platform.id}
-                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+                asChild
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded cursor-pointer"
               >
                 <Link
                   href={genreSlug ? `/games/${platform.slug}/${genreSlug}` : `/games/${platform.slug}`}
@@ -78,7 +79,7 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
                 </Link>
               </DropdownMenuItem>
             ))}
-            <DropdownMenuItem className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded">
+            <DropdownMenuItem asChild className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded">
               <Link href={`/games/${genreSlug ?? ''}`}>All platforms</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -103,7 +104,8 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
             {genres?.map((genre) => (
               <DropdownMenuItem
                 key={genre.id}
-                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+                asChild
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded cursor-pointer"
               >
                 <Link
                   href={platformSlug ? `/games/${platformSlug}/${genre.slug}` : `/games/${genre.slug}`}
@@ -117,35 +119,33 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
         </DropdownMenuPortal>
       </DropdownMenu>
 
-      {!platformSlug && !genreSlug ? null : (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
-              <span className="text-mine-shaft-400 text-xs sm:text-sm md:text-base font-semibold flex items-center">
-                Sort By: <BiCheckboxChecked className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
-              </span>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="bg-inherit hover:bg-inherit ring-mine-shaft-300/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mine-shaft-300/50 focus-visible:ring-offset-1">
+            <span className="text-mine-shaft-400 text-xs sm:text-sm md:text-base font-semibold flex items-center">
+              Sort By: <BiCheckboxChecked className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+            </span>
 
-              <span className="text-mine-shaft-200 text-xs md:text-base flex items-center ml-1">
-                {activeSortBy ? sortByQueryStringMap.get(activeSortBy)?.name : 'Relevance'}
-                <FiChevronDown className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuContent className="w-48 bg-mine-shaft-100">
-              {Array.from(sortByQueryStringMap.values()).map((option) => (
-                <DropdownMenuItem
-                  key={option.name}
-                  className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
-                  onClick={() => handleSortByClick(option.slug)}
-                >
-                  {option.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenuPortal>
-        </DropdownMenu>
-      )}
+            <span className="text-mine-shaft-200 text-xs md:text-base flex items-center ml-1">
+              {activeSortBy ? sortByQueryStringMap.get(activeSortBy)?.name : 'Relevance'}
+              <FiChevronDown className="text-cyan-700 w-5 h-5 sm:w-6 sm:h-6" />
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuContent className="w-48 bg-mine-shaft-100">
+            {Array.from(sortByQueryStringMap.values()).map((option) => (
+              <DropdownMenuItem
+                key={option.name}
+                className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded cursor-pointer"
+                onClick={() => handleSortByClick(option.slug)}
+              >
+                {option.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenu>
     </div>
   );
 }

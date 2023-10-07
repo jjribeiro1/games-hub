@@ -7,8 +7,8 @@ export default function useFetchReviewsFromUser() {
   const { data } = useQuery({
     queryKey: ['get-reviews-from-user', currentUser?.uid],
     queryFn: () => getAllReviewsFromUser(currentUser?.uid as string),
-    staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
+    cacheTime: 1000 * 60 * 10,
   });
 
   return {
