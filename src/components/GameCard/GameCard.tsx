@@ -124,7 +124,7 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
           <Image
             className="aspect-video rounded-t-md"
             src={game.thumbnail}
-            alt={`imagem do jogo ${game.title}`}
+            alt={`${game.title} image`}
             width={320}
             height={180}
             priority
