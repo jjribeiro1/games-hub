@@ -1,8 +1,11 @@
+"use client"
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useAuthContext } from '@/context/auth-context';
 
 export default function HeroSection() {
+  const { currentUser } = useAuthContext();
   return (
     <section>
       <div className="relative flex justify-center items-center w-[100%] h-80 md:h-[400px]">
@@ -26,13 +29,16 @@ export default function HeroSection() {
           </p>
 
           <div className="flex items-center gap-3">
-            <Button
-              asChild
-              className="bg-cyan-600 hover:bg-cyan-700 text-mine-shaft-100 hover:text-mine-shaft-200 text-xs sm:text-base font-medium 
+            {!currentUser ? (
+              <Button
+                asChild
+                className="bg-cyan-600 hover:bg-cyan-700 text-mine-shaft-100 hover:text-mine-shaft-200 text-xs sm:text-base font-medium 
                transition-colors"
-            >
-              <Link href={'/register'}>Get Started</Link>
-            </Button>
+              >
+                <Link href={'/register'}>Get Started</Link>
+              </Button>
+            ) : null}
+
             <Button
               asChild
               className="bg-transparent hover:bg-transparent border-2 border-mine-shaft-400 hover:border-mine-shaft-100 text-mine-shaft-400 

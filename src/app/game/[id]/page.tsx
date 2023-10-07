@@ -62,7 +62,7 @@ export default function GameDetailsPage() {
                 <Image
                   className="aspect-video rounded-t-md"
                   src={game?.thumbnail as string}
-                  alt={`imagem do jogo ${game?.title}`}
+                  alt={`${game?.title} image`}
                   width={355}
                   height={200}
                   priority
