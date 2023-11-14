@@ -9,6 +9,7 @@ export default function useFetchReviewsFromUser() {
     queryFn: () => getAllReviewsFromUser(currentUser?.uid as string),
     staleTime: 1000 * 60 * 10,
     cacheTime: 1000 * 60 * 10,
+    enabled: !!currentUser
   });
 
   return {
