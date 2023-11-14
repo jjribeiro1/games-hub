@@ -79,7 +79,10 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
                 </Link>
               </DropdownMenuItem>
             ))}
-            <DropdownMenuItem asChild className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded">
+            <DropdownMenuItem
+              asChild
+              className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+            >
               <Link href={`/games/${genreSlug ?? ''}`}>All platforms</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -115,6 +118,12 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
                 </Link>
               </DropdownMenuItem>
             ))}
+            <DropdownMenuItem
+              asChild
+              className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded cursor-pointer"
+            >
+              <Link href={`/games/${platformSlug ?? ''}`}>All genres</Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenuPortal>
       </DropdownMenu>
