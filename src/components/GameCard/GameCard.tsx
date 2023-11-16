@@ -21,7 +21,6 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
   const [signInAlertMessage, setSignInAlertMessage] = useState('');
   const { gameIcons } = useGameIcons(game);
 
-
   return (
     <div className="bg-mine-shaft-900 w-72 h-72 sm:w-64 sm:h-64 md:w-60 lg:w-72 lg:h-72 min-[1440px]:w-80 min-[1440px]:h-80 rounded-md hover:scale-105 transition-transform">
       <Link href={`/game/${game.id}`}>
@@ -45,7 +44,12 @@ export default function GameCard({ game, loggedUserInfo, reviewsFromUser }: Game
 
         <div className="flex items-center justify-between px-1 lg:mt-3 w-full">
           <div className="flex gap-2">
-            <GameInLibraryPopover game={game} loggedUserInfo={loggedUserInfo} />
+            <GameInLibraryPopover
+              game={game}
+              loggedUserInfo={loggedUserInfo}
+              setOpenRequireSignInAlert={setOpenRequireSignInAlert}
+              setSignInAlertMessage={setSignInAlertMessage}
+            />
             <GameReviewPopover
               game={game}
               loggedUserInfo={loggedUserInfo}

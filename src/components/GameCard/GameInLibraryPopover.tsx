@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { HiPlus } from 'react-icons/hi';
 import { BsCheck2 } from 'react-icons/bs';
 import { FiChevronDown } from 'react-icons/fi';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-import { RequireSignInAlert } from '@/components/RequireSignInAlert'
 import { useAddGameToUserLibrary } from '@/mutations/add-game-to-user-library';
 import { useUpdateGameTypeFromUserLibrary } from '@/mutations/update-game-library-type';
 import { useRemoveGameFromUserLibrary } from '@/mutations/remove-game-from-user-library';
@@ -16,11 +15,16 @@ import { toast } from 'react-toastify';
 interface GameInLibraryPopoverProps {
   loggedUserInfo: UserInfo | null | undefined;
   game: Game;
+  setOpenRequireSignInAlert: (value: boolean) => void;
+  setSignInAlertMessage: (message: string) => void;
 }
 
-export default function GameInLibraryPopover({ loggedUserInfo, game }: GameInLibraryPopoverProps) {
-  const [openRequireSignInAlert, setOpenRequireSignInAlert] = useState(false);
-  const [signInAlertMessage, setSignInAlertMessage] = useState('');
+export default function GameInLibraryPopover({
+  loggedUserInfo,
+  game,
+  setOpenRequireSignInAlert,
+  setSignInAlertMessage,
+}: GameInLibraryPopoverProps) {
   const addGameToUserLibraryMutation = useAddGameToUserLibrary();
   const updateGameTypeFromUserLibraryMutation = useUpdateGameTypeFromUserLibrary();
   const removeGameFromUserLibraryMutation = useRemoveGameFromUserLibrary();
@@ -115,14 +119,6 @@ export default function GameInLibraryPopover({ loggedUserInfo, game }: GameInLib
           </PopoverContent>
         </Popover>
       )}
-
-      {openRequireSignInAlert ? (
-        <RequireSignInAlert
-          open={openRequireSignInAlert}
-          onOpenChange={setOpenRequireSignInAlert}
-          message={signInAlertMessage}
-        />
-      ) : null}
     </div>
   );
 }
