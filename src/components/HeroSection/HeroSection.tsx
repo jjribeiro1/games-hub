@@ -13,7 +13,7 @@ export default function HeroSection() {
           <Image
             className="aspect-auto opacity-20"
             src={'/images/heroImg.jpg'}
-            alt="sei lá"
+            alt="backgroud image of a game"
             fill
             sizes="(min-width: 300px, 100%)"
             priority

@@ -9,7 +9,7 @@ export default function Logo() {
       <Link href={'/'}>
         <Image
           src={LogoImg}
-          alt="logo do site"
+          alt="logo"
           quality={100}
           priority
           sizes="100vw"
