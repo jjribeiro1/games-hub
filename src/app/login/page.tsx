@@ -11,9 +11,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { loginSchema } from '@/lib/schemas/login-input';
 import { login } from '@/services/authentication';
 import { toast } from 'react-toastify';
+import { useAuthContext } from '@/context/auth-context';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { currentUser } = useAuthContext();
+
+  if (currentUser) {
+    router.push('/');
+  }
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -39,7 +45,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex items-center justify-center w-full h-screen">
+    <div className="flex items-center justify-center w-full py-16">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -107,6 +113,6 @@ export default function LoginPage() {
           </div>
         </form>
       </Form>
-    </main>
+    </div>
   );
 }

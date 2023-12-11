@@ -15,7 +15,11 @@ import { toast } from 'react-toastify';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { setCurrentUser } = useAuthContext();
+  const { setCurrentUser, currentUser } = useAuthContext();
+
+  if (currentUser) {
+    router.push('/');
+  }
 
   const form = useForm<z.infer<typeof registerUserSchema>>({
     resolver: zodResolver(registerUserSchema),
@@ -45,7 +49,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="flex items-center justify-center w-full min-h-screen py-16 lg:py-0">
+    <div className="flex items-center justify-center py-16">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -168,6 +172,6 @@ export default function RegisterPage() {
           </div>
         </form>
       </Form>
-    </main>
+    </div>
   );
 }
