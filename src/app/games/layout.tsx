@@ -13,7 +13,7 @@ export default function GamesLayout({ children }: { children: React.ReactNode })
   const { platformSlug, genreSlug } = useVerifyGamesPageUrl();
 
   return (
-    <main className="flex flex-col items-center gap-8 mt-6 px-2 lg:px-4 py-8 w-full min-h-screen">
+    <div className="flex flex-col items-center gap-8 mt-6 px-2 lg:px-4 pt-10 pb-16 w-full">
       <section>
         {platformSlug || genreSlug ? (
           <FilterBar
@@ -27,6 +27,6 @@ export default function GamesLayout({ children }: { children: React.ReactNode })
         )}
       </section>
       {children}
-    </main>
+    </div>
   );
 }

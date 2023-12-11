@@ -35,7 +35,7 @@ export default function GameDetailsPage() {
 
   return (
     <>
-      <main className="relative pb-8 w-full min-h-screen">
+      <div className="relative pb-8 w-full">
         <div className="absolute w-full opacity-10 -z-50 h-80 sm:h-[400px]">
           {!isLoading ? (
             <Image
@@ -329,7 +329,7 @@ export default function GameDetailsPage() {
             reviewsWithComment={reviewsWithComment}
           />
         </article>
-      </main>
+      </div>
     </>
   );
 }

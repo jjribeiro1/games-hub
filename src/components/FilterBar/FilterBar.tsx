@@ -81,7 +81,7 @@ export default function FilterBar({ genres, mappedGenres, platforms, mappedPlatf
             ))}
             <DropdownMenuItem
               asChild
-              className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded"
+              className="text-mine-shaft-950 font-medium focus:bg-mine-shaft-800 focus:text-mine-shaft-100 rounded cursor-pointer"
             >
               <Link href={`/games/${genreSlug ?? ''}`}>All platforms</Link>
             </DropdownMenuItem>

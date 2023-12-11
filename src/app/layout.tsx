@@ -14,11 +14,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-br">
-      <body className={`${inter.className} min-h-screen w-full bg-mine-shaft-950`}>
+    <html lang="en-US">
+      <body className={`${inter.className} min-h-[100dvh] flex flex-col w-full bg-mine-shaft-950`}>
         <PageProviders>
           <Header />
-          {children}
+          <main className="flex-grow">{children}</main>
           <Footer />
         </PageProviders>
       </body>

@@ -20,7 +20,7 @@ export default function MyLibraryPage() {
   ];
 
   return (
-    <main className="min-h-screen p-4">
+    <div className="px-4 py-16">
       <Accordion type="multiple" className="w-full">
         {accordionGameTypeOptions.map((option) => {
           const games = library?.filter((game) => game.type === option);
@@ -49,6 +49,6 @@ export default function MyLibraryPage() {
           );
         })}
       </Accordion>
-    </main>
+    </div>
   );
 }
